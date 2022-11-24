@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using LastWallpaper.Core.Model;
 using LastWallpaper.Models;
 using System;
 using System.IO;
@@ -25,7 +26,7 @@ namespace LastWallpaper
         private readonly string _cacheFolder;
         private readonly string _bingImageListUrl;
 
-        public event EventHandler<ImageOfTheDayInfo>? ImageUpdated;
+        public event EventHandler<ImageOfTheDay>? ImageUpdated;
 
         public BingLoader( PixelSize screenSize, string cacheFolder )
         {
@@ -85,14 +86,17 @@ namespace LastWallpaper
 
             // notice everyone ------------------------
 
-            OnImageUpdated( 
-                new ImageOfTheDayInfo(
-                    Path.GetFullPath( imageOfTheDayFileName ),
-                    imageOfTheDay )
-                );
+            var info = 
+                new ImageOfTheDay(
+                    Path.GetFullPath( imageOfTheDayFileName ) ) { 
+                    Title = imageOfTheDay.Title,
+                    Copyright = imageOfTheDay.CopyrightText
+                };
+
+            OnImageUpdated( info );
         }
 
-        private void OnImageUpdated( ImageOfTheDayInfo info )
+        private void OnImageUpdated( ImageOfTheDay info )
         {
             var eh = ImageUpdated;
             eh?.Invoke( this, info );

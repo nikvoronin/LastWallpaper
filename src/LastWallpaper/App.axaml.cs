@@ -7,14 +7,15 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
-using LastWallpaper.Models;
+using LastWallpaper.Core;
+using LastWallpaper.Core.Model;
 using LastWallpaper.ViewModels;
 using LastWallpaper.Views;
-using Microsoft.Toolkit.Uwp.Notifications;
 using PropertyChanged;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
 
@@ -70,8 +71,30 @@ namespace LastWallpaper
                 () => OpenExternalBrowser( Path.GetFullPath( DefaultWallpapersFolder ) ) );
         }
 
+        private const object StaticClassInstance = null; // yes, it is null. static classes has no instance
+
+        MethodInfo? _showToastMethod = null; // STUB: replace with something also
         public override void Initialize()
         {
+            // TODO: discover and load plugins here
+
+            if ( IsWindowsPlatform ) {
+                // STUB: for windows toasts plugin
+                try {                    
+                    var toastPluginPath = Path.GetFullPath( 
+                        "./Extensions/ToastNotifications/ToastNotifications.dll" );
+                    Assembly toastPlugin =
+                        PluginLoadContext.LoadPluginFromFile( toastPluginPath );
+
+                    Type? notificationManagerClass =
+                        toastPlugin.GetType( "LastWallpaper.ToastNotifications" );
+
+                    _showToastMethod =
+                        notificationManagerClass?.GetMethod( "OnImageUpdated" );
+                }
+                catch { }
+            }
+
             // here and above is a last chance to initialize relay commands
             AvaloniaXamlLoader.Load( this );
         }
@@ -103,7 +126,7 @@ namespace LastWallpaper
             base.OnFrameworkInitializationCompleted();
         }
 
-        private void OnBingImageUpdated( object? sender, ImageOfTheDayInfo info )
+        private void OnBingImageUpdated( object? sender, ImageOfTheDay info )
         {
             var desktop = Desktop;
 
@@ -115,28 +138,16 @@ namespace LastWallpaper
                 vm.ImageTitle = $"{info.Description}\n{info.Copyright}";
             } );
 
-            // TODO: add ability to disable toasts. Enable by default
-            SendToastNotification( info );
+            if ( IsWindowsPlatform ) {
+                // TODO: add ability to disable toasts. Enable by default
+                // STUB: remove hardcoded toasts call
+                _showToastMethod?.Invoke( StaticClassInstance, new object[] { info } );
 
-            try {
-                WindowsRegistry.SetWallpaper( info.FileName );
+                try {
+                    WindowsRegistry.SetWallpaper( info.FileName );
+                }
+                catch { }
             }
-            catch { }
-        }
-
-        private static void SendToastNotification( ImageOfTheDayInfo info )
-        {
-            // https://learn.microsoft.com/en-us/windows/apps/design/shell/tiles-and-notifications/send-local-toast?tabs=desktop
-            // https://learn.microsoft.com/en-us/windows/apps/design/shell/tiles-and-notifications/adaptive-interactive-toasts?tabs=appsdk
-
-            new ToastContentBuilder()
-                .AddHeroImage( new Uri( info.FileName ) )
-                .AddText( info.Description )
-                .AddAttributionText( info.Copyright )
-                .Show( toast => {
-                    toast.Group = "The Last Wallpaper";
-                    toast.ExpirationTime = DateTime.Now.AddDays( 2 ); // TODO: add expiration as option
-                } );
         }
 
         private void Desktop_Startup( object? sender, ControlledApplicationLifetimeStartupEventArgs e )
@@ -159,9 +170,12 @@ namespace LastWallpaper
             _bingLoader?.StopPoll();
         }
 
+        private static readonly bool IsWindowsPlatform =
+            RuntimeInformation.IsOSPlatform( OSPlatform.Windows );
+
         private static void OpenExternalBrowser( string url )
         {
-            if ( RuntimeInformation.IsOSPlatform( OSPlatform.Windows ) ) {
+            if ( IsWindowsPlatform ) {
                 Process.Start(
                     new ProcessStartInfo( "cmd", $"/c start {url.Replace( "&", "^&" )}" ) );
             }
