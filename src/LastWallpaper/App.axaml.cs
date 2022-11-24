@@ -14,6 +14,7 @@ using Microsoft.Toolkit.Uwp.Notifications;
 using PropertyChanged;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
 
@@ -32,6 +33,7 @@ namespace LastWallpaper
         public ICommand UpdateNowCommand { get; private set; }
         public ICommand ShowMainWindowCommand { get; private set; }
         public ICommand AboutCommand { get; private set; }
+        public ICommand OpenWallpapersFolderCommand { get; private set; }
 
         public IClassicDesktopStyleApplicationLifetime? Desktop
             => ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
@@ -63,6 +65,9 @@ namespace LastWallpaper
 
             AboutCommand = new RelayCommand(
                 () => OpenExternalBrowser( ApplicationGithubRepositoryLink ) );
+
+            OpenWallpapersFolderCommand = new RelayCommand(
+                () => OpenExternalBrowser( Path.GetFullPath( DefaultWallpapersFolder ) ) );
         }
 
         public override void Initialize()

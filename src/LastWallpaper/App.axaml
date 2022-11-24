@@ -15,12 +15,11 @@
 			<TrayIcon Icon="/Assets/avalonia-logo.ico" ToolTipText="The Last Wallpaper">
 				<TrayIcon.Menu>
 					<NativeMenu>
-						<NativeMenuItem Header="Like!" IsEnabled="False" />
-						<NativeMenuItem Header="Neutral" IsEnabled="False" />
-						<NativeMenuItem Header="Dislike" IsEnabled="False" />
-						<NativeMenuItemSeparator />
 						<NativeMenuItem Header="Update Now"
 										Command="{Binding Source={x:Static Application.Current},Path=UpdateNowCommand,Mode=OneTime}"/>
+						<NativeMenuItemSeparator />
+						<NativeMenuItem Header="Wallpapers Album"
+										Command="{Binding Source={x:Static Application.Current},Path=OpenWallpapersFolderCommand,Mode=OneTime}"/>
 						<NativeMenuItem Header="Show Application"
 										Command="{Binding Source={x:Static Application.Current},Path=ShowMainWindowCommand,Mode=OneTime}"/>
 						<NativeMenuItemSeparator />
