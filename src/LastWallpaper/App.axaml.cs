@@ -68,7 +68,11 @@ namespace LastWallpaper
                 () => OpenExternalBrowser( ApplicationGithubRepositoryLink ) );
 
             OpenWallpapersFolderCommand = new RelayCommand(
-                () => OpenExternalBrowser( Path.GetFullPath( DefaultWallpapersFolder ) ) );
+                () => {
+                    var path = Path.GetFullPath( DefaultWallpapersFolder );
+                    if ( IsWindowsPlatform ) path = $"explorer \"{path}\"";
+                    OpenExternalBrowser( path );
+                });
         }
 
         private const object StaticClassInstance = null; // yes, it is null. static classes has no instance
