@@ -24,9 +24,12 @@ namespace LastWallpaper
     [DoNotNotify]
     public partial class App : Application
     {
-        public const string DefaultWallpapersFolder = "Wallpapers";
         public const string ApplicationGithubRepositoryLink
             = "https://github.com/nikvoronin/LastWallpaper";
+        public const string CurrentFolderRelativePathPrefix = "./";
+        public const string DefaultWallpapersFolderName = "The Last Wallpaper";
+
+        public readonly string WallpapersFolder;
 
         BingLoader? _bingLoader;
 
@@ -46,8 +49,22 @@ namespace LastWallpaper
                     act( desktop );
             } );
 
+        private static string? MyPicturesFolderOrNull()
+        {
+            try {
+                return Environment.GetFolderPath(
+                    Environment.SpecialFolder.MyPictures );
+            }
+            catch { return null; }
+        }
+
         public App()
         {
+            WallpapersFolder =
+                Path.Combine(
+                    MyPicturesFolderOrNull() ?? CurrentFolderRelativePathPrefix,
+                    DefaultWallpapersFolderName );
+
             ExitCommand = RelayCommandFor( desk => desk.Shutdown() );
 
             ShowMainWindowCommand = RelayCommandFor( desk => {
@@ -69,10 +86,10 @@ namespace LastWallpaper
 
             OpenWallpapersFolderCommand = new RelayCommand(
                 () => {
-                    var path = Path.GetFullPath( DefaultWallpapersFolder );
+                    var path = Path.GetFullPath( WallpapersFolder );
                     if ( IsWindowsPlatform ) path = $"explorer \"{path}\"";
                     OpenExternalBrowser( path );
-                });
+                } );
         }
 
         private const object StaticClassInstance = null; // yes, it is null. static classes has no instance
@@ -84,8 +101,8 @@ namespace LastWallpaper
 
             if ( IsWindowsPlatform ) {
                 // STUB: for windows toasts plugin
-                try {                    
-                    var toastPluginPath = Path.GetFullPath( 
+                try {
+                    var toastPluginPath = Path.GetFullPath(
                         "./Extensions/ToastNotifications/ToastNotifications.dll" );
                     Assembly toastPlugin =
                         PluginLoadContext.LoadPluginFromFile( toastPluginPath );
@@ -121,7 +138,7 @@ namespace LastWallpaper
                 .Bounds.Size;
 
             // TODO: try get a wallpaper folder from app-settings
-            _bingLoader = new BingLoader( screenSize, DefaultWallpapersFolder );
+            _bingLoader = new BingLoader( screenSize, WallpapersFolder );
             _bingLoader.ImageUpdated += OnBingImageUpdated;
 
             desktop.Startup += Desktop_Startup;
@@ -158,7 +175,7 @@ namespace LastWallpaper
         {
             Desktop.MainWindow.Opened += MainWindow_Opened;
 
-            _bingLoader?.StartPoll();            
+            _bingLoader?.StartPoll();
         }
 
         // HACK: to hide main window at the first start
