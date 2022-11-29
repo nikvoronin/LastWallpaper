@@ -172,7 +172,7 @@ namespace LastWallpaper
                     return;
 
                 vm.ImageSource = new Bitmap( info.FileName );
-                vm.ImageTitle = $"{info.Description}\n{info.Copyright}";
+                vm.ImageTitle = $"{info.Title}\n{info.Copyright}";
             } );
 
             if ( IsWindowsPlatform ) {

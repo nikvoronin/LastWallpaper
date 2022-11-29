@@ -24,7 +24,7 @@ namespace LastWallpaper
             var windows = RuntimeInformation.IsOSPlatform( OSPlatform.Windows );
             if ( !windows ) return;
 
-            var key = Registry.CurrentUser.OpenSubKey( @"Control Panel\Desktop", true );
+            using var key = Registry.CurrentUser.OpenSubKey( @"Control Panel\Desktop", true );
 
             key?.SetValue( @"WallpaperStyle", p.ToStyleValue() );
             key?.SetValue( @"TileWallpaper", p.ToTileValue() );
