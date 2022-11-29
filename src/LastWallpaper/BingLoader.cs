@@ -14,6 +14,8 @@ namespace LastWallpaper
 {
     public sealed class BingLoader
     {
+        public static readonly string PictureFileNamePrefix = "bing";
+
         private const string BingImageListUrlTemplate = 
             "https://bingwallpaper.microsoft.com/api/BWC/getHPImages?screenWidth={0}&screenHeight={1}";
         private const int StartImmediately = 0;
@@ -74,7 +76,7 @@ namespace LastWallpaper
             var imageOfTheDayFileName =
                 Path.Combine(
                     _cacheFolder,
-                    $"{imageOfTheDay.StartDate}.jpg" );
+                    $"{PictureFileNamePrefix}{imageOfTheDay.StartDate}.jpg" );
 
             var imageAlreadyExists = File.Exists( imageOfTheDayFileName );
             if ( imageAlreadyExists ) return;
