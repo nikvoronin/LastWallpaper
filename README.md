@@ -23,6 +23,7 @@ See also [History](#history) chapter.
 ## Documentation
 
 - [Bing image of the day](/doc/bing_nov-2022.md). --Nov 2022
+- [Set Windows desktop wallpaper](/doc/windows_desktop_wallpaper.md)
 
 ## History
 

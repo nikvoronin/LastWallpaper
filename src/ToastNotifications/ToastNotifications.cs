@@ -7,8 +7,6 @@ namespace LastWallpaper
     {
         public const string ToastGroupName = "The Last Wallpaper";
 
-        public static void Main() { }
-        
         public static void OnImageUpdated( ImageOfTheDay info )
         {
             var toast = new ToastContentBuilder()

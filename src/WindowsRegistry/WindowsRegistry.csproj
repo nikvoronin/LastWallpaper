@@ -1,15 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0-windows10.0.17763.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
 	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	<ImplicitUsings>enable</ImplicitUsings>
 	<Nullable>disable</Nullable>
-	<AssemblyName>ToastNotifications</AssemblyName>
+	<AssemblyName>WindowsRegistry</AssemblyName>
 	<RootNamespace>LastWallpaper</RootNamespace>
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	<BaseIntermediateOutputPath>$(SolutionDir)obj\</BaseIntermediateOutputPath>
-	<OutputPath>$(SolutionDir)bin\Extensions\ToastNotifications\</OutputPath>
+	<OutputPath>$(SolutionDir)bin\Extensions\WindowsRegistry\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,17 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
-	  <PackageReference Include="Microsoft.Win32.SystemEvents" Version="7.0.0" />
-	  <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\LastWallpaper.Core\LastWallpaper.Core.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="del $(SolutionDir)bin\Extensions\ToastNotifications\LastWallpaper.Core.dll" />
+    <Exec Command="del $(SolutionDir)bin\Extensions\WindowsRegistry\LastWallpaper.Core.dll" />
 	<Exec Command="del /S $(SolutionDir)bin\*.pdb" />
   </Target>
 

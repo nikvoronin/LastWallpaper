@@ -95,6 +95,7 @@ namespace LastWallpaper
         private const object StaticClassInstance = null; // yes, it is null. static classes has no instance
 
         MethodInfo? _showToastMethod = null; // STUB: replace with something also
+        MethodInfo? _setWindowsRegistryWallpaperMethod = null; // STUB: replace with something also
         public override void Initialize()
         {
             // TODO: discover and load plugins here
@@ -111,6 +112,21 @@ namespace LastWallpaper
                         toastPlugin.GetType( "LastWallpaper.ToastNotifications" );
 
                     _showToastMethod =
+                        notificationManagerClass?.GetMethod( "OnImageUpdated" );
+                }
+                catch { }
+
+                // STUB: for windows registry plugin
+                try {
+                    var windowsRegistryPluginPath = Path.GetFullPath(
+                        "./Extensions/WindowsRegistry/WindowsRegistry.dll" );
+                    Assembly windowsRegistry =
+                        PluginLoadContext.LoadPluginFromFile( windowsRegistryPluginPath );
+
+                    Type? notificationManagerClass =
+                        windowsRegistry.GetType( "LastWallpaper.WindowsRegistry" );
+
+                    _setWindowsRegistryWallpaperMethod =
                         notificationManagerClass?.GetMethod( "OnImageUpdated" );
                 }
                 catch { }
@@ -160,14 +176,12 @@ namespace LastWallpaper
             } );
 
             if ( IsWindowsPlatform ) {
+                // STUB: remove hardcoded plugins call
                 // TODO: add ability to disable toasts. Enable by default
-                // STUB: remove hardcoded toasts call
-                _showToastMethod?.Invoke( StaticClassInstance, new object[] { info } );
-
-                try {
-                    WindowsRegistry.SetWallpaper( info.FileName );
-                }
-                catch { }
+                _showToastMethod
+                    ?.Invoke( StaticClassInstance, new object[] { info } );
+                _setWindowsRegistryWallpaperMethod
+                    ?.Invoke( StaticClassInstance, new object[] { info } );
             }
         }
 

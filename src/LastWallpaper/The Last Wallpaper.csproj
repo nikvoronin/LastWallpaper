@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LastWallpaper.Core\Core.csproj" />
+    <ProjectReference Include="..\LastWallpaper.Core\LastWallpaper.Core.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
