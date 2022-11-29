@@ -5,9 +5,9 @@ VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "The Last Wallpaper", "LastWallpaper\The Last Wallpaper.csproj", "{FED60989-CCB2-49E1-B170-93A6753E4D4D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "LastWallpaper.Core\Core.csproj", "{31357A86-17BF-47AF-B56E-B587649CDDBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LastWallpaper.Core", "LastWallpaper.Core\LastWallpaper.Core.csproj", "{31357A86-17BF-47AF-B56E-B587649CDDBE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToastNotifications", "WindowsToastNotifications\ToastNotifications.csproj", "{FCD6F482-C0BF-4486-B1CA-84FD5926EE5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToastNotifications", "ToastNotifications\ToastNotifications.csproj", "{FCD6F482-C0BF-4486-B1CA-84FD5926EE5B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
