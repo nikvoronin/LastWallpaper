@@ -12,8 +12,19 @@ namespace LastWallpaper.Core
             _resolver = new AssemblyDependencyResolver( pluginPath );
         }
 
+        private static readonly string[] BypassAssemblies = new[] {
+            "LastWallpaper.Core"
+        };
+
         protected override Assembly? Load( AssemblyName assemblyName )
         {
+            var bypassAssembly = 
+                BypassAssemblies.Any( 
+                    a => assemblyName.FullName.Contains( 
+                        a, StringComparison.OrdinalIgnoreCase ) );
+
+            if ( bypassAssembly ) return null;
+
             string? assemblyPath = _resolver.ResolveAssemblyToPath( assemblyName );
 
             return
@@ -41,5 +52,4 @@ namespace LastWallpaper.Core
                     new AssemblyName( Path.GetFileNameWithoutExtension( path ) ) );
         }
     }
-
 }
