@@ -27,7 +27,9 @@ See also [History](#history) chapter.
 
 ## History
 
-### 0.1.0-alpha // 22 Nov 2022
+### 0.1.0-alpha
+
+22 Nov 2022
 
 - Bing image of the day. Windows 10 and above only.
 - Windows' toast messages.
