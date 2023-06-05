@@ -11,14 +11,9 @@ module Native =
     extern int SystemParametersInfo (int uAction, int uParam, string lpvParam, int fuWinIni)
 
 module Toast =
-    let addText text (builder: ToastContentBuilder) =
-        match text with 
-        | Some title -> builder.AddText (title)
-        | None -> builder
-
-    let addAttrText copyright (builder: ToastContentBuilder) =
-        match copyright with 
-        | Some title -> builder.AddAttributionText (title)
+    let setupOpt o f (builder: ToastContentBuilder) =
+        match o with
+        | Some x -> f x builder
         | None -> builder
 
     let notify f (builder: ToastContentBuilder) =
@@ -28,8 +23,10 @@ module Toast =
     let show groupName (info: ImageOfTheDay) =
         (new ToastContentBuilder ())
             .AddHeroImage( new Uri( info.FileName ) )
-            |> addText info.Title
-            |> addAttrText info.Copyright
+            |> setupOpt info.Title
+                (fun x b -> b.AddText (x))
+            |> setupOpt info.Copyright
+                (fun x b -> b.AddAttributionText (x)) 
             |> notify
                 ( fun t ->
                     t.Group <- groupName
