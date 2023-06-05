@@ -32,5 +32,5 @@ let mainNotifyIcon =
 [<EntryPoint; STAThread>]
 let main argv =
     use _ = mainNotifyIcon
-    App.run () |> ignore
+    App.run ()
     0

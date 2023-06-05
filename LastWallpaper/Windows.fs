@@ -1,11 +1,40 @@
 ﻿module Windows
 
+open Types
 open System.Runtime.InteropServices
 open Microsoft.Win32;
+open Microsoft.Toolkit.Uwp.Notifications;
+open System
 
 module Native =
     [<DllImport ("user32.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)>]
     extern int SystemParametersInfo (int uAction, int uParam, string lpvParam, int fuWinIni)
+
+module Toast =
+    let addText text (builder: ToastContentBuilder) =
+        match text with 
+        | Some title -> builder.AddText (title)
+        | None -> builder
+
+    let addAttrText copyright (builder: ToastContentBuilder) =
+        match copyright with 
+        | Some title -> builder.AddAttributionText (title)
+        | None -> builder
+
+    let notify f (builder: ToastContentBuilder) =
+        builder.Show 
+            (fun t -> f t |> ignore)
+
+    let show groupName (info: ImageOfTheDay) =
+        (new ToastContentBuilder ())
+            .AddHeroImage( new Uri( info.FileName ) )
+            |> addText info.Title
+            |> addAttrText info.Copyright
+            |> notify
+                ( fun t ->
+                    t.Group <- groupName
+                    t.ExpirationTime <- DateTime.Now.AddDays (2) // TODO: add expiration as option
+                )
         
 module SysRegistry =
     [<Literal>]
