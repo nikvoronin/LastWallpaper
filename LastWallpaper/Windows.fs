@@ -32,26 +32,26 @@ module SysRegistry =
 
     let setWallpaper (pos: WallpaperPosition ) imagePath =
         use key =
-            Registry.CurrentUser.OpenSubKey 
+            Registry.CurrentUser
+                .OpenSubKey 
                 ( @"Control Panel\Desktop"
                 , true
                 )
 
-        key.SetValue
+        key.SetValue 
             ( @"WallpaperStyle"
             , (strNumOfPos pos)
-            );
+            )
 
-        key.SetValue
+        key.SetValue 
             ( @"TileWallpaper"
             , (strNumOfTiled pos)
-            );
+            )
 
         Native.SystemParametersInfo
             ( SPI_SETDESKWALLPAPER
             , 0
             , imagePath
             , SPIF_UPDATEINIFILE ||| SPIF_SENDWININICHANGE
-            )
-        |> ignore
+            ) |> ignore
 
