@@ -22,7 +22,8 @@ module Toast =
 
     let show groupName (info: ImageOfTheDay) =
         (new ToastContentBuilder ())
-            .AddHeroImage( new Uri( info.FileName ) )
+            |> setupOpt (Some (new Uri (info.FileName)))
+                (fun x b -> b.AddHeroImage (x))
             |> setupOpt info.Title
                 (fun x b -> b.AddText (x))
             |> setupOpt info.Copyright
@@ -60,17 +61,17 @@ module SysRegistry =
         use key =
             Registry.CurrentUser
                 .OpenSubKey 
-                ( @"Control Panel\Desktop"
+                ( "Control Panel\\Desktop"
                 , true
                 )
 
         key.SetValue 
-            ( @"WallpaperStyle"
+            ( "WallpaperStyle"
             , (strNumOfPos pos)
             )
 
         key.SetValue 
-            ( @"TileWallpaper"
+            ( "TileWallpaper"
             , (strNumOfTiled pos)
             )
 
