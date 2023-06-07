@@ -6,7 +6,7 @@ open System.Drawing
 [<Literal>]
 let AppName = "The Last Wallpaper"
 [<Literal>]
-let AppVersion = "3.6.6"
+let AppVersion = "3.6.7-temp"
 [<Literal>]
 let GitHubProjectUrl = "https://github.com/nikvoronin/LastWallpaper"
 let DefaultTrayIconSize = Size (20, 20)
@@ -36,7 +36,13 @@ let mainNotifyIcon =
         (createIconOpt None) // TODO: STUB: replace with proper icon
     |> SystemTray.setContextMenu
         ( Menu.createContext
-            [ "&Update Now" |> Menu.stub__TODO
+            [ "&Update Now"
+                |> Menu.verb
+                    (fun _ ->
+                        match (Providers.Bing.update ()) with
+                        | Some x -> Providers.Bing.loadImage x
+                        | _ -> ()
+                    )
             ; "&Open Wallpapers Folder" |> Menu.stub__TODO
             ; Menu.separator ()
             ; $"&About {AppName} {AppVersion}"
