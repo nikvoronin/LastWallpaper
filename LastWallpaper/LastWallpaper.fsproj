@@ -1,26 +1,24 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-	  <OutputType>WinExe</OutputType>
-	  <TargetFramework>net7.0-windows10.0.18362.0</TargetFramework>
-	  <UseWindowsForms>true</UseWindowsForms>
-	  <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows10.0.18362.0</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
   </PropertyGroup>
-
   <ItemGroup>
+    <Compile Include="Providers.fs" />
     <Compile Include="Types.fs" />
     <Compile Include="Windows.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
-		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="7.0.0" />
-		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FSharp.Json" Version="0.4.1" />
+    <PackageReference Include="FsHttp" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
+    <PackageReference Include="Microsoft.Win32.SystemEvents" Version="7.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\WinFormFs\WinFormFs\WinFormFs.fsproj" />
   </ItemGroup>
-
 </Project>
