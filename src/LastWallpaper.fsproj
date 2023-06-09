@@ -4,6 +4,7 @@
     <TargetFramework>net7.0-windows10.0.18362.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
+    <BaseOutputPath>..\bin\</BaseOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Providers.fs" />
@@ -19,6 +20,6 @@
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WinFormFs\WinFormFs\WinFormFs.fsproj" />
+    <ProjectReference Include="..\lib\WinFormFs\WinFormFs\WinFormFs.fsproj" />
   </ItemGroup>
 </Project>
