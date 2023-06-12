@@ -31,6 +31,15 @@ let createIconOpt imagePath =
     | Some path -> createIconFromImage path
     | None -> SystemIcons.Application
 
+let updateNow () =
+    async {
+        try
+            let! x = Providers.Bing.update ()
+            Providers.Bing.loadImage x
+        with _ -> ()
+    }
+    |> Async.Start
+
 let mainNotifyIcon =
     SystemTray.createIcon
         (createIconOpt None) // TODO: STUB: replace with proper icon
@@ -38,11 +47,7 @@ let mainNotifyIcon =
         ( Menu.createContext
             [ "&Update Now"
                 |> Menu.verb
-                    (fun _ ->
-                        match (Providers.Bing.update ()) with
-                        | Some x -> Providers.Bing.loadImage x
-                        | _ -> ()
-                    )
+                    (fun _ -> updateNow () )
             ; "&Open Wallpapers Folder" |> Menu.stub__TODO
             ; Menu.separator ()
             ; $"&About {AppName} {AppVersion}"
