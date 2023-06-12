@@ -6,7 +6,7 @@ open System.Drawing
 [<Literal>]
 let AppName = "The Last Wallpaper"
 [<Literal>]
-let AppVersion = "3.6.7-temp"
+let AppVersion = "3.6.13-temp"
 [<Literal>]
 let GitHubProjectUrl = "https://github.com/nikvoronin/LastWallpaper"
 let DefaultTrayIconSize = Size (20, 20)
@@ -31,23 +31,29 @@ let createIconOpt imagePath =
     | Some path -> createIconFromImage path
     | None -> SystemIcons.Application
 
-let updateNow () =
+let updateNow (ico: NotifyIcon) =
     async {
         try
-            let! x = Providers.Bing.update ()
-            Providers.Bing.loadImage x
+            let! x = Providers.Bing.updateAsync ()
+            use! fs = Providers.Bing.loadImageAsync x
+            let! icoPath =
+                Providers.Bing.saveToFileAsync fs
+            fs.Close ()
+
+            ico.Icon <- createIconOpt (Some icoPath)
         with _ -> ()
-    }
-    |> Async.Start
+    } |> Async.Start
+
+let updateNowMenuItem =
+    "&Update Now"
+    |> Menu.stub__TODO
 
 let mainNotifyIcon =
     SystemTray.createIcon
         (createIconOpt None) // TODO: STUB: replace with proper icon
     |> SystemTray.setContextMenu
         ( Menu.createContext
-            [ "&Update Now"
-                |> Menu.verb
-                    (fun _ -> updateNow () )
+            [ updateNowMenuItem
             ; "&Open Wallpapers Folder" |> Menu.stub__TODO
             ; Menu.separator ()
             ; $"&About {AppName} {AppVersion}"
@@ -62,8 +68,17 @@ let mainNotifyIcon =
         )
     |> SystemTray.showIcon
 
+let initApp () =
+    updateNowMenuItem
+        .Click.Add
+        (fun _ ->
+            updateNow mainNotifyIcon
+        )
+
 [<EntryPoint; STAThread>]
 let main argv =
     use _ = mainNotifyIcon
+
+    initApp ()
     App.run ()
     0

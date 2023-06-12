@@ -30,33 +30,38 @@ module Bing =
         let scr = Screen.PrimaryScreen.Bounds.Size
         $"https://bingwallpaper.microsoft.com/api/BWC/getHPImages?screenWidth={scr.Width}&screenHeight={scr.Height}"
 
-    let saveStreamToFile (s: Stream) =
-        let tempImagePath = // TODO: pass image filename
-            Path.Combine
-                ( Environment.GetFolderPath
-                    Environment.SpecialFolder.MyPictures
-                , "bingImage.jpg"
-                )
-        use fs = File.Create(tempImagePath)
-        s.CopyTo fs
-        s
+    let saveToFileAsync (s: Stream) =
+        async {
+            let tempImagePath = // TODO: pass image filename
+                Path.Combine
+                    ( Environment.GetFolderPath
+                        Environment.SpecialFolder.MyPictures
+                    , "bingImage.jpg"
+                    )
+            use fs = File.Create(tempImagePath)
+            do! s.CopyToAsync fs
+                |> Async.AwaitTask
 
-    let closeStream (s: Stream) = s.Close()
+            return tempImagePath
+        }
 
-    let loadImage (info: BingHpImages) =
+    let loadImageAsync (info: BingHpImages) =
         let iinfo =
             info.Images
             |> Array.item 0
 
-        http {
-            GET iinfo.UrlBase.Value
-        }
-        |> Request.send
-        |> Response.toStream
-        |> saveStreamToFile
-        |> closeStream
+        async {
+            let! response =
+                http {
+                    GET iinfo.UrlBase.Value
+                }
+                |> Request.sendAsync
 
-    let update () =
+            return!
+                Response.toStreamAsync response
+        }
+
+    let updateAsync () =
         async {
             let! response =
                 http {
@@ -66,5 +71,6 @@ module Bing =
             
             let! json = Response.toStringAsync None response
 
-            return Json.deserialize<BingHpImages> json
+            return
+                Json.deserialize<BingHpImages> json
         }
