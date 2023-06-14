@@ -47,7 +47,7 @@ let updateNowMenuItem =
 
 let mainNotifyIcon =
     SystemTray.createIcon
-        (createIconOpt None) // TODO: STUB: replace with proper icon
+        (createIconOpt None)
     |> SystemTray.setContextMenu
         ( Menu.createContext
             [ updateNowMenuItem

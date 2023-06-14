@@ -31,6 +31,7 @@ module Bing =
         $"https://bingwallpaper.microsoft.com/api/BWC/getHPImages?screenWidth={scr.Width}&screenHeight={scr.Height}"
 
     let getImageFolderBase =
+        // TODO: add option to override folder through application settings file
         Path.Combine
             ( Environment.GetFolderPath
                 Environment.SpecialFolder.MyPictures
@@ -39,13 +40,14 @@ module Bing =
 
     let getOrCreateFolder () =
         let folder =
-                Path.Combine
-                    ( getImageFolderBase
-                    , DateTime.Now.Year.ToString ()
-                    )
+            Path.Combine
+                ( getImageFolderBase
+                , DateTime.Now.Year.ToString ()
+                )
         
         if not (Directory.Exists folder) then
-            Directory.CreateDirectory (folder) |> ignore
+            Directory.CreateDirectory folder
+            |> ignore
         
         folder
 
@@ -74,9 +76,10 @@ module Bing =
                     |> Request.sendAsync
 
                 use! s = Response.toStreamAsync response
+                use fs = File.Create filename
 
-                use fs = File.Create(filename)
-                do! s.CopyToAsync fs
+                do!
+                    s.CopyToAsync fs
                     |> Async.AwaitTask
             
             return filename
@@ -90,7 +93,8 @@ module Bing =
                 }
                 |> Request.sendAsync
             
-            let! json = Response.toStringAsync None response
+            let! json =
+                Response.toStringAsync None response
 
             return
                 Json.deserialize<BingHpImages> json
