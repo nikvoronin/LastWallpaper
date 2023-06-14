@@ -6,15 +6,15 @@ open System.Drawing
 [<Literal>]
 let AppName = "The Last Wallpaper"
 [<Literal>]
-let AppVersion = "3.6.13-temp"
+let AppVersion = "3.6.14-temp"
 [<Literal>]
 let GitHubProjectUrl = "https://github.com/nikvoronin/LastWallpaper"
 let DefaultTrayIconSize = Size (20, 20)
 
 let createIconFromImage (imagePath: string) =
-    let src = new Bitmap (imagePath)
-    let dst = new Bitmap (src, DefaultTrayIconSize)
-    let g = Graphics.FromImage (dst)
+    use src = new Bitmap (imagePath)
+    use dst = new Bitmap (src, DefaultTrayIconSize)
+    use g = Graphics.FromImage (dst)
 
     g.DrawRectangle
         ( Pens.White
@@ -35,12 +35,9 @@ let updateNow (ico: NotifyIcon) =
     async {
         try
             let! x = Providers.Bing.updateAsync ()
-            use! fs = Providers.Bing.loadImageAsync x
-            let! icoPath =
-                Providers.Bing.saveToFileAsync fs
-            fs.Close ()
+            let! imagePath = Providers.Bing.loadImageAsync x
 
-            ico.Icon <- createIconOpt (Some icoPath)
+            ico.Icon <- createIconOpt (Some imagePath)
         with _ -> ()
     } |> Async.Start
 

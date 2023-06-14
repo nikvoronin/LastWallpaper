@@ -30,20 +30,32 @@ module Bing =
         let scr = Screen.PrimaryScreen.Bounds.Size
         $"https://bingwallpaper.microsoft.com/api/BWC/getHPImages?screenWidth={scr.Width}&screenHeight={scr.Height}"
 
-    let saveToFileAsync (s: Stream) =
-        async {
-            let tempImagePath = // TODO: pass image filename
-                Path.Combine
-                    ( Environment.GetFolderPath
-                        Environment.SpecialFolder.MyPictures
-                    , "bingImage.jpg"
-                    )
-            use fs = File.Create(tempImagePath)
-            do! s.CopyToAsync fs
-                |> Async.AwaitTask
+    // let saveToFileAsync fullFileName (s: Stream) =
+    //     async {
+    //         use fs = File.Create(fullFileName)
+    //         do! s.CopyToAsync fs
+    //             |> Async.AwaitTask
 
-            return tempImagePath
-        }
+    //     }
+
+    let getImageFolderBase =
+        Path.Combine
+            ( Environment.GetFolderPath
+                Environment.SpecialFolder.MyPictures
+            , "The Last Wallpaper"
+            )
+
+    let getOrCreateFolder () =
+        let folder =
+                Path.Combine
+                    ( getImageFolderBase
+                    , DateTime.UtcNow.Year.ToString ()
+                    )
+        
+        if not (Directory.Exists folder) then
+            Directory.CreateDirectory (folder) |> ignore
+        
+        folder
 
     let loadImageAsync (info: BingHpImages) =
         let iinfo =
@@ -57,8 +69,19 @@ module Bing =
                 }
                 |> Request.sendAsync
 
-            return!
-                Response.toStreamAsync response
+            use! s = Response.toStreamAsync response
+
+            let filename =
+                Path.Combine
+                    ( getOrCreateFolder ()
+                    , $"bing{iinfo.StartDate.Value}.jpg"
+                    )
+
+            use fs = File.Create(filename)
+            do! s.CopyToAsync fs
+                |> Async.AwaitTask
+            
+            return filename
         }
 
     let updateAsync () =
