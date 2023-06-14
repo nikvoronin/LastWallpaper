@@ -6,7 +6,7 @@ open System.Drawing
 [<Literal>]
 let AppName = "The Last Wallpaper"
 [<Literal>]
-let AppVersion = "3.6.14-temp"
+let AppVersion = "3.6.15-temp"
 [<Literal>]
 let GitHubProjectUrl = "https://github.com/nikvoronin/LastWallpaper"
 let DefaultTrayIconSize = Size (20, 20)

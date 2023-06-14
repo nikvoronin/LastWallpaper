@@ -30,14 +30,6 @@ module Bing =
         let scr = Screen.PrimaryScreen.Bounds.Size
         $"https://bingwallpaper.microsoft.com/api/BWC/getHPImages?screenWidth={scr.Width}&screenHeight={scr.Height}"
 
-    // let saveToFileAsync fullFileName (s: Stream) =
-    //     async {
-    //         use fs = File.Create(fullFileName)
-    //         do! s.CopyToAsync fs
-    //             |> Async.AwaitTask
-
-    //     }
-
     let getImageFolderBase =
         Path.Combine
             ( Environment.GetFolderPath
@@ -62,29 +54,30 @@ module Bing =
             info.Images
             |> Array.item 0
 
+        let name =
+            match iinfo.StartDate with
+            | Some x -> x
+            | _ -> $"{DateTime.Now:yyyyMMdd}"
+
+        let filename =
+            Path.Combine
+                ( getOrCreateFolder ()
+                , $"bing{name}.jpg"
+                )
+
         async {
-            let! response =
-                http {
-                    GET iinfo.UrlBase.Value
-                }
-                |> Request.sendAsync
+            if not (File.Exists filename) then
+                let! response =
+                    http {
+                        GET iinfo.UrlBase.Value
+                    }
+                    |> Request.sendAsync
 
-            use! s = Response.toStreamAsync response
+                use! s = Response.toStreamAsync response
 
-            let name =
-                match iinfo.StartDate with
-                | Some x -> x
-                | _ -> $"{DateTime.Now:yyyyMMdd}"
-
-            let filename =
-                Path.Combine
-                    ( getOrCreateFolder ()
-                    , $"bing{name}.jpg"
-                    )
-
-            use fs = File.Create(filename)
-            do! s.CopyToAsync fs
-                |> Async.AwaitTask
+                use fs = File.Create(filename)
+                do! s.CopyToAsync fs
+                    |> Async.AwaitTask
             
             return filename
         }
