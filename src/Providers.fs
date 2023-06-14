@@ -49,7 +49,7 @@ module Bing =
         let folder =
                 Path.Combine
                     ( getImageFolderBase
-                    , DateTime.UtcNow.Year.ToString ()
+                    , DateTime.Now.Year.ToString ()
                     )
         
         if not (Directory.Exists folder) then
@@ -71,10 +71,15 @@ module Bing =
 
             use! s = Response.toStreamAsync response
 
+            let name =
+                match iinfo.StartDate with
+                | Some x -> x
+                | _ -> $"{DateTime.Now:yyyyMMdd}"
+
             let filename =
                 Path.Combine
                     ( getOrCreateFolder ()
-                    , $"bing{iinfo.StartDate.Value}.jpg"
+                    , $"bing{name}.jpg"
                     )
 
             use fs = File.Create(filename)
