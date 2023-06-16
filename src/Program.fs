@@ -6,22 +6,37 @@ open System.Drawing
 [<Literal>]
 let AppName = "The Last Wallpaper"
 [<Literal>]
-let AppVersion = "3.6.15-temp"
+let AppVersion = "3.6.16-theta"
 [<Literal>]
 let GitHubProjectUrl = "https://github.com/nikvoronin/LastWallpaper"
 let DefaultTrayIconSize = Size (20, 20)
 
+let brightestColor (b: Bitmap) =
+    let pixels =
+        [ for y in 0 .. b.Height-1 do
+            for x in 0 .. b.Width-1 do
+                b.GetPixel (x, y)
+        ]
+
+    Seq.maxBy
+        (fun (x: Color) -> x.GetBrightness ())
+        pixels
+
+let penWith (color: Color) =
+    new Pen (color)
+
 let createIconFromImage (imagePath: string) =
     use src = new Bitmap (imagePath)
     use dst = new Bitmap (src, DefaultTrayIconSize)
-    use g = Graphics.FromImage (dst)
 
-    g.DrawRectangle
-        ( Pens.White
-        , 0, 0
-        , dst.Width - 1
-        , dst.Height - 1
-        )
+    // TODO: to options, ability to draw border around the tray icon
+    // use g = Graphics.FromImage (dst)
+    // g.DrawRectangle
+    //     ( penWith Color.White// (brightestColor dst)
+    //     , 0, 0
+    //     , dst.Width - 1
+    //     , dst.Height - 1
+    //     )
 
     Icon.FromHandle
         (dst.GetHicon())
