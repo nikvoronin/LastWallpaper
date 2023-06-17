@@ -45,4 +45,3 @@ See also [Release Notes](#release-notes) chapter.
 - update desktop wallpaper
 - toast notifications
 - unify providers
-

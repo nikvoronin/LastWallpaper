@@ -55,10 +55,9 @@ let updateTrayIcon imagePath (notifyIcon: NotifyIcon) =
             $"{AppName}\n{DateTime.Now.ToLongDateString ()} {DateTime.Now.ToLongTimeString ()}" // last update date-time
         |> ignore
 
-        if isNotNull prevIcon then
+        if not (isNull prevIcon) then
             try prevIcon.Dispose ()
             with _ -> ()
-
 
 let updateBingNow (icon: NotifyIcon) =
     async {
