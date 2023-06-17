@@ -35,3 +35,14 @@ See also [Release Notes](#release-notes) chapter.
 
 - Bing image of the day. Windows 10 and above only.
 - Windows' toast messages.
+
+<!-- omit in toc -->
+## TODO
+
+- refactoring:
+    - clairify funс names
+    - add app global state record
+- update desktop wallpaper
+- toast notifications
+- unify providers
+
