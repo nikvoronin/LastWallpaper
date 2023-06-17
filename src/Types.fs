@@ -1,4 +1,5 @@
 ﻿module Types
+open System.Windows.Forms
 
 type ImageOfTheDay = {
     FileName: string
@@ -6,3 +7,8 @@ type ImageOfTheDay = {
     Description: string Option
     Copyright: string Option
     }
+
+type Msg<'a> =
+    | UpdateNow of NotifyIcon
+    | QuitApp
+    | AboutApp of string

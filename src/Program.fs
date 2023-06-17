@@ -62,7 +62,13 @@ let updateBingNow (icon: NotifyIcon) =
         with _ -> ()
     } |> Async.Start
 
-let init () =
+let dispatcher msg =
+    match msg with
+    | UpdateNow x -> updateBingNow x
+    | QuitApp -> App.exit ()
+    | AboutApp url -> Sys.openUrlInBrowser url
+
+let init dispatch =
     let mainNotifyIcon =
         SystemTray.createIcon (createIconOpt None)
 
@@ -71,19 +77,16 @@ let init () =
         ( Menu.createContext
             [ "&Update Now"
                 |> Menu.verb
-                    (fun _ ->
-                        updateBingNow mainNotifyIcon
-                    )
+                    (fun _ -> dispatch (Msg.UpdateNow mainNotifyIcon))
             ; "&Open Wallpapers Folder" |> Menu.stub__TODO
             ; Menu.separator ()
             ; $"&About {AppName} {AppVersion}"
                 |> Menu.verb
-                    (fun _ ->
-                        Sys.openUrlInBrowser
-                            GitHubProjectUrl
-                    )
+                    (fun _ -> dispatch (Msg.AboutApp GitHubProjectUrl))
             ; Menu.separator ()
-            ; "&Quit" |> Menu.verb App.exitA
+            ; "&Quit"
+                |> Menu.verb 
+                    (fun _ -> dispatch Msg.QuitApp)
             ]
         )
     |> SystemTray.updateText AppName
@@ -91,6 +94,6 @@ let init () =
 
 [<EntryPoint; STAThread>]
 let main argv =
-    use _ = init () // to avoid of disposing the notify icon control
+    use _ = init dispatcher // to avoid of disposing the notify icon control
     App.run ()
     0
