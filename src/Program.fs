@@ -62,10 +62,6 @@ let updateBingNow (icon: NotifyIcon) =
         with _ -> ()
     } |> Async.Start
 
-let update msg =
-    match msg with
-    | UpdateNow x -> updateBingNow x
-
 let init () =
     let mainNotifyIcon =
         SystemTray.createIcon (createIconOpt None)
@@ -76,7 +72,7 @@ let init () =
             [ "&Update Now"
                 |> Menu.verb
                     (fun _ ->
-                        update (Msg.UpdateNow mainNotifyIcon)
+                        updateBingNow mainNotifyIcon
                     )
             ; "&Open Wallpapers Folder" |> Menu.stub__TODO
             ; Menu.separator ()
