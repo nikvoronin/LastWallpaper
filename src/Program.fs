@@ -2,11 +2,12 @@
 open WinFormFs
 open System.Windows.Forms
 open System.Drawing
+open Types
 
 [<Literal>]
 let AppName = "The Last Wallpaper"
 [<Literal>]
-let AppVersion = "3.6.16-theta"
+let AppVersion = "3.6.17-theta"
 [<Literal>]
 let GitHubProjectUrl = "https://github.com/nikvoronin/LastWallpaper"
 let DefaultTrayIconSize = Size (20, 20)
@@ -30,13 +31,13 @@ let createIconFromImage (imagePath: string) =
     use dst = new Bitmap (src, DefaultTrayIconSize)
 
     // TODO: to options, ability to draw border around the tray icon
-    // use g = Graphics.FromImage (dst)
-    // g.DrawRectangle
-    //     ( penWith Color.White// (brightestColor dst)
-    //     , 0, 0
-    //     , dst.Width - 1
-    //     , dst.Height - 1
-    //     )
+    use g = Graphics.FromImage (dst)
+    g.DrawRectangle
+        ( penWith (brightestColor dst) // Color.White// 
+        , 0, 0
+        , dst.Width - 1
+        , dst.Height - 1
+        )
 
     Icon.FromHandle
         (dst.GetHicon())
@@ -46,26 +47,37 @@ let createIconOpt imagePath =
     | Some path -> createIconFromImage path
     | None -> SystemIcons.Application
 
-let updateNow (ico: NotifyIcon) =
+let updateBingNow (icon: NotifyIcon) =
     async {
         try
             let! x = Providers.Bing.updateAsync ()
             let! imagePath = Providers.Bing.loadImageAsync x
 
-            ico.Icon <- createIconOpt (Some imagePath)
+            icon
+            |> SystemTray.changeIcon
+                (createIconOpt (Some imagePath))
+            |> SystemTray.updateText
+                $"{AppName}\n{DateTime.Now.ToLongDateString ()} {DateTime.Now.ToLongTimeString ()}" // last update date-time
+            |> ignore
         with _ -> ()
     } |> Async.Start
 
-let updateNowMenuItem =
-    "&Update Now"
-    |> Menu.stub__TODO
+let update msg =
+    match msg with
+    | UpdateNow x -> updateBingNow x
 
-let mainNotifyIcon =
-    SystemTray.createIcon
-        (createIconOpt None)
+let init () =
+    let mainNotifyIcon =
+        SystemTray.createIcon (createIconOpt None)
+
+    mainNotifyIcon
     |> SystemTray.setContextMenu
         ( Menu.createContext
-            [ updateNowMenuItem
+            [ "&Update Now"
+                |> Menu.verb
+                    (fun _ ->
+                        update (Msg.UpdateNow mainNotifyIcon)
+                    )
             ; "&Open Wallpapers Folder" |> Menu.stub__TODO
             ; Menu.separator ()
             ; $"&About {AppName} {AppVersion}"
@@ -78,19 +90,11 @@ let mainNotifyIcon =
             ; "&Quit" |> Menu.verb App.exitA
             ]
         )
+    |> SystemTray.updateText AppName
     |> SystemTray.showIcon
-
-let initApp () =
-    updateNowMenuItem
-        .Click.Add
-        (fun _ ->
-            updateNow mainNotifyIcon
-        )
 
 [<EntryPoint; STAThread>]
 let main argv =
-    use _ = mainNotifyIcon
-
-    initApp ()
+    use _ = init () // to avoid of disposing the notify icon control
     App.run ()
     0

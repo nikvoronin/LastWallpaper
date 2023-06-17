@@ -6,3 +6,6 @@
         Description: string Option
         Copyright: string Option
         }
+    
+    type Msg<'a> =
+    | UpdateNow of 'a

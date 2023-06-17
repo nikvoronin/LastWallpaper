@@ -6,6 +6,7 @@ module Bing =
     open System.IO
     open System
     open System.Windows.Forms
+    open System.Globalization
 
     type ImageInfo = {
         [<JsonField("startdate")>]
@@ -25,6 +26,21 @@ module Bing =
         [<JsonField("images")>]
         Images: ImageInfo array
     }
+
+    let extractHint (x: ImageInfo) =
+        let title =
+            if x.Title.IsSome
+            then $"{x.Title.Value}\n"
+            else String.Empty
+        let dt =
+            match x.StartDate with
+            | Some d ->
+                (DateTime
+                    .ParseExact (d, "yyyyMMdd", CultureInfo.InvariantCulture))
+                    .ToLongDateString ()
+            | _ -> String.Empty
+
+        $"{title}{dt}"
 
     let buildBingSourceUrl () =
         let scr = Screen.PrimaryScreen.Bounds.Size
