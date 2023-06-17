@@ -7,21 +7,18 @@ open Types
 [<Literal>]
 let AppName = "The Last Wallpaper"
 [<Literal>]
-let AppVersion = "3.6.17-theta"
+let AppVersion = "3.6.18-alpha"
 [<Literal>]
 let GitHubProjectUrl = "https://github.com/nikvoronin/LastWallpaper"
 let DefaultTrayIconSize = Size (20, 20)
 
-let brightestColor (b: Bitmap) =
-    let pixels =
+let findBrightestColor (b: Bitmap) =
+    Seq.maxBy
+        (fun (x: Color) -> x.GetBrightness ())
         [ for y in 0 .. b.Height-1 do
             for x in 0 .. b.Width-1 do
                 b.GetPixel (x, y)
         ]
-
-    Seq.maxBy
-        (fun (x: Color) -> x.GetBrightness ())
-        pixels
 
 let penWith (color: Color) =
     new Pen (color)
@@ -32,8 +29,9 @@ let createIconFromImage (imagePath: string) =
 
     // TODO: to options, ability to draw border around the tray icon
     use g = Graphics.FromImage (dst)
+    use pen = penWith (findBrightestColor dst) // Color.White// 
     g.DrawRectangle
-        ( penWith (brightestColor dst) // Color.White// 
+        ( pen
         , 0, 0
         , dst.Width - 1
         , dst.Height - 1
@@ -47,18 +45,28 @@ let createIconOpt imagePath =
     | Some path -> createIconFromImage path
     | None -> SystemIcons.Application
 
+let updateTrayIcon imagePath (notifyIcon: NotifyIcon) =
+        let prevIcon = notifyIcon.Icon
+
+        notifyIcon
+        |> SystemTray.changeIcon
+            (createIconOpt (Some imagePath))
+        |> SystemTray.updateText
+            $"{AppName}\n{DateTime.Now.ToLongDateString ()} {DateTime.Now.ToLongTimeString ()}" // last update date-time
+        |> ignore
+
+        if isNotNull prevIcon then
+            try prevIcon.Dispose ()
+            with _ -> ()
+
+
 let updateBingNow (icon: NotifyIcon) =
     async {
         try
             let! x = Providers.Bing.updateAsync ()
             let! imagePath = Providers.Bing.loadImageAsync x
 
-            icon
-            |> SystemTray.changeIcon
-                (createIconOpt (Some imagePath))
-            |> SystemTray.updateText
-                $"{AppName}\n{DateTime.Now.ToLongDateString ()} {DateTime.Now.ToLongTimeString ()}" // last update date-time
-            |> ignore
+            updateTrayIcon imagePath icon
         with _ -> ()
     } |> Async.Start
 
@@ -70,21 +78,21 @@ let dispatch msg =
 
 let init send =
     let mainNotifyIcon =
-        SystemTray.createIcon (createIconOpt None)
+        SystemTray.createIcon (createIconOpt None) // TODO: try to open the last known image at the start
 
     mainNotifyIcon
     |> SystemTray.setContextMenu
         ( Menu.createContext
-            [ "&Update Now"
+            [ "Update Now"
                 |> Menu.verb
                     (fun _ -> send (Msg.UpdateNow mainNotifyIcon))
-            ; "&Open Wallpapers Folder" |> Menu.stub__TODO
+            ; "Explore Wallpapers Folder" |> Menu.stub__TODO
             ; Menu.separator ()
-            ; $"&About {AppName} {AppVersion}"
+            ; $"About v{AppVersion}"
                 |> Menu.verb
                     (fun _ -> send (Msg.AboutApp GitHubProjectUrl))
             ; Menu.separator ()
-            ; "&Quit"
+            ; "Quit"
                 |> Menu.verb 
                     (fun _ -> send Msg.QuitApp)
             ]
@@ -94,6 +102,12 @@ let init send =
 
 [<EntryPoint; STAThread>]
 let main argv =
-    use _ = init dispatch // to avoid of disposing the notify icon control
+    use ni = init dispatch // to avoid of disposing the notify icon control
+    use t =
+        Timer.startImmediate
+            (TimeSpan.FromHours (1))
+            (fun () -> dispatch (Msg.UpdateNow ni))
+
     App.run ()
+    Timer.stop t
     0

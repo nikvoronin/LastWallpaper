@@ -44,7 +44,8 @@ module Bing =
 
     let buildBingSourceUrl () =
         let scr = Screen.PrimaryScreen.Bounds.Size
-        $"https://bingwallpaper.microsoft.com/api/BWC/getHPImages?screenWidth={scr.Width}&screenHeight={scr.Height}"
+        "https://bingwallpaper.microsoft.com/api/BWC/getHPImages"
+        + $"?screenWidth={scr.Width}&screenHeight={scr.Height}"
 
     let getImageFolderBase =
         // TODO: add option to override folder through application settings file
