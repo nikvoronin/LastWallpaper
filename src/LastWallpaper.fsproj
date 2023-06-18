@@ -21,6 +21,6 @@
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\lib\WinFormFs\WinFormFs\WinFormFs.fsproj" />
+    <ProjectReference Include="..\WinFormFs\WinFormFs\WinFormFs.fsproj" />
   </ItemGroup>
 </Project>

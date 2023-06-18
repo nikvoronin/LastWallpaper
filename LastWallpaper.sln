@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LastWallpaper", "src\LastWallpaper.fsproj", "{78CAB62E-23B1-45AA-93A4-26F7781E0C07}"
 EndProject
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "WinFormFs", "lib\WinFormFs\WinFormFs\WinFormFs.fsproj", "{4D6B1A61-CAAC-4515-B4E8-B37AAA9D6703}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "WinFormFs", "WinFormFs\WinFormFs\WinFormFs.fsproj", "{4D6B1A61-CAAC-4515-B4E8-B37AAA9D6703}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

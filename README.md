@@ -26,9 +26,9 @@ See also [Release Notes](#release-notes) chapter.
 
 ## Documentation
 
-- [Windows 10 Toast Notifications](/doc/win10_toast_notifications.md).
-- [Windows Desktop Wallpaper](/doc/windows_desktop_wallpaper.md).
-- [Bing image of the day](/doc/bing_nov-2022.md). --Nov 2022
+- [Windows 10 Toast Notifications](/docs/win10_toast_notifications.md).
+- [Windows Desktop Wallpaper](/docs/windows_desktop_wallpaper.md).
+- [Bing image of the day](/docs/bing_nov-2022.md). --Nov 2022
 
 ## Release Notes
 

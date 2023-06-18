@@ -1,3 +1,3 @@
 [submodule "WinFormFs"]
-	path = lib/WinFormFs
+	path = WinFormFs
 	url = https://github.com/nikvoronin/WinFormFs.git
