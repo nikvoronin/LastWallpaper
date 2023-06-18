@@ -66,6 +66,22 @@ module Bing =
         
         folder
 
+    let downloadImageAsync url filename =
+        async {
+            let! response =
+                http {
+                    GET url
+                }
+                |> Request.sendAsync
+
+            use! s = Response.toStreamAsync response
+            use fs = File.Create filename
+
+            do!
+                s.CopyToAsync fs
+                |> Async.AwaitTask
+        }
+
     let loadImageAsync (info: BingHpImages) =
         let iinfo =
             info.Images
@@ -82,22 +98,15 @@ module Bing =
                 , $"bing{name}.jpg"
                 )
 
-        async {
-            if not (File.Exists filename) then
-                let! response =
-                    http {
-                        GET iinfo.UrlBase.Value
-                    }
-                    |> Request.sendAsync
+        async { 
+            if File.Exists filename then
+                return Types.Actual filename
+            else
+                do! downloadImageAsync
+                        iinfo.UrlBase.Value
+                        filename
 
-                use! s = Response.toStreamAsync response
-                use fs = File.Create filename
-
-                do!
-                    s.CopyToAsync fs
-                    |> Async.AwaitTask
-            
-            return filename
+                return Types.FreshImage filename
         }
 
     let updateAsync () =

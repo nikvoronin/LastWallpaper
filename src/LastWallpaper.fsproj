@@ -7,10 +7,10 @@
     <BaseOutputPath>..\bin\</BaseOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Providers.fs" />
     <Compile Include="Types.fs" />
     <Compile Include="Windows.fs" />
     <Compile Include="Timer.fs" />
+    <Compile Include="Providers.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

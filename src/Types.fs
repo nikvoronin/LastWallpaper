@@ -13,3 +13,7 @@ type Msg<'a> =
     | QuitApp
     | AboutApp of string
     | ExploreFolder of string
+
+type UpdateResult =
+    | FreshImage of string
+    | Actual of string
