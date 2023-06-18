@@ -25,11 +25,24 @@ let penWith (color: Color) =
 
 let createIconFromImage (imagePath: string) =
     use src = new Bitmap (imagePath)
-    use dst = new Bitmap (src, DefaultTrayIconSize)
+    use dst =
+        new Bitmap
+            ( DefaultTrayIconSize.Width
+            , DefaultTrayIconSize.Height
+            )
 
     // TODO: to options, ability to draw border around the tray icon
     use g = Graphics.FromImage (dst)
-    use pen = penWith (findBrightestColor dst) // Color.White// 
+    g.InterpolationMode <-
+        Drawing2D.InterpolationMode.NearestNeighbor
+    g.DrawImage
+        ( src
+        , 0, 0
+        , dst.Width
+        , dst.Height
+        )
+
+    use pen = penWith (findBrightestColor dst)
     g.DrawRectangle
         ( pen
         , 0, 0
