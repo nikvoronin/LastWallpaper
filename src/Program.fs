@@ -73,7 +73,8 @@ let dispatch msg =
     match msg with
     | UpdateNow x -> updateBingNow x
     | QuitApp -> App.exit ()
-    | AboutApp url -> Sys.openUrlInBrowser url
+    | AboutApp url -> Sys.shellOpen url
+    | ExploreFolder path -> Sys.shellOpen path
 
 let init send =
     let mainNotifyIcon =
@@ -85,7 +86,9 @@ let init send =
             [ "Update Now"
                 |> Menu.verb
                     (fun _ -> send (Msg.UpdateNow mainNotifyIcon))
-            ; "Explore Wallpapers Folder" |> Menu.stub__TODO
+            ; "Explore Wallpapers Folder"
+                |> Menu.verb
+                    (fun _ -> send (Msg.ExploreFolder Providers.Bing.getImageFolderBase))
             ; Menu.separator ()
             ; $"About v{AppVersion}"
                 |> Menu.verb

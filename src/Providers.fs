@@ -60,11 +60,9 @@ module Bing =
             Path.Combine
                 ( getImageFolderBase
                 , DateTime.Now.Year.ToString ()
-                )
-        
-        if not (Directory.Exists folder) then
-            Directory.CreateDirectory folder
-            |> ignore
+                )        
+        Directory.CreateDirectory folder
+        |> ignore
         
         folder
 

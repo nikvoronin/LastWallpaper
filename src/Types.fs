@@ -12,3 +12,4 @@ type Msg<'a> =
     | UpdateNow of NotifyIcon
     | QuitApp
     | AboutApp of string
+    | ExploreFolder of string

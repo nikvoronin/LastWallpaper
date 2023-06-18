@@ -25,7 +25,7 @@ let mainForm =
                 [ "&Technical Details 🚀"
                     |> Menu.verb
                         (fun _ ->
-                            Sys.openUrlInBrowser
+                            Sys.shellOpen
                                 GitHubProjectUrl
                         )
                 ; Menu.separator ()
