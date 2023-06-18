@@ -52,8 +52,8 @@ See also [Release Notes](#release-notes) chapter.
 ## TODO
 
 ```text
-- refactoring:
-    - shrink image to icon using nearest neighbor method
+> refactoring:
+    + shrink image to icon using nearest neighbor method
     - clairify funс names
     - add app global state record
 - toast notifications
