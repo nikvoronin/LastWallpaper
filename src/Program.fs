@@ -58,9 +58,7 @@ let createIconOpt imagePath =
     | Some path -> createIconFromImage path
     | None -> SystemIcons.Application
 
-let updateTrayIcon (notifyIcon: NotifyIcon) imagePath =
-        let prevIcon = notifyIcon.Icon
-
+let updateNotifyIcon (notifyIcon: NotifyIcon) imagePath =
         notifyIcon
         |> SystemTray.changeIcon
             (createIconOpt (Some imagePath))
@@ -68,28 +66,19 @@ let updateTrayIcon (notifyIcon: NotifyIcon) imagePath =
             $"{AppName}\n{DateTime.Now.ToLongDateString ()} {DateTime.Now.ToLongTimeString ()}" // last update date-time
         |> ignore
 
-        if not (isNull prevIcon) then
-            try prevIcon.Dispose ()
-            with _ -> ()
-
-let updateWallpaper updateResult =
-    match updateResult with
-    | FreshImage path ->
-        Windows.SysRegistry.setWallpaper
-            Windows.SysRegistry.Fill
-            path
-        path
-    | Actual path -> path // for the first change at the app start
-
 let updateBingNow (icon: NotifyIcon) =
     async {
         try
             let! x = Providers.Bing.updateAsync ()
             let! result = Providers.Bing.loadImageAsync x
 
-            result
-            |> updateWallpaper
-            |> updateTrayIcon icon
+            match result with
+            | FreshImage path ->
+                Windows.SysRegistry.setWallpaper
+                    Windows.SysRegistry.Fill
+                    path
+                updateNotifyIcon icon path
+            | _ -> ()
         with _ -> ()
     } |> Async.Start
 

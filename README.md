@@ -56,6 +56,7 @@ See also [Release Notes](#release-notes) chapter.
     + shrink image to icon using nearest neighbor method
     - clairify funс names
     - add app global state record
+    - store tray icon in the global state and dispose it when a new one arrived
 - toast notifications
 - unify providers
 + update desktop wallpaper
