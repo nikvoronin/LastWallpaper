@@ -8,19 +8,16 @@ Wallpaper of the day on desktop.
 
 ## What's New
 
-18 Jun 2023
+19 Jun 2023
+
+- Windows toast notifications.
+
+Not so far
 
 - Looking for changes from bing (once an hour).
 - Downloads new image.
 - Updates desktop wallpaper.
 - Changes tray icon according to the new image of the day.
-
-Not so far
-
-- Project structure was changed.
-- Started F# version (C# was abandoned).
-- Bing image of the day.
-- Windows' toast messages.
 
 See also [Release Notes](#release-notes) chapter.
 
@@ -31,6 +28,11 @@ See also [Release Notes](#release-notes) chapter.
 - [Bing image of the day](/docs/bing_nov-2022.md). --Nov 2022
 
 ## Release Notes
+
+<!-- omit in toc -->
+### 3.6.19-alpha
+
+- Windows toast notifications.
 
 <!-- omit in toc -->
 ### 3.6.18-alpha
@@ -57,7 +59,8 @@ See also [Release Notes](#release-notes) chapter.
     - clairify funс names
     - add app global state record
     - store tray icon in the global state and dispose it when a new one arrived
-- toast notifications
++ toast notifications
 - unify providers
 + update desktop wallpaper
+- on release, rename .exe file to `The Last Wallpaper`
 ```
