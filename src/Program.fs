@@ -66,6 +66,22 @@ let updateNotifyIcon (notifyIcon: NotifyIcon) imagePath =
             $"{AppName}\n{DateTime.Now.ToLongDateString ()} {DateTime.Now.ToLongTimeString ()}" // last update date-time
         |> ignore
 
+let setNewImageToDesktop path iotd =
+    Windows.SysRegistry.setWallpaper
+        Windows.SysRegistry.Fill
+        path
+    Windows.Toast.show
+        AppName
+        iotd
+
+let createImageOfTheDay path (bng: Providers.Bing.BingHpImages) =
+    {
+        FileName = path
+        Title = bng.Images[0].Title
+        Copyright = bng.Images[0].CopyrightText
+        Description = None
+    }
+
 let updateBingNow (icon: NotifyIcon) =
     async {
         try
@@ -74,10 +90,9 @@ let updateBingNow (icon: NotifyIcon) =
 
             match result with
             | FreshImage path ->
-                Windows.SysRegistry.setWallpaper
-                    Windows.SysRegistry.Fill
-                    path
                 updateNotifyIcon icon path
+                createImageOfTheDay path x
+                |> setNewImageToDesktop path
             | _ -> ()
         with _ -> ()
     } |> Async.Start
