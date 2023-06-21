@@ -1,5 +1,70 @@
 module Providers
 
+module NasaApod =
+    open FsHttp
+    open FSharp.Json
+    open FSharp.Data
+    open System.IO
+    open System
+    open System.Globalization
+
+    let buildSourceUrl () =
+        let dt = DateTime.Now.ToString("yyMMdd");
+        $"https://apod.nasa.gov/apod/ap{dt}.html"
+
+    let update () =
+        let doc =
+            buildSourceUrl ()
+            |> HtmlDocument.Load
+        
+        let url =
+            "https://apod.nasa.gov/apod/"
+            + (
+                doc.Descendants "a"
+                |> Seq.choose 
+                    (fun x ->
+                        x.TryGetAttribute "href"
+                        |> Option.map (fun a -> a.Value ())
+                    )
+                |> Seq.filter
+                    ( fun s ->
+                        s.Contains ".jpg"
+                        || s.Contains ".jpeg"
+                    )
+                |> Seq.item 0
+            )
+        
+        let desc =
+            doc.Descendants "img"
+            |> Seq.choose 
+                (fun x ->
+                    x.TryGetAttribute "alt"
+                    |> Option.map (fun a -> a.Value ())
+                )
+            |> Seq.item 0
+
+        let title =
+            ( doc.Descendants "center"
+                |> Seq.item 1
+                |> HtmlNode.descendants
+                    false
+                    (fun x -> x.Name () = "b")
+                |> Seq.item 0
+                |> HtmlNode.innerText
+            ).Trim ()
+
+        let crpre =
+            doc.Descendants "center"
+                |> Seq.item 1
+                |> HtmlNode.innerText
+
+        let cr =
+            ( crpre[ crpre.IndexOf(':') + 1 ..]
+                .Replace ("&", " &")
+            ).Trim ()
+
+        (url, title, desc, cr)
+
 module Bing =
     open FsHttp
     open FSharp.Json

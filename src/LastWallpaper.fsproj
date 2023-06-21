@@ -14,6 +14,7 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FSharp.Data.Html.Core" Version="6.2.0" />
     <PackageReference Include="FSharp.Json" Version="0.4.1" />
     <PackageReference Include="FsHttp" Version="10.0.0" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
