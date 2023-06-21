@@ -8,12 +8,13 @@ Wallpaper of the day on desktop.
 
 ## What's New
 
-19 Jun 2023
+21 Jun 2023
 
-- Windows toast notifications.
+- Initial downloading for NASA APOD image of the day.
 
 Not so far
 
+- Windows toast notifications.
 - Looking for changes from bing (once an hour).
 - Downloads new image.
 - Updates desktop wallpaper.
@@ -45,22 +46,26 @@ See also [Release Notes](#release-notes) chapter.
 <!-- omit in toc -->
 ### 0.1.0-alpha
 
-22 Nov 2022
-
 - Bing image of the day. Windows 10 and above only.
 - Windows' toast messages.
+- --- *C#, 22 Nov 2022*
 
 <!-- omit in toc -->
-## TODO
+## Stage
 
 ```text
-> refactoring:
-    + shrink image to icon using nearest neighbor method
-    - clairify funс names
-    - add app global state record
-    - store tray icon in the global state and dispose it when a new one arrived
-+ toast notifications
-- unify providers
-+ update desktop wallpaper
+TODO
+- icon with nine image dominant colors
+- add app global state record
+- store tray icon in the global state and dispose it when a new one arrived
+- Options instead of Toast::setupOpt
+> unify providers
+    > NASA APOD
+    - Bing
 - on release, rename .exe file to `The Last Wallpaper`
+
+DONE
++ toast notifications
++ update desktop wallpaper
++ shrink image to icon using nearest neighbor method
 ```
