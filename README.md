@@ -58,13 +58,14 @@ TODO
 - icon with nine image dominant colors
 - add app global state record
 - store tray icon in the global state and dispose it when a new one arrived
-- Options instead of Toast::setupOpt
 > unify providers
     > NASA APOD
+        - Use AsyncLoad
     - Bing
 - on release, rename .exe file to `The Last Wallpaper`
 
 DONE
+--- Options instead of Toast::setupOpt
 + toast notifications
 + update desktop wallpaper
 + shrink image to icon using nearest neighbor method

@@ -15,7 +15,7 @@ module NasaApod =
     let update () =
         let doc =
             buildSourceUrl ()
-            |> HtmlDocument.Load
+            |> HtmlDocument.Load // TODO: use AsyncLoad
         
         let url =
             "https://apod.nasa.gov/apod/"
