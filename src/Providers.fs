@@ -94,9 +94,10 @@ module Bing =
 
     let extractHint (x: ImageInfo) =
         let title =
-            if x.Title.IsSome
-            then $"{x.Title.Value}\n"
-            else String.Empty
+            match x.Title with
+            | Some t -> $"{t}\n"
+            | None -> String.Empty
+
         let dt =
             match x.StartDate with
             | Some d ->
