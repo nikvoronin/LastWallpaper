@@ -6,14 +6,17 @@ Wallpaper of the day on desktop.
 - [Documentation](#documentation)
 - [Release Notes](#release-notes)
 
+> There are at least two others developer versions in branches: one is cross-platform under the AvaloniaUI /[develop-cs-xplatform](https://github.com/nikvoronin/LastWallpaper/tree/develop-cs-xplatform) and another one /[develop-fs-win](https://github.com/nikvoronin/LastWallpaper/tree/develop-fs-win) written in F#. Both are workable but abandoned and obsolete.
+
 ## What's New
 
-21 Jun 2023
+29 May 2024
 
-- Initial downloading for NASA APOD image of the day.
+- Switched back to the csharp + winforms.
 
 Not so far
 
+- Initial downloading for NASA APOD image of the day.
 - Windows toast notifications.
 - Looking for changes from bing (once an hour).
 - Downloads new image.
@@ -29,6 +32,11 @@ See also [Release Notes](#release-notes) chapter.
 - [Bing image of the day](/docs/bing_nov-2022.md). --Nov 2022
 
 ## Release Notes
+
+<!-- omit in toc -->
+### 4.5.29-alpha
+
+- Stub for csharp version. Switched back to the csharp + winforms.
 
 <!-- omit in toc -->
 ### 3.6.19-alpha
