@@ -68,9 +68,9 @@ Valuable fields:
 "urlbase": "/th?id=OHR.MullOtter_ROW8840823080",
 ```
 
-> image link = `https://www.bing.com` + `{urlbase}` + `{resulution}`
+> image link = `https://www.bing.com` + `{urlbase}` + `{resolution}`
 
-Resulutions:
+Resolutions:
 
 - HD: `_1280x720.jpg`
 - FullHD: `_1920x1080.jpg`
