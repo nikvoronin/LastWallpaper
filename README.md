@@ -6,7 +6,7 @@ Wallpaper of the day on desktop.
 - [Documentation](#documentation)
 - [Release Notes](#release-notes)
 
-> There are at least two others developer versions in branches: one is cross-platform under the AvaloniaUI /[develop-cs-xplatform](https://github.com/nikvoronin/LastWallpaper/tree/develop-cs-xplatform) and another one /[develop-fs-win](https://github.com/nikvoronin/LastWallpaper/tree/develop-fs-win) written in F#. Both are workable but abandoned and obsolete.
+> There are at least two others developer versions in branches: one is cross-platform app written under the AvaloniaUI /[develop-cs-xplatform](https://github.com/nikvoronin/LastWallpaper/tree/develop-cs-xplatform) and another one /[develop-fs-win](https://github.com/nikvoronin/LastWallpaper/tree/develop-fs-win) written in F#. Both are workable but abandoned and obsolete.
 
 ## What's New
 
@@ -27,9 +27,12 @@ See also [Release Notes](#release-notes) chapter.
 
 ## Documentation
 
-- [Windows 10 Toast Notifications](/docs/win10_toast_notifications.md).
-- [Windows Desktop Wallpaper](/docs/windows_desktop_wallpaper.md).
-- [Bing image of the day](/docs/bing_nov-2022.md). --Nov 2022
+- Bing image of the day. API:
+    - [May 2024](/docs/bing_may-2024.md)
+    - [Nov 2022](/docs/bing_nov-2022.md)
+- NASA APOD _// TODO: describe API for the nasa astronomy picture of the day_
+- [Windows 10 Toast Notifications](/docs/win10_toast_notifications.md)
+- [Windows Desktop Wallpaper](/docs/windows_desktop_wallpaper.md)
 
 ## Release Notes
 
@@ -57,24 +60,3 @@ See also [Release Notes](#release-notes) chapter.
 - Bing image of the day. Windows 10 and above only.
 - Windows' toast messages.
 - --- *C#, 22 Nov 2022*
-
-<!-- omit in toc -->
-## Stage
-
-```text
-TODO
-- icon with nine image dominant colors
-- add app global state record
-- store tray icon in the global state and dispose it when a new one arrived
-> unify providers
-    > NASA APOD
-        - Use AsyncLoad
-    - Bing
-- on release, rename .exe file to `The Last Wallpaper`
-
-DONE
---- Options instead of Toast::setupOpt
-+ toast notifications
-+ update desktop wallpaper
-+ shrink image to icon using nearest neighbor method
-```
