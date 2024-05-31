@@ -59,7 +59,7 @@ Valuable fields:
 
 - __startdate__ - publish date.
 - __urlbase__ - relatve url to the image.
-- __copyrighttext__ - copyrights of the image.
+- __copyright__ - copyrights of the image.
 - __title__ - description of the picture. What's happening in the picture.
 
 ### URL of the image

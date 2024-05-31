@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json;
@@ -39,22 +40,31 @@ public sealed class BingMay24 : PictureDayLoader
                 filename,
                 FileMode.Create );
 
-        imageStream.CopyTo( fileStream );
+        await imageStream.CopyToAsync( fileStream, ct );
+
+        //var imageDateTime =
+        //    DateTime.ParseExact(
+        //        json!.Images![0]!.StartDate!,
+        //        "yyyyMMdd",
+        //        CultureInfo.InvariantCulture );
 
         return [filename];
     }
 
     private const string RequestPicturesList =
-        "https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=10";
+        "https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1";
 
     public class ImageInfo
     {
         [JsonPropertyName( "startdate" )]
         public string? StartDate { get; set; }
+
         [JsonPropertyName( "urlbase" )]
         public string? UrlBase { get; set; }
-        [JsonPropertyName( "copyrighttext" )]
-        public string? CopyrightText { get; set; }
+
+        [JsonPropertyName( "copyright" )]
+        public string? Copyright { get; set; }
+
         [JsonPropertyName( "title" )]
         public string? Title { get; set; }
     }

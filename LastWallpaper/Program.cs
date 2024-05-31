@@ -95,7 +95,7 @@ internal static class Program
 
     const string UpdateCtxMenuItemName = nameof( UpdateCtxMenuItemName );
     const string AppName = "The Last Wallpaper";
-    const string AppVersion = "4.5.31-alpha";
+    const string AppVersion = "4.6.1-alpha";
     const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
     internal enum ErrorLevel
