@@ -57,7 +57,7 @@ As a JSON with a description of 8 last images. See next example
 
 Valuable fields:
 
-- __startdate__ - publish date.
+- __fullstartdate__ - publish date and time. `202405290700` = "yyyyMMddHHmm"
 - __urlbase__ - relatve url to the image.
 - __copyright__ - copyrights of the image.
 - __title__ - description of the picture. What's happening in the picture.

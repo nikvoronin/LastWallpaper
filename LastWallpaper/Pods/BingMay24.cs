@@ -44,8 +44,8 @@ public sealed class BingMay24 : PictureDayLoader
 
         //var imageDateTime =
         //    DateTime.ParseExact(
-        //        json!.Images![0]!.StartDate!,
-        //        "yyyyMMdd",
+        //        json!.Images![0]!.FullStartDate!,
+        //        "yyyyMMddHHmm",
         //        CultureInfo.InvariantCulture );
 
         return [filename];
@@ -56,8 +56,8 @@ public sealed class BingMay24 : PictureDayLoader
 
     public class ImageInfo
     {
-        [JsonPropertyName( "startdate" )]
-        public string? StartDate { get; set; }
+        [JsonPropertyName( "fullstartdate" )]
+        public string? FullStartDate { get; set; }
 
         [JsonPropertyName( "urlbase" )]
         public string? UrlBase { get; set; }
