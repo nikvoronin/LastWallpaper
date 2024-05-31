@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Net.Http;
 using System.Windows.Forms;
 
 namespace LastWallpaper;
@@ -14,8 +15,10 @@ internal static class Program
     {
         ApplicationConfiguration.Initialize();
 
+        HttpClient client = new();
+
         var scheduler = new Scheduler( [
-            new BingMay24()
+            new BingMay24(client)
             ] );
 
         NotifyIcon notifyIconCtrl =

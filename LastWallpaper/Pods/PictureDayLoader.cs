@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,6 +8,11 @@ namespace LastWallpaper.Pods;
 public abstract class PictureDayLoader : IPictureDayLoader
 {
     public abstract string Name { get; }
+
+    protected PictureDayLoader( HttpClient client )
+    {
+        _client = client;
+    }
 
     public async Task<IReadOnlyCollection<string>> UpdateAsync(
         CancellationToken ct )
@@ -25,4 +31,5 @@ public abstract class PictureDayLoader : IPictureDayLoader
         CancellationToken ct );
 
     private int _interlocked;
+    protected readonly HttpClient _client;
 }
