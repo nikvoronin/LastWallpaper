@@ -14,7 +14,7 @@ public sealed class Scheduler : IDisposable
     private readonly CancellationTokenSource _cts;
 
     public Scheduler(
-        IReadOnlyCollection<IPictureDayLoader> pods )
+        IReadOnlyCollection<IPictureDayLoader> pods)
     {
         Debug.Assert( pods is not null );
 
@@ -30,22 +30,26 @@ public sealed class Scheduler : IDisposable
 
         _timer = new(
             OnTimerTick,
-            _cts,
+            null,
             StartImmediately,
             (long)CheckNewImagePeriod.TotalMilliseconds );
     }
 
-    private void OnTimerTick( object? cts ) =>
-        Update((cts as CancellationTokenSource)!.Token);
+    private void OnTimerTick( object? cts ) => Update();
 
-    public void Update( CancellationToken ct )
+    public void Update()
     {
+        var ct = _cts.Token;
         Task.Run( async () => {
+            var news = new Dictionary<string, IReadOnlyCollection<string>>();
+
             foreach (var pod in _pods) {
                 try {
                     ct.ThrowIfCancellationRequested();
 
-                    await pod.UpdateAsync( ct );
+                    var result = await pod.UpdateAsync( ct );
+                    if (result.Count > 0)
+                        news.TryAdd( pod.Name, result);
                 }
                 catch (OperationCanceledException) {
                     break;
@@ -54,6 +58,8 @@ public sealed class Scheduler : IDisposable
                     // TODO: log exception
                 }
             }
+
+            // TODO: share news with Selector
         } );
     }
 

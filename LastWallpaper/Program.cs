@@ -1,3 +1,4 @@
+using LastWallpaper.Pods;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -13,16 +14,23 @@ internal static class Program
     {
         ApplicationConfiguration.Initialize();
 
+        var scheduler = new Scheduler( [
+            new BingMay24()
+            ] );
+
         NotifyIcon notifyIconCtrl =
             new() {
                 Text = AppName,
                 Visible = true,
                 Icon = SystemIcons.GetStockIcon(
-                    StockIconId.ImageFiles), // TODO: replace with icon
-                ContextMenuStrip = CreateContextMenu()
+                    StockIconId.ImageFiles ), // TODO: replace with icon
+                ContextMenuStrip = CreateContextMenu( scheduler )
             };
 
+        scheduler.Start();
         Application.Run();
+
+        scheduler.Dispose();
 
         notifyIconCtrl.Visible = false;
         notifyIconCtrl.Dispose();
@@ -30,14 +38,18 @@ internal static class Program
         return (int)ErrorLevel.ExitOk;
     }
 
-    private static ContextMenuStrip CreateContextMenu()
+    private static ContextMenuStrip CreateContextMenu(
+        Scheduler scheduler )
     {
         ContextMenuStrip contextMenu = new();
         contextMenu.Items.AddRange( new ToolStripItem[] {
             new ToolStripMenuItem(
                 "&Update Now!",
                 null,
-                (_,_) => { // TODO: replace stub with update process
+                (_,_) => {
+                    scheduler.Update();
+
+                    // TODO: replace stub with update process
                     ToastNotifications.ShowToast(
                         Path.Combine(
                             Environment.GetFolderPath(
