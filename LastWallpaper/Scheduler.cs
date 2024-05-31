@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,7 +14,7 @@ public sealed class Scheduler : IDisposable
     private readonly CancellationTokenSource _cts;
 
     public Scheduler(
-        IReadOnlyCollection<IPictureDayLoader> pods)
+        IReadOnlyCollection<IPictureDayLoader> pods )
     {
         Debug.Assert( pods is not null );
 
@@ -25,7 +24,7 @@ public sealed class Scheduler : IDisposable
 
     public void Start()
     {
-        Debug.Assert(_cts is not null );
+        Debug.Assert( _cts is not null );
 
         if (_timer is not null) return;
 
@@ -36,10 +35,12 @@ public sealed class Scheduler : IDisposable
             (long)CheckNewImagePeriod.TotalMilliseconds );
     }
 
-    private void OnTimerTick( object? cts ) => Update();
+    private void OnTimerTick( object? _ ) => Update();
 
     public void Update()
     {
+        Debug.Assert( _cts is not null );
+
         var ct = _cts.Token;
         Task.Run( async () => {
             var news = new Dictionary<string, IReadOnlyCollection<string>>();
@@ -50,7 +51,7 @@ public sealed class Scheduler : IDisposable
 
                     var result = await pod.UpdateAsync( ct );
                     if (result.Count > 0)
-                        news.TryAdd( pod.Name, result);
+                        news.TryAdd( pod.Name, result );
                 }
                 catch (OperationCanceledException) {
                     break;

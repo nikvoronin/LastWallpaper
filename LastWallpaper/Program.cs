@@ -2,7 +2,6 @@ using LastWallpaper.Pods;
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Net.Http;
 using System.Windows.Forms;
 
@@ -53,13 +52,13 @@ internal static class Program
                     scheduler.Update();
 
                     // TODO: replace stub with update process
-                    ToastNotifications.ShowToast(
-                        Path.Combine(
-                            Environment.GetFolderPath(
-                                Environment.SpecialFolder.MyPictures),
-                            "bingImage.jpg"),
-                        AppName,
-                        "© Nikolai Voronin");
+                    //ToastNotifications.ShowToast(
+                    //    Path.Combine(
+                    //        Environment.GetFolderPath(
+                    //            Environment.SpecialFolder.MyPictures),
+                    //        "bingImage.jpg"),
+                    //    AppName,
+                    //    "© Nikolai Voronin");
                 } )
             {
                 Name = UpdateCtxMenuItemName,
