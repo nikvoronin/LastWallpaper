@@ -5,8 +5,6 @@ namespace LastWallpaper;
 
 public static class ToastNotifications
 {
-    public const string ToastGroupName = "The Last Wallpaper";
-
     public static void ShowToast(
         string filename,
         string? title,
@@ -26,4 +24,6 @@ public static class ToastNotifications
             toast.ExpirationTime = DateTime.Now.AddDays( 2 ); // TODO: add expiration as option
         } );
     }
+
+    public const string ToastGroupName = "The Last Wallpaper";
 }

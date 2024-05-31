@@ -7,7 +7,7 @@ public static class WindowsRegistry
 {
     public static void SetWallpaper(
         string imagePath,
-        Position position = Position.Fill )
+        Position position = Position.Default )
     {
         var windows = RuntimeInformation.IsOSPlatform( OSPlatform.Windows );
         if (!windows) return;
@@ -32,20 +32,20 @@ public static class WindowsRegistry
     static extern int SystemParametersInfo( int uAction, int uParam, string lpvParam, int fuWinIni );
 }
 
-public enum Position { Center, Tile, Stretch, Span, Fit, Fill }
+public enum Position { Default, Center, Tile, Stretch, Span, Fit, Fill }
 
 file static class Extension
 {
-    public static string ToStyleValue( this Position position )
-        => position switch {
-            Position.Center => "0",
-            Position.Tile => "0",
+    public static string ToStyleValue( this Position position ) =>
+        position switch {
+            Position.Center
+                or Position.Tile => "0",
             Position.Stretch => "2",
             Position.Span => "22",
             Position.Fit => "6",
-            Position.Fill or _ => "10"
+            _ => "10" // Position.Fill by default
         };
 
-    public static string ToTileValue( this Position position )
-        => position == Position.Tile ? "1" : "0";
+    public static string ToTileValue( this Position position ) =>
+        position == Position.Tile ? "1" : "0";
 }
