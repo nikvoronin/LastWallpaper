@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace LastWallpaper.Pods;
 
-public abstract class PictureDayLoader : IPictureDayLoader
+public abstract class PodLoader : IPictureDayLoader
 {
     public abstract string Name { get; }
 
-    protected PictureDayLoader( HttpClient client )
+    protected PodLoader( HttpClient client )
     {
         _client = client;
     }

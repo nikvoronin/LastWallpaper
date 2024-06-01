@@ -59,8 +59,7 @@ Valuable fields:
 
 - __fullstartdate__ - publish date and time. `202405290700` = "yyyyMMddHHmm"
 - __urlbase__ - relatve url to the image.
-- __copyright__ - copyrights of the image.
-- __title__ - description of the picture. What's happening in the picture.
+- __copyright__ - description and copyrights of the picture. `What's happening in the picture (© Some One/Anywhere)`
 
 ### URL of the image
 

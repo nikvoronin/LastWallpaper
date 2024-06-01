@@ -1,6 +1,5 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using System;
-using System.Threading;
 
 namespace LastWallpaper;
 
@@ -21,10 +20,8 @@ public static class ToastNotifications
             toast.AddAttributionText( copyright );
 
         toast.Show( toast => {
-            toast.Group = ToastGroupName;
+            toast.Group = Program.AppName;
             toast.ExpirationTime = DateTime.Now.AddDays( 2 ); // TODO: add expiration as option
         } );
     }
-
-    public const string ToastGroupName = "The Last Wallpaper";
 }

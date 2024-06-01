@@ -8,7 +8,7 @@ namespace LastWallpaper.Pods;
 public interface IPictureDayLoader
 {
     /// <summary>
-    /// Name of the POD loader.
+    /// Name or prefix of the POD loader.
     /// </summary>
     string Name { get; }
 

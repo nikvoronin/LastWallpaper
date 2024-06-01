@@ -14,18 +14,21 @@ internal static class Program
     static int Main()
     {
         ApplicationConfiguration.Initialize();
+        SynchronizationContext.SetSynchronizationContext(
+            new WindowsFormsSynchronizationContext() );
 
-        HttpClient client = new();
+        var client = new HttpClient();
 
+        Debug.Assert( SynchronizationContext.Current is not null );
         var scheduler =
             new Scheduler(
                 new UpdateUiHandler( SynchronizationContext.Current! ),
                 [
-                    new BingMay24(client)
+                    new BingLoader(client)
                 ] );
 
-        NotifyIcon notifyIconCtrl =
-            new() {
+        var notifyIconCtrl =
+            new NotifyIcon() {
                 Text = AppName,
                 Visible = true,
                 Icon = SystemIcons.GetStockIcon(
@@ -86,10 +89,11 @@ internal static class Program
         return contextMenu;
     }
 
-    const string UpdateCtxMenuItemName = nameof( UpdateCtxMenuItemName );
-    const string AppName = "The Last Wallpaper";
-    const string AppVersion = "4.6.1-alpha";
-    const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
+    public const string AppName = "The Last Wallpaper";
+    public const string AppVersion = "4.6.1-alpha";
+    public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
+
+    private const string UpdateCtxMenuItemName = nameof( UpdateCtxMenuItemName );
 
     internal enum ErrorLevel
     {
