@@ -24,7 +24,7 @@ internal static class Program
             new Scheduler(
                 new UpdateUiHandler( SynchronizationContext.Current! ),
                 [
-                    new BingLoader(client)
+                    new BingPodLoader(client)
                 ] );
 
         var notifyIconCtrl =

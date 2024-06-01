@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace LastWallpaper.Pods;
 
-public sealed class BingLoader( HttpClient client )
+public sealed class BingPodLoader( HttpClient client )
     : PodLoader( client )
 {
     public override string Name => "bing";
