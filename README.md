@@ -31,32 +31,10 @@ See also [Release Notes](#release-notes) chapter.
 
 ## Release Notes
 
-<!-- omit in toc -->
-### 4.6.2-beta
-
-- Bing POD loader is ready.
-
-<!-- omit in toc -->
-### 4.5.29-alpha
-
-- Stub for csharp version. Switched back to the csharp + winforms.
-
-<!-- omit in toc -->
-### 3.6.19-alpha
-
-- Windows toast notifications.
-
-<!-- omit in toc -->
-### 3.6.18-alpha
-
-- Looking for changes from bing (once an hour).
-- Downloads new image.
-- Updates desktop wallpaper.
-- Changes tray icon according to the new image of the day.
-
-<!-- omit in toc -->
-### 0.1.0-alpha
-
-- Bing image of the day. Windows 10 and above only.
-- Windows' toast messages.
-- --- _C#, 22 Nov 2022_
+| Version      | Notes                                                                                                  |
+| ------------ | ------------------------------------------------------------------------------------------------------ |
+| 4.6.2-beta   | Bing POD loader is ready.                                                                              |
+| 4.5.29-alpha | Stub for csharp version. Switched back to the csharp + winforms.                                       |
+| 3.6.19-alpha | Windows toast notifications.                                                                           |
+| 3.6.18-alpha | Looking for changes from bing (once an hour). Changes tray icon according to the new image of the day. |
+| 0.1.0-alpha  | Bing image of the day. Windows 10 and above only. Windows' toast messages. --- _C#, 22 Nov 2022_       |
