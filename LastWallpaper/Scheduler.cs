@@ -1,7 +1,9 @@
-﻿using LastWallpaper.Pods;
+﻿using LastWallpaper.Models;
+using LastWallpaper.Pods;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,16 +11,14 @@ namespace LastWallpaper;
 
 public sealed class Scheduler : IDisposable
 {
-    private Timer? _timer;
-    private readonly IReadOnlyCollection<IPictureDayLoader> _pods;
-    private readonly CancellationTokenSource _cts;
-
     public Scheduler(
+        IUpdateHandler updateHandler,
         IReadOnlyCollection<IPictureDayLoader> pods )
     {
         Debug.Assert( pods is not null );
 
         _pods = pods;
+        _updateHandler = updateHandler;
         _cts = new CancellationTokenSource();
     }
 
@@ -43,15 +43,15 @@ public sealed class Scheduler : IDisposable
 
         var ct = _cts.Token;
         Task.Run( async () => {
-            var news = new Dictionary<string, IReadOnlyCollection<string>>();
+            var news = new Dictionary<string, Imago>();
 
             foreach (var pod in _pods) {
                 try {
                     ct.ThrowIfCancellationRequested();
 
                     var result = await pod.UpdateAsync( ct );
-                    if (result.Count > 0)
-                        news.TryAdd( pod.Name, result );
+                    if (result.IsSuccess)
+                        news.TryAdd( pod.Name, result.Value );
                 }
                 catch (OperationCanceledException) {
                     break;
@@ -62,6 +62,10 @@ public sealed class Scheduler : IDisposable
             }
 
             // TODO: share news with Selector
+            if (news.Count > 0) {
+                var first = news.Values.First();
+                _updateHandler.HandleUpdate(first);
+            }
         } );
     }
 
@@ -76,6 +80,11 @@ public sealed class Scheduler : IDisposable
         }
         catch { }
     }
+
+    private Timer? _timer;
+    private readonly IReadOnlyCollection<IPictureDayLoader> _pods;
+    private readonly CancellationTokenSource _cts;
+    private readonly IUpdateHandler _updateHandler;
 
     private const int StartImmediately = 0;
 

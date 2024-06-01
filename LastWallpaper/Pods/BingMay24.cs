@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FluentResults;
+using LastWallpaper.Models;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -12,13 +14,13 @@ namespace LastWallpaper.Pods;
 
 public sealed class BingMay24 : PictureDayLoader
 {
-    public override string Name => nameof( BingMay24 );
+    public override string Name => "bing";
 
     public BingMay24( HttpClient client )
         : base( client )
     { }
 
-    protected override async Task<IReadOnlyCollection<string>> UpdateInternalAsync(
+    protected override async Task<Result<Imago>> UpdateInternalAsync(
         CancellationToken ct )
     {
         await using var jsonStream =
@@ -26,14 +28,20 @@ public sealed class BingMay24 : PictureDayLoader
         var json = JsonSerializer.Deserialize<BingHpImages>( jsonStream );
 
         var noUpdates = (json?.Images?.Count ?? 0) == 0;
-        if (noUpdates) return [];
+        if (noUpdates) return Result.Fail( "Empty JSON. No updates were found." );
 
         var lastImageUrl = $"https://www.bing.com{json!.Images![0]!.UrlBase}_UHD.jpg";
 
         await using var imageStream =
             await _client.GetStreamAsync( lastImageUrl, ct );
 
-        var filename = $"{Guid.NewGuid()}.jpeg";
+        // TODO: use cache folder instead
+        var folder = Environment.GetFolderPath(
+            Environment.SpecialFolder.MyPictures );
+        var filename =
+            Path.Combine(
+                folder,
+                $"{Guid.NewGuid()}.jpeg" );
 
         await using var fileStream =
             new FileStream(
@@ -42,13 +50,26 @@ public sealed class BingMay24 : PictureDayLoader
 
         await imageStream.CopyToAsync( fileStream, ct );
 
-        //var imageDateTime =
-        //    DateTime.ParseExact(
-        //        json!.Images![0]!.FullStartDate!,
-        //        "yyyyMMddHHmm",
-        //        CultureInfo.InvariantCulture );
+        var imageDateTime =
+            DateTime.ParseExact(
+                json!.Images![0]!.FullStartDate!,
+                "yyyyMMddHHmm",
+                CultureInfo.InvariantCulture );
 
-        return [filename];
+        // TODO: parse then split copyrights into title+copyright pair
+        var description = json!.Images![0]!.Copyright;
+        var titleCopyrights = description!.Split( " (©" );
+        var title = titleCopyrights[0];
+        var copyrights = $"©{titleCopyrights[1][..^1]}";
+
+        var result = new Imago() {
+            Filename = filename,
+            Created = imageDateTime,
+            Title = title,
+            Copyright = copyrights,
+        };
+
+        return Result.Ok( result );
     }
 
     private const string RequestPicturesList =

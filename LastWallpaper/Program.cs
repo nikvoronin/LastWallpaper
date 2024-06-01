@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Net.Http;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace LastWallpaper;
@@ -16,9 +17,12 @@ internal static class Program
 
         HttpClient client = new();
 
-        var scheduler = new Scheduler( [
-            new BingMay24(client)
-            ] );
+        var scheduler =
+            new Scheduler(
+                new UpdateHandler(),
+                [
+                    new BingMay24(client)
+                ] );
 
         NotifyIcon notifyIconCtrl =
             new() {
@@ -30,6 +34,7 @@ internal static class Program
             };
 
         scheduler.Start();
+        App.UiContext = SynchronizationContext.Current;
         Application.Run();
 
         scheduler.Dispose();
@@ -47,19 +52,7 @@ internal static class Program
         contextMenu.Items.AddRange( new ToolStripItem[] {
             new ToolStripMenuItem(
                 "&Update Now!",
-                null,
-                (_,_) => {
-                    scheduler.Update();
-
-                    // TODO: replace stub with update process
-                    //ToastNotifications.ShowToast(
-                    //    Path.Combine(
-                    //        Environment.GetFolderPath(
-                    //            Environment.SpecialFolder.MyPictures),
-                    //        "bingImage.jpg"),
-                    //    AppName,
-                    //    "© Nikolai Voronin");
-                } )
+                null, (_,_) => scheduler.Update() )
             {
                 Name = UpdateCtxMenuItemName,
                 Enabled = true,

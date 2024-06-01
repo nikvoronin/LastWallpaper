@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using FluentResults;
+using LastWallpaper.Models;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,6 +19,5 @@ public interface IPictureDayLoader
     /// <returns>
     /// Collection of pathes to downloaded images or empty collection otherwise.
     /// </returns>
-    Task<IReadOnlyCollection<string>> UpdateAsync(
-        CancellationToken ct );
+    Task<Result<Imago>> UpdateAsync( CancellationToken ct );
 }

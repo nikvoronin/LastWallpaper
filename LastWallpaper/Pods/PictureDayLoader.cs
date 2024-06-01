@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using FluentResults;
+using LastWallpaper.Models;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,12 +15,11 @@ public abstract class PictureDayLoader : IPictureDayLoader
         _client = client;
     }
 
-    public async Task<IReadOnlyCollection<string>> UpdateAsync(
-        CancellationToken ct )
+    public async Task<Result<Imago>> UpdateAsync( CancellationToken ct )
     {
         ct.ThrowIfCancellationRequested();
         if (Interlocked.CompareExchange( ref _interlocked, 1, 0 ) != 0)
-            return [];
+            return Result.Fail( "Update already in progress." );
 
         var result = await UpdateInternalAsync( ct );
 
@@ -27,8 +27,7 @@ public abstract class PictureDayLoader : IPictureDayLoader
         return result;
     }
 
-    protected abstract Task<IReadOnlyCollection<string>> UpdateInternalAsync(
-        CancellationToken ct );
+    protected abstract Task<Result<Imago>> UpdateInternalAsync( CancellationToken ct );
 
     private int _interlocked;
     protected readonly HttpClient _client;
