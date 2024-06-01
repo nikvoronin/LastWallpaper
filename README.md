@@ -10,18 +10,13 @@ Wallpaper of the day on desktop.
 
 ## What's New
 
-29 May 2024
+2 Jun 2024
 
-- Switched back to the csharp + winforms.
+- Bing POD loader is ready.
 
 Not so far
 
-- Initial downloading for NASA APOD image of the day.
-- Windows toast notifications.
-- Looking for changes from bing (once an hour).
-- Downloads new image.
-- Updates desktop wallpaper.
-- Changes tray icon according to the new image of the day.
+- Switched back to the csharp + winforms.
 
 See also [Release Notes](#release-notes) chapter.
 
@@ -35,6 +30,11 @@ See also [Release Notes](#release-notes) chapter.
 - [Windows Desktop Wallpaper](/docs/windows_desktop_wallpaper.md)
 
 ## Release Notes
+
+<!-- omit in toc -->
+### 4.6.2-beta
+
+- Bing POD loader is ready.
 
 <!-- omit in toc -->
 ### 4.5.29-alpha
@@ -59,4 +59,4 @@ See also [Release Notes](#release-notes) chapter.
 
 - Bing image of the day. Windows 10 and above only.
 - Windows' toast messages.
-- --- *C#, 22 Nov 2022*
+- --- _C#, 22 Nov 2022_
