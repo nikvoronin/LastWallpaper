@@ -56,15 +56,12 @@ public sealed class Scheduler : IDisposable
                 catch (OperationCanceledException) {
                     break;
                 }
-                catch (Exception e) {
-                    // TODO: log exception
-                }
             }
 
             // TODO: share news with Selector
             if (news.Count > 0) {
-                var first = news.Values.First();
-                _updateHandler?.HandleUpdate(first);
+                var imago = news.Values.First();
+                _updateHandler?.HandleUpdate( imago );
             }
         } );
     }

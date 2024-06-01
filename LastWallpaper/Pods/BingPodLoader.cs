@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,9 +21,9 @@ public sealed class BingPodLoader( HttpClient client )
     protected override async Task<Result<Imago>> UpdateInternalAsync(
         CancellationToken ct )
     {
-        await using var jsonStream =
-            await _client.GetStreamAsync( RequestPicturesList, ct );
-        var json = JsonSerializer.Deserialize<BingHpImages>( jsonStream );
+        var json =
+            await _client.GetFromJsonAsync<BingHpImages>(
+                RequestPicturesList, ct );
 
         var noUpdates = (json?.Images?.Count ?? 0) == 0;
         if (noUpdates) return Result.Fail( "Empty JSON. No updates were found." );
@@ -41,20 +41,20 @@ public sealed class BingPodLoader( HttpClient client )
                 urlBase,
                 ImageResolution.UltraHD );
 
+        var imageFilename =
+            Path.Combine(
+                FileManager.AlbumFolder,
+                $"{Name}{lastImageInfo.FullStartDate}.jpeg" );
+
+        // TODO: check here should we load picture or picture is already known
+        if (File.Exists( imageFilename )) return Result.Fail( "Picture already known." );
+
         await using var imageStream =
             await _client.GetStreamAsync( lastImageUrl, ct );
 
-        // TODO: use cache folder instead
-        var folder = Environment.GetFolderPath(
-            Environment.SpecialFolder.MyPictures );
-        var filename =
-            Path.Combine(
-                folder,
-                $"{Guid.NewGuid()}.jpeg" );
-
         await using var fileStream =
             new FileStream(
-                filename,
+                imageFilename,
                 FileMode.Create );
 
         await imageStream.CopyToAsync( fileStream, ct );
@@ -71,7 +71,7 @@ public sealed class BingPodLoader( HttpClient client )
             var copyrights) = SplitDescription( lastImageInfo.Copyright );
 
         var result = new Imago() {
-            Filename = filename,
+            Filename = imageFilename,
             Created = fullStartDate,
             Title = title,
             Copyright = copyrights,

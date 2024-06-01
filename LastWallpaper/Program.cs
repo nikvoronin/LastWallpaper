@@ -62,21 +62,24 @@ internal static class Program
                 Visible = true
             },
 
+            new ToolStripMenuItem(
+                "&Open Picture Gallery",
+                null, (_,_) => {
+                    ExecShellProcess(
+                        "explorer", FileManager.AlbumFolder);
+                } )
+            {
+                Enabled = true,
+                Visible = true
+            },
+
             new ToolStripSeparator(),
 
             new ToolStripMenuItem(
                 $"&About {AppName} {AppVersion}",
-                null,
-                (_,_) => {
-                    try {
-                        Process.Start(
-                            new ProcessStartInfo(
-                                "cmd",
-                                $"/c start {GithubProjectUrl}")
-                            {
-                                CreateNoWindow = true
-                            });
-                    } catch {}
+                null, (_,_) => {
+                    ExecShellProcess(
+                        "cmd", $"/c start {GithubProjectUrl}");
                 } ),
 
             new ToolStripSeparator(),
@@ -89,8 +92,19 @@ internal static class Program
         return contextMenu;
     }
 
+    private static void ExecShellProcess( string command, string args )
+    {
+        try {
+            Process.Start(
+                new ProcessStartInfo( command, args ) {
+                    CreateNoWindow = true
+                } );
+        }
+        catch { }
+    }
+
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.6.1-alpha";
+    public const string AppVersion = "4.6.2-beta";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
     private const string UpdateCtxMenuItemName = nameof( UpdateCtxMenuItemName );
