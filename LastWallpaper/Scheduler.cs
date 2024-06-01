@@ -64,7 +64,7 @@ public sealed class Scheduler : IDisposable
             // TODO: share news with Selector
             if (news.Count > 0) {
                 var first = news.Values.First();
-                _updateHandler.HandleUpdate(first);
+                _updateHandler?.HandleUpdate(first);
             }
         } );
     }

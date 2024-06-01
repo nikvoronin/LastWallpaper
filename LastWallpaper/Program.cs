@@ -19,7 +19,7 @@ internal static class Program
 
         var scheduler =
             new Scheduler(
-                new UpdateHandler(),
+                new UpdateUiHandler( SynchronizationContext.Current! ),
                 [
                     new BingMay24(client)
                 ] );
@@ -34,7 +34,7 @@ internal static class Program
             };
 
         scheduler.Start();
-        App.UiContext = SynchronizationContext.Current;
+
         Application.Run();
 
         scheduler.Dispose();
