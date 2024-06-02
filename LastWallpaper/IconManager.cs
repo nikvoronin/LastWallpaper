@@ -15,7 +15,7 @@ public static class IconManager
 
         // TODO: to options, ability to draw border around the tray icon
         var g = Graphics.FromImage( dst );
-        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
         g.DrawImage( src, 0, 0, dst.Width, dst.Height );
 
         var pen = PenBy( FindBrightestColor( dst ) );
@@ -34,15 +34,14 @@ public static class IconManager
                 var pixel = bitmap.GetPixel( x, y );
                 var bright = pixel.GetBrightness();
 
+                if (bright >= 1f) return Color.White;
+
                 if (bright > maxBright) {
                     maxColor = pixel;
                     maxBright = bright;
-
-                    if (maxBright == 1f) goto WhiteColorFound;
                 }
             }
         }
-    WhiteColorFound:;
 
         return maxColor;
     }

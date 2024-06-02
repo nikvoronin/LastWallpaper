@@ -59,12 +59,14 @@ public sealed class BingPodLoader( HttpClient client )
 
         await imageStream.CopyToAsync( fileStream, ct );
 
-        if (!DateTime.TryParseExact(
+        var wrongDateTimeFormat =
+            !DateTime.TryParseExact(
                 lastImageInfo.FullStartDate,
                 "yyyyMMddHHmm",
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
-                out DateTime fullStartDate ))
+                out DateTime fullStartDate );
+        if (wrongDateTimeFormat)
             fullStartDate = DateTime.Now;
 
         (var title,
