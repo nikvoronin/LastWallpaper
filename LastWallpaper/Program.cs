@@ -19,22 +19,26 @@ internal static class Program
 
         var client = new HttpClient();
 
-        Debug.Assert( SynchronizationContext.Current is not null );
-        var scheduler =
-            new Scheduler(
-                new UpdateUiHandler( SynchronizationContext.Current! ),
-                [
-                    new BingPodLoader(client)
-                ] );
-
         var notifyIconCtrl =
             new NotifyIcon() {
                 Text = AppName,
                 Visible = true,
                 Icon = SystemIcons.GetStockIcon(
-                    StockIconId.ImageFiles ), // TODO: replace with icon
-                ContextMenuStrip = CreateContextMenu( scheduler )
+                    StockIconId.ImageFiles ) // TODO: replace with latest icon from config
             };
+
+        Debug.Assert( SynchronizationContext.Current is not null );
+        var scheduler =
+            new Scheduler(
+                new UpdateUiHandler(
+                    SynchronizationContext.Current!,
+                    notifyIconCtrl),
+                [
+                    new BingPodLoader(client)
+                ] );
+
+        notifyIconCtrl.ContextMenuStrip =
+            CreateContextMenu( scheduler );
 
         scheduler.Start();
 
@@ -57,7 +61,6 @@ internal static class Program
                 "&Update Now!",
                 null, (_,_) => scheduler.Update() )
             {
-                Name = UpdateCtxMenuItemName,
                 Enabled = true,
                 Visible = true
             },
@@ -106,8 +109,6 @@ internal static class Program
     public const string AppName = "The Last Wallpaper";
     public const string AppVersion = "4.6.2-beta";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
-
-    private const string UpdateCtxMenuItemName = nameof( UpdateCtxMenuItemName );
 
     internal enum ErrorLevel
     {
