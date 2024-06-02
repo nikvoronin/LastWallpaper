@@ -1,5 +1,6 @@
 ﻿using LastWallpaper.Models;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace LastWallpaper;
 
@@ -13,6 +14,8 @@ public sealed class UpdateUiHandler( SynchronizationContext uiContext )
 {
     public void HandleUpdate( Imago imago )
     {
+        Task.Run( () => WindowsRegistry.SetWallpaper( imago.Filename ) );
+
         _uiContext?.Post( _ =>
             ToastNotifications.ShowToast(
                 imago.Filename,

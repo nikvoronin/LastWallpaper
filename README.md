@@ -34,7 +34,7 @@ See also [Release Notes](#release-notes) chapter.
 | Version       | Notes                                                                 |
 | ------------- | --------------------------------------------------------------------- |
 | 4.6.2-beta    | Bing POD loader is ready                                              |
-| 4.5.29-alpha  | c#, switched back to csharp + winforms                                |
+| 4.5.29-alpha  | C#, switched back to csharp + winforms                                |
 | 3.6.19-alpha  | Windows toast notifications                                           |
 | 3.6.18-alpha  | F#, Bing POD. Changes tray icon according to the new image of the day |
 | 2.11.22-alpha | C#, cross-platform version with Avalonia UI                           |
