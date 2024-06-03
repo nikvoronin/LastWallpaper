@@ -7,6 +7,7 @@ namespace LastWallpaper.Models;
 /// </summary>
 public class Imago
 {
+    public required string PodName { get; init; }
     public required string Filename { get; init; }
     public required DateTime Created { get; init; }
     public string? Copyright { get; init; }

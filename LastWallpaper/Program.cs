@@ -21,7 +21,7 @@ internal static class Program
 
         var notifyIconCtrl =
             new NotifyIcon() {
-                Text = AppName,
+                Text = AppName, // TODO: add last updating date-time from config
                 Visible = true,
                 Icon = SystemIcons.GetStockIcon(
                     StockIconId.ImageFiles ) // TODO: replace with latest icon from config
@@ -107,7 +107,7 @@ internal static class Program
     }
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.6.2-beta";
+    public const string AppVersion = "4.6.3";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
     internal enum ErrorLevel

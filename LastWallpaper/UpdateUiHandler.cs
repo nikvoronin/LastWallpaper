@@ -21,6 +21,8 @@ public sealed class UpdateUiHandler(
         Task.Run( () => WindowsRegistry.SetWallpaper( imago.Filename ) );
 #endif
         _notifyIconCtrl.Icon = IconManager.CreateIcon( imago.Filename );
+        _notifyIconCtrl.Text =
+            $"{Program.AppName} #{imago.PodName}\n{imago.Created:D} {imago.Created:t}";
 
         _uiContext?.Post( _ =>
             ToastNotifications.ShowToast(

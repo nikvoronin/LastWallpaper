@@ -12,7 +12,7 @@ Wallpaper of the day on desktop.
 
 ## What's New
 
-2 Jun 2024
+3 Jun 2024
 
 - Bing POD loader is ready.
 
@@ -35,7 +35,7 @@ See also [Release Notes](#release-notes) chapter.
 
 | Version       | Notes                                                                 |
 | ------------- | --------------------------------------------------------------------- |
-| 4.6.2-beta    | Bing POD loader is ready                                              |
+| 4.6.3         | Bing POD loader is ready                                              |
 | 4.5.29-alpha  | C#, switched back to csharp + winforms                                |
 | 3.6.19-alpha  | Windows toast notifications                                           |
 | 3.6.18-alpha  | F#, Bing POD. Changes tray icon according to the new image of the day |

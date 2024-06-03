@@ -73,6 +73,7 @@ public sealed class BingPodLoader( HttpClient client )
             var copyrights) = SplitDescription( lastImageInfo.Copyright );
 
         var result = new Imago() {
+            PodName = Name,
             Filename = imageFilename,
             Created = fullStartDate,
             Title = title,
