@@ -1,5 +1,6 @@
 ﻿using FluentResults;
 using LastWallpaper.Models;
+using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,14 +24,9 @@ public interface IPictureDayLoader
     Task<Result<Imago>> UpdateAsync( CancellationToken ct );
 }
 
-public abstract class PodLoader : IPictureDayLoader
+public abstract class PodLoader( HttpClient client ) : IPictureDayLoader
 {
     public abstract string Name { get; }
-
-    protected PodLoader( HttpClient client )
-    {
-        _client = client;
-    }
 
     public async Task<Result<Imago>> UpdateAsync( CancellationToken ct )
     {
@@ -38,14 +34,25 @@ public abstract class PodLoader : IPictureDayLoader
         if (Interlocked.CompareExchange( ref _interlocked, 1, 0 ) != 0)
             return Result.Fail( "Update already in progress." );
 
-        var result = await UpdateInternalAsync( ct );
+        Result<Imago> result;
+        try {
+            result = await UpdateInternalAsync( ct );
+        }
+        catch (Exception e)
+        when (e is not OperationCanceledException) {
+            result = Result.Fail(
+                new ExceptionalError(
+                    $"Error on updating #{Name} POD", e ) );
+        }
+        finally {
+            Interlocked.Exchange( ref _interlocked, 0 );
+        }
 
-        Interlocked.Exchange( ref _interlocked, 0 );
         return result;
     }
 
     protected abstract Task<Result<Imago>> UpdateInternalAsync( CancellationToken ct );
 
     private int _interlocked;
-    protected readonly HttpClient _client;
+    protected readonly HttpClient _client = client;
 }
