@@ -19,6 +19,7 @@ public sealed class NasaApodLoader( HttpClient client )
     protected override async Task<Result<Imago>> UpdateInternalAsync(
         CancellationToken ct )
     {
+        // TODO: move throttling block to the scheduler
         var delta = DateTime.UtcNow - _lastUpdateDate;
         if (delta.TotalHours < 23) {
             return Result.Fail(
