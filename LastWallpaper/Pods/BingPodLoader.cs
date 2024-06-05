@@ -69,7 +69,9 @@ public sealed class BingPodLoader( HttpClient client )
         if (wrongDateTimeFormat)
             fullStartDate = DateTime.Now;
 
-        (var title,
+        // TODO: set time part hour:minute to Now but leave json date unchanged
+
+        ( var title,
             var copyrights) = SplitDescription( lastImageInfo.Copyright );
 
         var result = new Imago() {

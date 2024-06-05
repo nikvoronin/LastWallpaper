@@ -27,7 +27,7 @@ public sealed class NasaApodLoader( HttpClient client )
                 $"Next time. Not now. Last update was {(int)delta.TotalHours} hours ago." );
         }
 
-        var apiKey = "DEMO_KEY"; // TODO: get from pod configuration or use default one
+        var apiKey = DefaultApiKey; // TODO: get from pod configuration or use default one
         var requestPicturesListUrl =
             string.Format(
                 CultureInfo.InvariantCulture,
@@ -70,6 +70,8 @@ public sealed class NasaApodLoader( HttpClient client )
         if (wrongDateTimeFormat)
             imageDate = DateTime.Now;
 
+        // TODO: set time part hour:minute to Now but leave json date unchanged
+
         var copyrights =
             imageInfo.Copyright
                 ?.Trim().Replace( "\n", "" );
@@ -92,6 +94,8 @@ public sealed class NasaApodLoader( HttpClient client )
     // Hardcoded latest (today) one image.
     private static readonly CompositeFormat RequestLatestPictureUrlFormat =
         CompositeFormat.Parse( "https://api.nasa.gov/planetary/apod?api_key={0}" );
+
+    private const string DefaultApiKey = "DEMO_KEY";
 
     public class ImageInfo
     {

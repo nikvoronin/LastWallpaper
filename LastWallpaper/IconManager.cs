@@ -13,7 +13,6 @@ public static class IconManager
                 DefaultTrayIconSize.Width,
                 DefaultTrayIconSize.Height );
 
-        // TODO: to options, ability to draw border around the tray icon
         var g = Graphics.FromImage( dst );
         g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
         g.DrawImage( src, 0, 0, dst.Width, dst.Height );
