@@ -57,9 +57,10 @@ As a JSON with a description of 8 last images. See next example
 
 Valuable fields:
 
-- __fullstartdate__ - publish date and time. `202405290700` = "yyyyMMddHHmm"
+- __startdate__ - publish date.  `20240529` = "yyyyMMdd"
+- _fullstartdate_ - publish date and time but time is always seven o'clock. `202405290700` = "yyyyMMddHHmm"
 - __urlbase__ - relatve url to the image.
-- __copyright__ - description and copyrights of the picture. `What's happening in the picture (© Some One/Anywhere)`
+- __copyright__ - contains description and copyrights of the picture at once. `What's happening in the picture (© Some One/Anywhere)`
 
 ### URL of the image
 
@@ -67,13 +68,13 @@ Valuable fields:
 "urlbase": "/th?id=OHR.MullOtter_ROW8840823080",
 ```
 
-> image link = `https://www.bing.com` + `{urlbase}` + `{resolution}`
+> image link = `https://www.bing.com` + `{urlbase}` + `_{resolution}.jpg`
 
 Resolutions:
 
-- HD: `_1280x720.jpg`
-- FullHD: `_1920x1080.jpg`
-- UltraHD (4K): `_UHD.jpg`
+- HD: `1280x720`
+- FullHD: `1920x1080`
+- UltraHD (4K): `UHD`
 
 Example: `https://www.bing.com/th?id=OHR.MullOtter_ROW8840823080_UHD.jpg`
 

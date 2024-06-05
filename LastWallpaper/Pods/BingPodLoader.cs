@@ -44,7 +44,7 @@ public sealed class BingPodLoader( HttpClient client )
         var imageFilename =
             Path.Combine(
                 FileManager.AlbumFolder,
-                $"{Name}{lastImageInfo.FullStartDate}.jpeg" );
+                $"{Name}{lastImageInfo.StartDate}.jpeg" );
 
         // TODO: check here should we load picture or picture is already known
         if (File.Exists( imageFilename )) return Result.Fail( "Picture already known." );
@@ -61,8 +61,8 @@ public sealed class BingPodLoader( HttpClient client )
 
         var wrongDateTimeFormat =
             !DateTime.TryParseExact(
-                lastImageInfo.FullStartDate,
-                "yyyyMMddHHmm",
+                lastImageInfo.StartDate,
+                "yyyyMMdd",
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
                 out DateTime fullStartDate );
@@ -108,17 +108,11 @@ public sealed class BingPodLoader( HttpClient client )
 
     public class ImageInfo
     {
-        [JsonPropertyName( "fullstartdate" )]
-        public string? FullStartDate { get; set; }
+        [JsonPropertyName( "startdate" )] public required string StartDate { get; init; }
 
-        [JsonPropertyName( "urlbase" )]
-        public string? UrlBase { get; set; }
+        [JsonPropertyName( "urlbase" )] public required string UrlBase { get; init; }
 
-        [JsonPropertyName( "copyright" )]
-        public string? Copyright { get; set; }
-
-        [JsonPropertyName( "title" )]
-        public string? Title { get; set; }
+        [JsonPropertyName( "copyright" )] public string? Copyright { get; set; }
     }
 
     public class BingHpImages
