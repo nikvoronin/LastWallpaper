@@ -107,7 +107,7 @@ internal static class Program
     }
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.6.3";
+    public const string AppVersion = "4.6.5";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
     internal enum ErrorLevel
