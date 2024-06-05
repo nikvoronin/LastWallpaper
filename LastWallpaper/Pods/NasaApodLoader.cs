@@ -72,16 +72,17 @@ public sealed class NasaApodLoader( HttpClient client )
 
         // TODO: set time part hour:minute to Now but leave json date unchanged
 
-        var copyrights =
+        var owner =
             imageInfo.Copyright
-                ?.Trim().Replace( "\n", "" );
+                ?.Trim().Replace( "\n", "" )
+                ?? "(cc) Public domain";
 
         var result = new Imago() {
             PodName = Name,
             Filename = imageFilename,
             Created = imageDate,
             Title = imageInfo.Title,
-            Copyright = copyrights,
+            Copyright = owner,
         };
 
         _lastUpdateDate = DateTime.UtcNow;
