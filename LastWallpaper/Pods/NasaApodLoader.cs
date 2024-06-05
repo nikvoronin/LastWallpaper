@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,13 +27,20 @@ public sealed class NasaApodLoader( HttpClient client )
                 $"Next time. Not now. Last update was {(int)delta.TotalHours} hours ago." );
         }
 
-        var lastImageInfo =
+        var apiKey = "DEMO_KEY"; // TODO: get from pod configuration or use default one
+        var requestPicturesListUrl =
+            string.Format(
+                CultureInfo.InvariantCulture,
+                RequestLatestPictureUrlFormat,
+                apiKey );
+
+        var imageInfo =
             await _client.GetFromJsonAsync<ImageInfo>(
-                RequestPicturesList, ct );
+                requestPicturesListUrl, ct );
 
-        if (lastImageInfo is null) return Result.Fail( "Empty JSON. No updates were found." );
+        if (imageInfo is null) return Result.Fail( "Empty JSON. No updates were found." );
 
-        var filename = lastImageInfo.Date.Replace( "-", "" );
+        var filename = imageInfo.Date.Replace( "-", "" );
 
         var imageFilename =
             Path.Combine(
@@ -43,7 +51,7 @@ public sealed class NasaApodLoader( HttpClient client )
         if (File.Exists( imageFilename )) return Result.Fail( "Picture already known." );
 
         await using var imageStream =
-            await _client.GetStreamAsync( lastImageInfo.HdImageUrl, ct );
+            await _client.GetStreamAsync( imageInfo.HdImageUrl, ct );
 
         await using var fileStream =
             new FileStream(
@@ -54,7 +62,7 @@ public sealed class NasaApodLoader( HttpClient client )
 
         var wrongDateTimeFormat =
             !DateTime.TryParseExact(
-                lastImageInfo.Date,
+                imageInfo.Date,
                 "yyyy-MM-dd",
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
@@ -63,14 +71,14 @@ public sealed class NasaApodLoader( HttpClient client )
             imageDate = DateTime.Now;
 
         var copyrights =
-            lastImageInfo.Copyright
+            imageInfo.Copyright
                 ?.Trim().Replace( "\n", "" );
 
         var result = new Imago() {
             PodName = Name,
             Filename = imageFilename,
             Created = imageDate,
-            Title = lastImageInfo.Title,
+            Title = imageInfo.Title,
             Copyright = copyrights,
         };
 
@@ -82,8 +90,8 @@ public sealed class NasaApodLoader( HttpClient client )
     private DateTime _lastUpdateDate = DateTime.MinValue;
 
     // Hardcoded latest (today) one image.
-    private const string RequestPicturesList =
-        "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY";
+    private static readonly CompositeFormat RequestLatestPictureUrlFormat =
+        CompositeFormat.Parse( "https://api.nasa.gov/planetary/apod?api_key={0}" );
 
     public class ImageInfo
     {
