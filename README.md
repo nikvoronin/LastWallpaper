@@ -29,7 +29,7 @@ See also [Release Notes](#release-notes) chapter.
 - Bing image of the day. API:
     - [May 2024](/docs/bing_may-2024.md)
     - [Nov 2022](/docs/bing_nov-2022.md)
-- NASA APOD _// TODO: describe API for the nasa astronomy picture of the day_
+- [NASA APIs](https://api.nasa.gov/), free but limited with 50 requests per IP address per day.
 - [Windows 10 Toast Notifications](/docs/win10_toast_notifications.md)
 - [Windows Desktop Wallpaper](/docs/windows_desktop_wallpaper.md)
 

@@ -34,7 +34,8 @@ internal static class Program
                     SynchronizationContext.Current!,
                     notifyIconCtrl),
                 [
-                    new BingPodLoader(client)
+                    new BingPodLoader(client),
+                    //new NasaApodLoader(client)
                 ] );
 
         notifyIconCtrl.ContextMenuStrip =
