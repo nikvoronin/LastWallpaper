@@ -27,7 +27,7 @@ GET request returns JSON below:
             {
                 "pageid": 77085108,
                 "ns": 10,
-                "title": "Template:POTD protected/2024-06-06",
+                "title": "Template:POTD/2024-06-06",
                 "images": [
                     {
                         "ns": 6,
