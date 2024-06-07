@@ -7,6 +7,8 @@ Images can have arbitrary proportions. Both portrait and album and square. So fo
 
 ## POTD Filename
 
+> https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&prop=images&titles=Template:POTD/2024-06-06
+
 ```text
 https://en.wikipedia.org/w/api.php
     ? action        = query
@@ -126,13 +128,13 @@ http://en.wikipedia.org/w/api.php
 
 - imageinfo
     - extmetadata
-        - ImageDescription → value
+        - ObjectName → value
         - Credit → value
         - Artist → value
 
-All `values` could contain HTML formated content.
+All `values` could contain HTML formated content. `ImageDescription` could contain a very long html formatted text.
 
-Response JSON:
+Example of JSON response:
 
 ```json
 {
@@ -147,12 +149,14 @@ Response JSON:
                 "imageinfo": [
                     {
                         "extmetadata": {
-                            ...
+                            "ObjectName": {
+                                "value": "Martial eagle (Polemaetus bellicosus)",
+                                "source": "mediawiki-metadata"
+                            },
                             "ImageDescription": {
                                 "value": "Martial eagle (<i>Polemaetus bellicosus</i>), Matetsi Safari Area, Zimbabwe",
                                 "source": "commons-desc-page"
                             },
-                            ...
                             "Credit": {
                                 "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>, from <a rel=\"nofollow\" class=\"external text\" href=\"https://www.sharpphotography.co.uk/\">Sharp Photography, sharpphotography.co.uk</a>",
                                 "source": "commons-desc-page"
@@ -161,7 +165,6 @@ Response JSON:
                                 "value": "<bdi><a href=\"https://www.wikidata.org/wiki/Q54800218\" class=\"extiw\" title=\"d:Q54800218\"><span title=\"Scottish wildlife photographer\">Charles J. Sharp</span></a>\n</bdi>",
                                 "source": "commons-desc-page"
                             },
-                            ...
                             "Copyrighted": {
                                 "value": "True",
                                 "source": "commons-desc-page",
