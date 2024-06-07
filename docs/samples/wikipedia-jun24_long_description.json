@@ -1,0 +1,85 @@
+{
+    "continue": {
+        "iistart": "2022-05-06T21:35:16Z",
+        "continue": "||"
+    },
+    "query": {
+        "pages": [
+            {
+                "pageid": 70556536,
+                "ns": 6,
+                "title": "File:Aerial View of Edinburgh, by Alfred Buckham, from about 1920.jpg",
+                "imagerepository": "local",
+                "imageinfo": [
+                    {
+                        "extmetadata": {
+                            "DateTime": {
+                                "value": "2022-05-06 21:35:43",
+                                "source": "mediawiki-metadata",
+                                "hidden": ""
+                            },
+                            "ObjectName": {
+                                "value": "Aerial View of Edinburgh, by Alfred Buckham, from about 1920",
+                                "source": "mediawiki-metadata"
+                            },
+                            "CommonsMetadataExtension": {
+                                "value": 1.2,
+                                "source": "extension",
+                                "hidden": ""
+                            },
+                            "Categories": {
+                                "value": "All free in US media|Featured pictures|Featured pictures of Scotland|Images published abroad that are in the public domain in the United States|Out of copyright in 2027|Wikipedia Picture of the day files|Wikipedia files not suitable for Commons",
+                                "source": "commons-categories",
+                                "hidden": ""
+                            },
+                            "Assessments": {
+                                "value": "",
+                                "source": "commons-categories",
+                                "hidden": ""
+                            },
+                            "ImageDescription": {
+                                "value": "<p>English: <span lang=\"en\">\"Aerial View of Edinburgh\", a 45.80 x 37.80 cm silver gelatin print of a photograph taken by Alfred Buckham in about 1920. From the National Gallery: \"Buckham’s aerial view of Edinburgh has become one of the most popular photographs in our collection. The view is taken from the west, with the castle in the foreground and the buildings of the Old Town along the Royal Mile gradually fading into a bank of mist with the rocky silhouette of Arthur’s Seat just visible in the distance. Buckham was always keen to capture strong contrasts of light and dark, often combining the skies and landscapes from separate photographs to achieve a theatrical effect. As he does here, he sometimes collaged or hand-painted the form of a tiny aircraft to enhance the vertiginous effect. Yet accuracy remained a concern; Buckham later professed a particular fondness for his view of Edinburgh, ‘because it presents, so nearly, the effect that I saw’.\"</span>\n</p>",
+                                "source": "commons-desc-page"
+                            },
+                            "Credit": {
+                                "value": "<p><a rel=\"nofollow\" class=\"external free\" href=\"https://www.nationalgalleries.org/art-and-artists/17391/aerial-view-edinburgh-about-1920\">https://www.nationalgalleries.org/art-and-artists/17391/aerial-view-edinburgh-about-1920</a>\n</p>",
+                                "source": "commons-desc-page"
+                            },
+                            "DateTimeOriginal": {
+                                "value": "<p>about 1920\n</p>",
+                                "source": "commons-desc-page"
+                            },
+                            "Artist": {
+                                "value": "<p><a href=\"//en.wikipedia.org/wiki/Alfred_Buckham\" title=\"Alfred Buckham\">Alfred G. Buckham</a> (1879 - 1956); restored by <a href=\"//en.wikipedia.org/wiki/User:Adam_Cuerden\" title=\"User:Adam Cuerden\">Adam Cuerden</a>\n</p>",
+                                "source": "commons-desc-page"
+                            },
+                            "LicenseShortName": {
+                                "value": "PD-US",
+                                "source": "commons-desc-page",
+                                "hidden": ""
+                            },
+                            "UsageTerms": {
+                                "value": "<a href=\"//en.wikipedia.org/wiki/Public_domain\" title=\"Public domain\">Public domain</a> in the United States",
+                                "source": "commons-desc-page"
+                            },
+                            "LicenseUrl": {
+                                "value": "//en.wikipedia.org/wiki/File:Aerial_View_of_Edinburgh,_by_Alfred_Buckham,_from_about_1920.jpg",
+                                "source": "commons-desc-page"
+                            },
+                            "Copyrighted": {
+                                "value": "True",
+                                "source": "commons-desc-page",
+                                "hidden": ""
+                            },
+                            "Restrictions": {
+                                "value": "",
+                                "source": "commons-desc-page",
+                                "hidden": ""
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

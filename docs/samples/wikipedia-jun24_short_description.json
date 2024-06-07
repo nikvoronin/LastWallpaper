@@ -1,0 +1,108 @@
+{
+    "continue": {
+        "iistart": "2020-03-09T10:39:48Z",
+        "continue": "||"
+    },
+    "query": {
+        "pages": [
+            {
+                "pageid": 69915226,
+                "ns": 6,
+                "title": "File:Martial eagle (Polemaetus bellicosus).jpg",
+                "imagerepository": "shared",
+                "imageinfo": [
+                    {
+                        "extmetadata": {
+                            "DateTime": {
+                                "value": "2020-08-26 16:07:37",
+                                "source": "mediawiki-metadata",
+                                "hidden": ""
+                            },
+                            "ObjectName": {
+                                "value": "Martial eagle (Polemaetus bellicosus)",
+                                "source": "mediawiki-metadata"
+                            },
+                            "CommonsMetadataExtension": {
+                                "value": 1.2,
+                                "source": "extension",
+                                "hidden": ""
+                            },
+                            "Categories": {
+                                "value": "Accipitriformes of Zimbabwe|Featured pictures on Wikipedia, English|Files with coordinates missing SDC location of creation|Pages with maps|Photographs by Charlesjsharp|Polemaetus bellicosus|Self-published work|Zimbabwe photographs taken on 2018-03-16",
+                                "source": "commons-categories",
+                                "hidden": ""
+                            },
+                            "Assessments": {
+                                "value": "quality|valued",
+                                "source": "commons-categories",
+                                "hidden": ""
+                            },
+                            "GPSLatitude": {
+                                "value": "-17.815570",
+                                "source": "commons-desc-page"
+                            },
+                            "GPSLongitude": {
+                                "value": "25.276378",
+                                "source": "commons-desc-page"
+                            },
+                            "GPSMapDatum": {
+                                "value": "WGS-84",
+                                "source": "commons-desc-page",
+                                "hidden": ""
+                            },
+                            "ImageDescription": {
+                                "value": "Martial eagle (<i>Polemaetus bellicosus</i>), Matetsi Safari Area, Zimbabwe",
+                                "source": "commons-desc-page"
+                            },
+                            "DateTimeOriginal": {
+                                "value": "2018-03-16 09:00:08",
+                                "source": "commons-desc-page"
+                            },
+                            "Credit": {
+                                "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>, from <a rel=\"nofollow\" class=\"external text\" href=\"https://www.sharpphotography.co.uk/\">Sharp Photography, sharpphotography.co.uk</a>",
+                                "source": "commons-desc-page"
+                            },
+                            "Artist": {
+                                "value": "<bdi><a href=\"https://www.wikidata.org/wiki/Q54800218\" class=\"extiw\" title=\"d:Q54800218\"><span title=\"Scottish wildlife photographer\">Charles J. Sharp</span></a>\n</bdi>",
+                                "source": "commons-desc-page"
+                            },
+                            "LicenseShortName": {
+                                "value": "CC BY-SA 4.0",
+                                "source": "commons-desc-page",
+                                "hidden": ""
+                            },
+                            "UsageTerms": {
+                                "value": "Creative Commons Attribution-Share Alike 4.0",
+                                "source": "commons-desc-page"
+                            },
+                            "AttributionRequired": {
+                                "value": "true",
+                                "source": "commons-desc-page",
+                                "hidden": ""
+                            },
+                            "LicenseUrl": {
+                                "value": "https://creativecommons.org/licenses/by-sa/4.0",
+                                "source": "commons-desc-page"
+                            },
+                            "Copyrighted": {
+                                "value": "True",
+                                "source": "commons-desc-page",
+                                "hidden": ""
+                            },
+                            "Restrictions": {
+                                "value": "",
+                                "source": "commons-desc-page",
+                                "hidden": ""
+                            },
+                            "License": {
+                                "value": "cc-by-sa-4.0",
+                                "source": "commons-templates",
+                                "hidden": ""
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
