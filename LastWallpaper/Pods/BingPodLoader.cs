@@ -65,11 +65,9 @@ public sealed class BingPodLoader( HttpClient client )
                 "yyyyMMdd",
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
-                out DateTime fullStartDate );
+                out DateTime startDate );
         if (wrongDateTimeFormat)
-            fullStartDate = DateTime.Now;
-
-        // TODO: set time part hour:minute to Now but leave json date unchanged
+            startDate = DateTime.Now;
 
         ( var title,
             var copyrights) = SplitDescription( lastImageInfo.Copyright );
@@ -77,7 +75,7 @@ public sealed class BingPodLoader( HttpClient client )
         var result = new Imago() {
             PodName = Name,
             Filename = imageFilename,
-            Created = fullStartDate,
+            Created = startDate.Date + DateTime.Now.TimeOfDay,
             Title = title,
             Copyright = copyrights,
         };

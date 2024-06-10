@@ -70,8 +70,6 @@ public sealed class NasaApodLoader( HttpClient client )
         if (wrongDateTimeFormat)
             imageDate = DateTime.Now;
 
-        // TODO: set time part hour:minute to Now but leave json date unchanged
-
         var owner =
             imageInfo.Copyright
                 ?.Trim().Replace( "\n", "" )
@@ -80,7 +78,7 @@ public sealed class NasaApodLoader( HttpClient client )
         var result = new Imago() {
             PodName = Name,
             Filename = imageFilename,
-            Created = imageDate,
+            Created = imageDate.Date + DateTime.Now.TimeOfDay,
             Title = imageInfo.Title,
             Copyright = owner,
         };
