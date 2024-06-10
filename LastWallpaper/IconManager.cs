@@ -5,6 +5,7 @@ namespace LastWallpaper;
 
 public static class IconManager
 {
+    // TODO: add strategies - thumbnail, k-tile, ...
     public static Icon CreateIcon( string imagePath )
     {
         var src = new Bitmap( imagePath );
