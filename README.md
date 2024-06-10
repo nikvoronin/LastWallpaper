@@ -1,6 +1,6 @@
 # The Last Wallpaper
 
-Wallpaper of the day on desktop.
+Picture Of The Day (POTD) as windows desktop wallpaper.
 
 - [What's New](#whats-new)
 - [Documentation](#documentation)
@@ -14,18 +14,23 @@ __System requirements:__ Windows 10 x64, .NET Desktop Runtime 8.0.
 
 ## What's New
 
-3 Jun 2024
+10 Jun 2024
 
-- Bing POD loader is ready.
+- Wikipedia POTD loader added.
+- K-Mean color estimator elaborated.
+- Ultralytics YOLO classifier was tested.
 
 Not so far
 
+- NASA APOD loader added.
+- Bing POD loader is ready.
 - Switched back to the csharp + winforms.
 
 See also [Release Notes](#release-notes) chapter.
 
 ## Documentation
 
+- // TODO: https://www.natgeotv.com/ca/photo-of-the-day
 - [Wikipedia POTD](/docs/wikipedia_jun-2024.md). Picture Of The Day.
 - Bing image of the day. API:
     - [May 2024](/docs/bing_may-2024.md)
@@ -38,6 +43,8 @@ See also [Release Notes](#release-notes) chapter.
 
 | Version       | Notes                                                                 |
 | ------------- | --------------------------------------------------------------------- |
+| 4.6.10        | Wikipedia POTD loader added                                           |
+| 4.6.5         | NASA APOD loader added                                                |
 | 4.6.3         | Bing POD loader is ready                                              |
 | 4.5.29-alpha  | C#, switched back to csharp + winforms                                |
 | 3.6.19-alpha  | Windows toast notifications                                           |
