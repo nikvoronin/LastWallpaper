@@ -11,7 +11,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LastWallpaper.Pods;
+namespace LastWallpaper.Pods.Bing;
 
 public sealed class BingPodLoader( HttpClient client )
     : PodLoader( client )

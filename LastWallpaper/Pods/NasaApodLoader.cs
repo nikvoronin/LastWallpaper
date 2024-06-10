@@ -10,7 +10,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LastWallpaper.Pods;
+namespace LastWallpaper.Pods.Nasa;
 
 public sealed class NasaApodLoader( HttpClient client )
     : PodLoader( client )

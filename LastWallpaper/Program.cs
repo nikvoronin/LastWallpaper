@@ -1,4 +1,6 @@
-using LastWallpaper.Pods;
+using LastWallpaper.Pods.Bing;
+using LastWallpaper.Pods.Nasa;
+using LastWallpaper.Pods.Wikimedia;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -35,7 +37,8 @@ internal static class Program
                     notifyIconCtrl),
                 [
                     new BingPodLoader(client),
-                    //new NasaApodLoader(client)
+                    new NasaApodLoader(client),
+                    new WikipediaPodLoader(client)
                 ] );
 
         notifyIconCtrl.ContextMenuStrip =
@@ -108,7 +111,7 @@ internal static class Program
     }
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.6.5";
+    public const string AppVersion = "4.6.10";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
     internal enum ErrorLevel

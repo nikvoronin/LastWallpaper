@@ -14,10 +14,12 @@ public static class ToastNotifications
             .AddHeroImage( new Uri( filename ) );
 
         if (title is not null)
-            toast.AddText( title );
+            toast.AddText( title ); // should limit length to 250
 
         if (copyright is not null)
-            toast.AddAttributionText( copyright );
+            toast.AddAttributionText( copyright ); // should limit length to 100
+
+        // TODO: add "about picture" button
 
         toast.Show( toast => {
             toast.Group = Program.AppName;

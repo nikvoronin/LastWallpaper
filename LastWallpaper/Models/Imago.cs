@@ -12,4 +12,5 @@ public class Imago
     public required DateTime Created { get; init; }
     public string? Copyright { get; init; }
     public string? Title { get; init; }
+    public string? Description { get; init; }
 }
