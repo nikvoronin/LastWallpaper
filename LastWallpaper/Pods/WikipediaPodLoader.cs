@@ -180,29 +180,29 @@ public sealed class MetaData
 public static class ExtMetaDataExtensions
 {
     public static string? ObjectName(
-        this IReadOnlyDictionary<string, MetaData> data ) =>
-        Untagify(
+        this IReadOnlyDictionary<string, MetaData> data )
+        => Untagify(
             data[nameof( ObjectName )]
             ?.Value
             .GetString() );
 
     public static string? ImageDescription(
-        this IReadOnlyDictionary<string, MetaData> data ) =>
-        Untagify(
+        this IReadOnlyDictionary<string, MetaData> data )
+        => Untagify(
             data[nameof( ImageDescription )]
             ?.Value
             .GetString() );
 
     public static string? Credit(
-        this IReadOnlyDictionary<string, MetaData> data ) =>
-        Untagify(
+        this IReadOnlyDictionary<string, MetaData> data )
+        => Untagify(
             data[nameof( Credit )]
             ?.Value
             .GetString() );
 
     public static string? Artist(
-        this IReadOnlyDictionary<string, MetaData> data ) =>
-        Untagify(
+        this IReadOnlyDictionary<string, MetaData> data )
+        => Untagify(
             data[nameof( Artist )]
             ?.Value
             .GetString() );

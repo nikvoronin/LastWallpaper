@@ -8,17 +8,17 @@ public static class IconManager
     // TODO: add strategies - thumbnail, k-tile, ...
     public static Icon CreateIcon( string imagePath )
     {
-        var src = new Bitmap( imagePath );
-        var dst =
+        using var src = new Bitmap( imagePath );
+        using var dst =
             new Bitmap(
                 DefaultTrayIconSize.Width,
                 DefaultTrayIconSize.Height );
 
-        var g = Graphics.FromImage( dst );
+        using var g = Graphics.FromImage( dst );
         g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
         g.DrawImage( src, 0, 0, dst.Width, dst.Height );
 
-        var pen = PenBy( FindBrightestColor( dst ) );
+        using var pen = PenBy( FindBrightestColor( dst ) );
         g.DrawRectangle( pen, 0, 0, dst.Width - 1, dst.Height - 1 );
 
         return Icon.FromHandle( dst.GetHicon() );
