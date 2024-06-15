@@ -23,31 +23,37 @@ internal static class Program
 
         var notifyIconCtrl =
             new NotifyIcon() {
-                Text = AppName, // TODO: add last updating date-time from config
-                Visible = true,
+                Text = AppName,
+                Visible = false,
                 Icon = SystemIcons.GetStockIcon(
-                    StockIconId.ImageFiles ) // TODO: replace with latest icon from config
+                    StockIconId.ImageFiles )
             };
+
+        var updateUiHandler =
+            new UpdateUiHandler(
+                    SynchronizationContext.Current!,
+                    notifyIconCtrl );
 
         Debug.Assert( SynchronizationContext.Current is not null );
         var scheduler =
             new Scheduler(
-                new UpdateUiHandler(
-                    SynchronizationContext.Current!,
-                    notifyIconCtrl),
+                updateUiHandler,
                 [
                     new BingPodLoader(client),
                     new NasaApodLoader(client),
                     new WikipediaPodLoader(client)
                 ] );
 
+        var imagoResult = FileManager.LoadLastImago();
+        if (imagoResult.IsSuccess)
+            updateUiHandler.InitialUpdate( imagoResult.Value );
+
         notifyIconCtrl.ContextMenuStrip =
             CreateContextMenu( scheduler );
+        notifyIconCtrl.Visible = true;
 
         scheduler.Start();
-
         Application.Run();
-
         scheduler.Dispose();
 
         notifyIconCtrl.Visible = false;
@@ -60,41 +66,43 @@ internal static class Program
         Scheduler scheduler )
     {
         ContextMenuStrip contextMenu = new();
-        contextMenu.Items.AddRange( new ToolStripItem[] {
-            new ToolStripMenuItem(
-                "&Update Now!",
-                null, (_,_) => scheduler.Update() )
-            {
-                Enabled = true,
-                Visible = true
-            },
+        contextMenu.Items.AddRange(
+            [
+                new ToolStripMenuItem(
+                    "&Update Now!",
+                    null, (_,_) => scheduler.Update() )
+                {
+                    Enabled = true,
+                    Visible = true
+                },
 
-            new ToolStripMenuItem(
-                "&Open Picture Gallery",
-                null, (_,_) => {
-                    ExecShellProcess(
-                        "explorer", FileManager.AlbumFolder);
-                } )
-            {
-                Enabled = true,
-                Visible = true
-            },
+                new ToolStripMenuItem(
+                    "&Open Picture Gallery",
+                    null, (_,_) => {
+                        ExecShellProcess(
+                            "explorer", FileManager.AlbumFolder);
+                    } )
+                {
+                    Enabled = true,
+                    Visible = true
+                },
 
-            new ToolStripSeparator(),
+                new ToolStripSeparator(),
 
-            new ToolStripMenuItem(
-                $"&About {AppName} {AppVersion}",
-                null, (_,_) => {
-                    ExecShellProcess(
-                        "cmd", $"/c start {GithubProjectUrl}");
-                } ),
+                new ToolStripMenuItem(
+                    $"&About {AppName} {AppVersion}",
+                    null, (_,_) => {
+                        ExecShellProcess(
+                            "cmd", $"/c start {GithubProjectUrl}");
+                    } ),
 
-            new ToolStripSeparator(),
+                new ToolStripSeparator(),
 
-            new ToolStripMenuItem(
-                "&Quit",
-                null, (_,_) => Application.Exit() ),
-        } );
+                new ToolStripMenuItem(
+                    "&Quit",
+                    null, (_,_) => Application.Exit() )
+            ]
+        );
 
         return contextMenu;
     }
@@ -111,7 +119,7 @@ internal static class Program
     }
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.6.10";
+    public const string AppVersion = "4.6.15";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
     internal enum ErrorLevel
