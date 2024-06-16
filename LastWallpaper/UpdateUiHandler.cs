@@ -7,13 +7,6 @@ using System.Windows.Forms;
 
 namespace LastWallpaper;
 
-public interface IUpdateHandler
-{
-    void InitialUpdate( Imago imago );
-
-    void HandleUpdate( Imago imago );
-}
-
 public sealed class UpdateUiHandler(
     SynchronizationContext uiContext,
     NotifyIcon notifyIconCtrl )

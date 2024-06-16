@@ -83,5 +83,5 @@ public static class FileManager
     private static string? _albumPath;
 
     private const string CacheFolderName = "cache";
-    private const string LastWallpaperFileName = "last-wallpaper.json";
+    private const string LastWallpaperFileName = "lastwallpaper.json";
 }
