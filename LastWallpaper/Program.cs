@@ -20,9 +20,7 @@ internal static class Program
             new WindowsFormsSynchronizationContext() );
 
         var client = new HttpClient();
-        client.DefaultRequestHeaders.Add(
-            "User-Agent",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" );
+        client.DefaultRequestHeaders.Add( "User-Agent", HttpClientUserAgent );
 
         var notifyIconCtrl =
             new NotifyIcon() {
@@ -121,8 +119,11 @@ internal static class Program
         catch { }
     }
 
+    private const string HttpClientUserAgent =
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
+
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.6.15";
+    public const string AppVersion = "4.6.16";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
     internal enum ErrorLevel

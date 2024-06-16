@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LastWallpaper.Pods;
 
-public interface IPictureDayLoader
+public interface IPotdLoader
 {
     /// <summary>
     /// Name or prefix of the POD loader.
@@ -24,7 +24,7 @@ public interface IPictureDayLoader
     Task<Result<Imago>> UpdateAsync( CancellationToken ct );
 }
 
-public abstract class PodLoader( HttpClient client ) : IPictureDayLoader
+public abstract class PodLoader( HttpClient client ) : IPotdLoader
 {
     public abstract string Name { get; }
 

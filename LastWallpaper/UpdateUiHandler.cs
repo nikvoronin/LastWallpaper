@@ -1,7 +1,8 @@
 ﻿using LastWallpaper.Models;
-using System.Text.Json;
 using System.Threading;
+#if !DEBUG
 using System.Threading.Tasks;
+#endif
 using System.Windows.Forms;
 
 namespace LastWallpaper;

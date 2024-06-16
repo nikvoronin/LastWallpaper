@@ -13,7 +13,7 @@ public sealed class Scheduler : IDisposable
 {
     public Scheduler(
         IUpdateHandler updateHandler,
-        IReadOnlyCollection<IPictureDayLoader> pods )
+        IReadOnlyCollection<IPotdLoader> pods )
     {
         Debug.Assert( pods is not null );
 
@@ -79,7 +79,7 @@ public sealed class Scheduler : IDisposable
     }
 
     private Timer? _timer;
-    private readonly IReadOnlyCollection<IPictureDayLoader> _pods;
+    private readonly IReadOnlyCollection<IPotdLoader> _pods;
     private readonly CancellationTokenSource _cts;
     private readonly IUpdateHandler _updateHandler;
 
