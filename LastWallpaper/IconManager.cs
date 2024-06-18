@@ -1,5 +1,7 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace LastWallpaper;
 
@@ -18,7 +20,7 @@ public static class IconManager
         g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
         g.DrawImage( src, 0, 0, dst.Width, dst.Height );
 
-        using var pen = PenBy( FindBrightestColor( dst ) );
+        using var pen = WidePenBy( FindBrightestColor( dst ), 24 );
         g.DrawRectangle( pen, 0, 0, dst.Width - 1, dst.Height - 1 );
 
         return Icon.FromHandle( dst.GetHicon() );
@@ -47,6 +49,10 @@ public static class IconManager
     }
 
     private static Pen PenBy( Color color ) => new( color );
+    private static Pen WidePenBy( Color color, int width ) => new( color, width );
 
-    private static Size DefaultTrayIconSize = new( 20, 20 );
+    private static Size DefaultTrayIconSize = new( 256, 256 );
+
+    [DllImport( "user32.dll", CharSet = CharSet.Auto )]
+    public extern static bool DestroyIcon( IntPtr handle );
 }

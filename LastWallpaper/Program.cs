@@ -123,7 +123,7 @@ internal static class Program
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.6.16";
+    public const string AppVersion = "4.6.18";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
     internal enum ErrorLevel
