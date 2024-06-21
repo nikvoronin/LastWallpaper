@@ -1,9 +1,6 @@
 ﻿using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
-using Microsoft.Extensions.Logging.Abstractions;
 using System;
-using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Threading;
 #if !DEBUG
 using System.Threading.Tasks;

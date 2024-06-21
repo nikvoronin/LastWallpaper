@@ -17,7 +17,7 @@ public static class IconManager
                 DefaultTrayIconSize.Height );
 
         using var g = Graphics.FromImage( dst );
-        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
         g.DrawImage( src, 0, 0, dst.Width, dst.Height );
 
         using var pen = WidePenBy( FindBrightestColor( dst ), 24 );
