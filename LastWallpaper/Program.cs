@@ -97,8 +97,10 @@ internal static class Program
                 new ToolStripMenuItem(
                     "&Open Picture Gallery",
                     null, (_,_) => {
-                        ExecShellProcess(
-                            "explorer", FileManager.AlbumFolder);
+                        try {
+                            ExecShellProcess(
+                                "explorer", FileManager.AlbumFolder);
+                        } catch {}
                     } )
                 {
                     Enabled = true,
@@ -110,8 +112,10 @@ internal static class Program
                 new ToolStripMenuItem(
                     $"&About {AppName} {AppVersion}",
                     null, (_,_) => {
-                        ExecShellProcess(
-                            "cmd", $"/c start {GithubProjectUrl}");
+                        try {
+                            ExecShellProcess(
+                                "cmd", $"/c start {GithubProjectUrl}");
+                        } catch {}
                     } ),
 
                 new ToolStripSeparator(),
@@ -125,16 +129,12 @@ internal static class Program
         return contextMenu;
     }
 
-    private static void ExecShellProcess( string command, string args )
-    {
-        try {
-            Process.Start(
-                new ProcessStartInfo( command, args ) {
-                    CreateNoWindow = true
-                } );
-        }
-        catch { }
-    }
+    private static void ExecShellProcess(
+        string command, string args )
+        => Process.Start(
+            new ProcessStartInfo( command, args ) {
+                CreateNoWindow = true
+            } );
 
     public const string AppName = "The Last Wallpaper";
     public const string AppVersion = "4.6.22";
