@@ -1,8 +1,6 @@
 using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
-using LastWallpaper.Pods.Bing;
-using LastWallpaper.Pods.Nasa;
-using LastWallpaper.Pods.Wikimedia;
+using LastWallpaper.Pods;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -44,17 +42,12 @@ internal static class Program
         var activePodsOnly =
             settings.ActivePods.Distinct()
             .Select( podType =>
-                (IPotdLoader?)(podType switch {
-                    PodType.Bing =>
-                        new BingPodLoader( client, settings.BingOptions ),
-                    PodType.Apod =>
-                        new NasaApodLoader( client, settings.ApodOptions ),
-                    PodType.Wikipedia =>
-                        new WikipediaPodLoader( client, settings.WikipediaOptions ),
-                    _ => null
-                }) )
+                PodFabric.CreatePod( podType, client, settings ) )
             .OfType<IPotdLoader>()
             .ToList();
+
+        if (activePodsOnly.Count == 0) // TODO: add logger
+            return (int)ErrorLevel.NoPodsDefined;
 
         Debug.Assert( SynchronizationContext.Current is not null );
         var scheduler =

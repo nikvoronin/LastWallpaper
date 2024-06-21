@@ -10,7 +10,7 @@ namespace LastWallpaper.Models;
 public class AppSettings
 {
     [JsonPropertyName( "toast_expire_days" )]
-    public int Toas { get; init; } = 2;
+    public int ToastExpireDays { get; init; } = 2;
 
     [JsonPropertyName( "user_agent" )]
     public string UserAgent { get; init; } =
