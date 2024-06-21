@@ -1,4 +1,5 @@
 ﻿using FluentResults;
+using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,12 @@ using System.Threading.Tasks;
 
 namespace LastWallpaper.Pods.Bing;
 
-public sealed class BingPodLoader( HttpClient client )
-    : PodLoader( client )
+public sealed class BingPodLoader(
+    HttpClient client,
+    BingSettings settings )
+    : PodLoader( PodType.Bing, client, settings )
 {
-    public override string Name => "bing";
+    public override BingSettings Settings => (BingSettings)_settings;
 
     protected override async Task<Result<Imago>> UpdateInternalAsync(
         CancellationToken ct )
@@ -39,7 +42,7 @@ public sealed class BingPodLoader( HttpClient client )
                 CultureInfo.InvariantCulture,
                 DownloadPictureUrlFormat,
                 urlBase,
-                ImageResolution.UltraHD );
+                Settings.Resolution );
 
         var imageFilename =
             Path.Combine(
@@ -69,7 +72,7 @@ public sealed class BingPodLoader( HttpClient client )
         if (wrongDateTimeFormat)
             startDate = DateTime.Now;
 
-        ( var title,
+        (var title,
             var copyrights) = SplitDescription( lastImageInfo.Copyright );
 
         var result = new Imago() {
@@ -120,4 +123,11 @@ public sealed class BingPodLoader( HttpClient client )
         [JsonPropertyName( "images" )]
         public IReadOnlyList<ImageInfo>? Images { get; set; }
     }
+}
+
+public class BingSettings : IPotdLoaderSettings
+{
+    [JsonPropertyName( "resolution" )]
+    public string Resolution { get; init; } =
+        BingPodLoader.ImageResolution.UltraHD;
 }

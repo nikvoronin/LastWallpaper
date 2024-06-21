@@ -1,4 +1,5 @@
 ﻿using FluentResults;
+using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using System;
 using System.Net.Http;
@@ -7,26 +8,10 @@ using System.Threading.Tasks;
 
 namespace LastWallpaper.Pods;
 
-public interface IPotdLoader
+public abstract class PodLoader : IPotdLoader
 {
-    /// <summary>
-    /// Name or prefix of the POD loader.
-    /// </summary>
-    string Name { get; }
-
-    /// <summary>
-    /// Updates and downloads pictures of the day.
-    /// </summary>
-    /// <param name="ct">Cancellation token.</param>
-    /// <returns>
-    /// Collection of pathes to downloaded images or empty collection otherwise.
-    /// </returns>
-    Task<Result<Imago>> UpdateAsync( CancellationToken ct );
-}
-
-public abstract class PodLoader( HttpClient client ) : IPotdLoader
-{
-    public abstract string Name { get; }
+    public string Name { get; }
+    public abstract IPotdLoaderSettings Settings { get; }
 
     public async Task<Result<Imago>> UpdateAsync( CancellationToken ct )
     {
@@ -54,5 +39,17 @@ public abstract class PodLoader( HttpClient client ) : IPotdLoader
     protected abstract Task<Result<Imago>> UpdateInternalAsync( CancellationToken ct );
 
     private int _interlocked;
-    protected readonly HttpClient _client = client;
+    protected readonly HttpClient _client;
+    protected readonly IPotdLoaderSettings _settings;
+
+    protected PodLoader(
+        PodType superType,
+        HttpClient client,
+        IPotdLoaderSettings settings )
+    {
+        _client = client;
+        _settings = settings;
+
+        Name = superType.ToString().ToLower();
+    }
 }

@@ -3,6 +3,7 @@ using LastWallpaper.Models;
 using System;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Windows.Forms;
 
 namespace LastWallpaper;
@@ -34,6 +35,34 @@ public static class FileManager
         }
 
         return Result.Fail( "The last wallpaper was not found" );
+    }
+
+    public static AppSettings LoadAppSettings()
+    {
+        var appSettingsFileName =
+            Path.Combine(
+                GetAppFolder(),
+                AppSettingsFileName );
+
+        AppSettings? appSettings = null;
+
+        if (File.Exists( appSettingsFileName )) {
+            try {
+                appSettings =
+                    JsonSerializer.Deserialize<AppSettings>(
+                        File.ReadAllText( appSettingsFileName ),
+                        new JsonSerializerOptions {
+                            AllowTrailingCommas = true,
+                            Converters =
+                            {
+                                new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseLower)
+                            }
+                        } );
+            }
+            catch { }
+        }
+
+        return appSettings ?? new();
     }
 
     public static string AlbumFolder {
@@ -84,4 +113,5 @@ public static class FileManager
 
     private const string CacheFolderName = "cache";
     private const string LastWallpaperFileName = "lastwallpaper.json";
+    private const string AppSettingsFileName = "appsettings.json";
 }

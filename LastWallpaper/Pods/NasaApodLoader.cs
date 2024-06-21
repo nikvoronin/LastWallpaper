@@ -1,4 +1,5 @@
 ﻿using FluentResults;
+using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using System;
 using System.Globalization;
@@ -12,22 +13,24 @@ using System.Threading.Tasks;
 
 namespace LastWallpaper.Pods.Nasa;
 
-public sealed class NasaApodLoader( HttpClient client )
-    : PodLoader( client )
+public sealed class NasaApodLoader(
+    HttpClient client,
+    ApodSettings settings )
+    : PodLoader( PodType.Apod, client, settings )
 {
-    public override string Name => "apod";
+    public override ApodSettings Settings => (ApodSettings)_settings;
 
     protected override async Task<Result<Imago>> UpdateInternalAsync(
         CancellationToken ct )
     {
-        // TODO: move throttling block to the scheduler
+        // TODO:? move throttling block to the scheduler
         var delta = DateTime.UtcNow - _lastUpdateDate;
-        if (delta.TotalHours < 23) {
+        if (delta.TotalHours < Settings.ThrottlingHours) {
             return Result.Fail(
                 $"Next time. Not now. Last update was {(int)delta.TotalHours} hours ago." );
         }
 
-        var apiKey = DefaultApiKey; // TODO: get from pod configuration or use default one
+        var apiKey = Settings.ApiKey;
         var requestPicturesListUrl =
             string.Format(
                 CultureInfo.InvariantCulture,
@@ -94,8 +97,6 @@ public sealed class NasaApodLoader( HttpClient client )
     private static readonly CompositeFormat RequestLatestPictureUrlFormat =
         CompositeFormat.Parse( "https://api.nasa.gov/planetary/apod?api_key={0}" );
 
-    private const string DefaultApiKey = "DEMO_KEY";
-
     public class ImageInfo
     {
         [JsonPropertyName( "copyright" )] public string? Copyright { get; init; }
@@ -104,4 +105,15 @@ public sealed class NasaApodLoader( HttpClient client )
         [JsonPropertyName( "media_type" )] public required string MediaType { get; init; }
         [JsonPropertyName( "title" )] public required string Title { get; init; }
     }
+}
+
+public class ApodSettings : IPotdLoaderSettings
+{
+    [JsonPropertyName( "throttling_hours" )]
+    public int ThrottlingHours { get; init; } = 23;
+
+    [JsonPropertyName( "api_key" )]
+    public string ApiKey { get; init; } = DefaultApiKey;
+
+    public const string DefaultApiKey = "DEMO_KEY";
 }

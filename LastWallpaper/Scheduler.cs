@@ -1,5 +1,5 @@
-﻿using LastWallpaper.Models;
-using LastWallpaper.Pods;
+﻿using LastWallpaper.Abstractions;
+using LastWallpaper.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

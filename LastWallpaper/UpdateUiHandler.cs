@@ -1,4 +1,5 @@
-﻿using LastWallpaper.Models;
+﻿using LastWallpaper.Abstractions;
+using LastWallpaper.Models;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Drawing;

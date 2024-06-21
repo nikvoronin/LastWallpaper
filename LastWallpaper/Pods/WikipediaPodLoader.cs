@@ -1,5 +1,6 @@
 ﻿using FluentResults;
 using HtmlAgilityPack;
+using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using System;
 using System.Collections.Generic;
@@ -17,10 +18,12 @@ using System.Threading.Tasks;
 
 namespace LastWallpaper.Pods.Wikimedia;
 
-public sealed class WikipediaPodLoader( HttpClient client )
-    : PodLoader( client )
+public sealed class WikipediaPodLoader(
+    HttpClient client,
+    WikipediaSettings settings )
+    : PodLoader( PodType.Wikipedia, client, settings )
 {
-    public override string Name => "wikipedia";
+    public override WikipediaSettings Settings => (WikipediaSettings)_settings;
 
     protected override async Task<Result<Imago>> UpdateInternalAsync(
         CancellationToken ct )
@@ -110,9 +113,6 @@ public sealed class WikipediaPodLoader( HttpClient client )
         return Result.Ok( result );
     }
 
-    const string WikiMediaQueryBase =
-        "https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2";
-
     private static readonly CompositeFormat WmQueryPotdFilenameFormat =
         CompositeFormat.Parse(
             WikiMediaQueryBase + "&prop=images&titles=Template:POTD/{0}" );
@@ -124,6 +124,9 @@ public sealed class WikipediaPodLoader( HttpClient client )
     private static readonly CompositeFormat WmQueryPotdCreditsFormat =
         CompositeFormat.Parse(
             WikiMediaQueryBase + "&prop=imageinfo&iiprop=extmetadata&titles={0}" );
+
+    private const string WikiMediaQueryBase =
+        "https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2";
 }
 
 public sealed class WikiMediaResponse
@@ -170,6 +173,10 @@ public sealed class WikiMediaResponse
             public IReadOnlyDictionary<string, MetaData>? ExtMetaData { get; init; }
         }
     }
+}
+
+public class WikipediaSettings : IPotdLoaderSettings
+{
 }
 
 public sealed class MetaData

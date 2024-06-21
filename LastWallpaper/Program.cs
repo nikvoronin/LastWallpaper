@@ -1,9 +1,12 @@
+using LastWallpaper.Abstractions;
+using LastWallpaper.Models;
 using LastWallpaper.Pods.Bing;
 using LastWallpaper.Pods.Nasa;
 using LastWallpaper.Pods.Wikimedia;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Windows.Forms;
@@ -15,12 +18,15 @@ internal static class Program
     [STAThread]
     static int Main()
     {
+        AppSettings settings = FileManager.LoadAppSettings();
+
         ApplicationConfiguration.Initialize();
         SynchronizationContext.SetSynchronizationContext(
             new WindowsFormsSynchronizationContext() );
 
         var client = new HttpClient();
-        client.DefaultRequestHeaders.Add( "User-Agent", HttpClientUserAgent );
+        client.DefaultRequestHeaders.Add(
+            "User-Agent", settings.UserAgent );
 
         var notifyIconCtrl =
             new NotifyIcon() {
@@ -32,18 +38,29 @@ internal static class Program
 
         var updateUiHandler =
             new UpdateUiHandler(
-                    SynchronizationContext.Current!,
-                    notifyIconCtrl );
+                SynchronizationContext.Current!,
+                notifyIconCtrl );
+
+        var activePodsOnly =
+            settings.ActivePods.Distinct()
+            .Select( podType =>
+                (IPotdLoader?)(podType switch {
+                    PodType.Bing =>
+                        new BingPodLoader( client, settings.BingOptions ),
+                    PodType.Apod =>
+                        new NasaApodLoader( client, settings.ApodOptions ),
+                    PodType.Wikipedia =>
+                        new WikipediaPodLoader( client, settings.WikipediaOptions ),
+                    _ => null
+                }) )
+            .OfType<IPotdLoader>()
+            .ToList();
 
         Debug.Assert( SynchronizationContext.Current is not null );
         var scheduler =
             new Scheduler(
                 updateUiHandler,
-                [
-                    new BingPodLoader(client),
-                    new NasaApodLoader(client),
-                    new WikipediaPodLoader(client)
-                ] );
+                activePodsOnly );
 
         var imagoResult = FileManager.LoadLastImago();
         if (imagoResult.IsSuccess)
@@ -119,15 +136,7 @@ internal static class Program
         catch { }
     }
 
-    private const string HttpClientUserAgent =
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
-
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.6.18";
+    public const string AppVersion = "4.6.22";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
-
-    internal enum ErrorLevel
-    {
-        ExitOk = 0
-    }
 }
