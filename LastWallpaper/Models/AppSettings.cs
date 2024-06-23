@@ -10,8 +10,8 @@ namespace LastWallpaper.Models;
 
 public class AppSettings
 {
-    [JsonPropertyName( "toast_expire_days" )]
-    public int ToastExpireDays { get; init; } = 2;
+    [JsonPropertyName( "toast_expire_in" )]
+    public TimeSpan ToastExpireIn { get; init; } = TimeSpan.FromDays( 2 );
 
     [JsonPropertyName( "update_every" )]
     public TimeSpan UpdateEvery { get; init; } = TimeSpan.FromMinutes( 57 );

@@ -45,11 +45,11 @@ internal static class Program
         if (activePodsOnly.Count == 0) // TODO: add logger
             return (int)ErrorLevel.NoPodsDefined;
 
-
         var frontUpdateHandler =
             new FrontUpdateHandler(
                 SynchronizationContext.Current!,
-                notifyIconCtrl );
+                notifyIconCtrl,
+                settings);
 
         var podsUpdateHandler =
             new PodsUpdateHandler(

@@ -8,7 +8,8 @@ public static class ToastNotifications
     public static void ShowToast(
         string filename,
         string? title,
-        string? copyright )
+        string? copyright,
+        TimeSpan expireIn )
     {
         var toast = new ToastContentBuilder()
             .AddHeroImage( new Uri( filename ) );
@@ -23,7 +24,7 @@ public static class ToastNotifications
 
         toast.Show( toast => {
             toast.Group = Program.AppName;
-            toast.ExpirationTime = DateTime.Now.AddDays( 2 ); // TODO: add expiration as option
+            toast.ExpirationTime = DateTime.Now.Add( expireIn );
         } );
     }
 }

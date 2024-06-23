@@ -11,8 +11,9 @@ using System.Windows.Forms;
 namespace LastWallpaper.Handlers;
 
 public sealed class FrontUpdateHandler(
-    SynchronizationContext uiContext,
-    NotifyIcon notifyIconCtrl )
+    SynchronizationContext _uiContext,
+    NotifyIcon _notifyIconCtrl,
+    AppSettings settings )
     : IParameterizedUpdateHandler<Imago>, IDisposable
 {
     private void UpdateInternal(
@@ -42,7 +43,8 @@ public sealed class FrontUpdateHandler(
                 ToastNotifications.ShowToast(
                     imago.Filename,
                     imago.Title,
-                    imago.Copyright ),
+                    imago.Copyright,
+                    settings.ToastExpireIn ),
                 null );
 
             FileManager.SaveCurrentImago( imago );
@@ -62,6 +64,4 @@ public sealed class FrontUpdateHandler(
     }
 
     private nint _currentIconHandle = 0;
-    private readonly NotifyIcon _notifyIconCtrl = notifyIconCtrl;
-    private readonly SynchronizationContext _uiContext = uiContext;
 }
