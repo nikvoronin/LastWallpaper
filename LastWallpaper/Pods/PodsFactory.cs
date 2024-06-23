@@ -7,7 +7,7 @@ using System.Net.Http;
 
 namespace LastWallpaper.Pods;
 
-public static class PodFabric
+public static class PodsFactory
 {
     public static IPotdLoader? CreatePod(
         PodType podType,

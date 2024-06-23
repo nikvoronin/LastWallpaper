@@ -42,7 +42,7 @@ internal static class Program
         var activePodsOnly =
             settings.ActivePods.Distinct()
             .Select( podType =>
-                PodFabric.CreatePod( podType, client, settings ) )
+                PodsFactory.CreatePod( podType, client, settings ) )
             .OfType<IPotdLoader>()
             .ToList();
 
