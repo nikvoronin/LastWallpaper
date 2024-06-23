@@ -20,7 +20,7 @@ public static class ToastNotifications
         if (copyright is not null)
             toast.AddAttributionText( copyright ); // should limit length to 100
 
-        // TODO: add "about picture" button
+        // TODO:? add "about picture" button
 
         toast.Show( toast => {
             toast.Group = Program.AppName;

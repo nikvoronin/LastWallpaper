@@ -49,12 +49,12 @@ internal static class Program
             new FrontUpdateHandler(
                 SynchronizationContext.Current!,
                 notifyIconCtrl,
-                settings);
+                settings );
 
         var podsUpdateHandler =
             new PodsUpdateHandler(
-                activePodsOnly, 
-                frontUpdateHandler);
+                activePodsOnly,
+                frontUpdateHandler );
 
         Debug.Assert( SynchronizationContext.Current is not null );
         var scheduler =
