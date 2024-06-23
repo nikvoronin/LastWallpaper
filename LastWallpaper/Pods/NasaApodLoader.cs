@@ -25,7 +25,7 @@ public sealed class NasaApodLoader(
     {
         // TODO:? move throttling block to the scheduler
         var delta = DateTime.UtcNow - _lastUpdateDate;
-        if (delta.TotalHours < Settings.ThrottlingHours) {
+        if (delta < Settings.ThrottlingHours) {
             return Result.Fail(
                 $"Next time. Not now. Last update was {(int)delta.TotalHours} hours ago." );
         }
@@ -110,7 +110,7 @@ public sealed class NasaApodLoader(
 public class ApodSettings : IPotdLoaderSettings
 {
     [JsonPropertyName( "throttling_hours" )]
-    public int ThrottlingHours { get; init; } = 23;
+    public TimeSpan ThrottlingHours { get; init; } = TimeSpan.FromHours( 23 );
 
     [JsonPropertyName( "api_key" )]
     public string ApiKey { get; init; } = DefaultApiKey;
