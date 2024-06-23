@@ -4,6 +4,7 @@ Picture Of The Day (POTD) as windows desktop wallpaper.
 
 - [What's New](#whats-new)
 - [Documentation](#documentation)
+- [Application Settings](#application-settings)
 - [Release Notes](#release-notes)
 
 ![20240603_212225](https://github.com/nikvoronin/LastWallpaper/assets/11328666/921585aa-f489-43e6-b084-7f5db9006428)
@@ -48,7 +49,7 @@ See [appsettings.json](https://github.com/nikvoronin/LastWallpaper/blob/main/Las
 - __active_pods__ - active pods list. Will updated in appear order. The first one with positive result become a wallpaper.
 - __bing__
     - __resolution__ - resolution of the picture:
-        - "UHD" - 4K
+        - "UHD" - 4K (3840x2160px)
         - "1920x1080" - FullHD
         - "1280x720" - HD
 - __apod__
@@ -74,19 +75,19 @@ See [appsettings.json](https://github.com/nikvoronin/LastWallpaper/blob/main/Las
   "wikipedia": {
   },
 
-  "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+  "user_agent": "LastWallpaper/4.6.23 (Windows NT 10.0; Win64; x64)"
 }
 ```
 
 ## Release Notes
 
-| Version       | Notes                                                                 |
-| ------------- | --------------------------------------------------------------------- |
-| 4.6.23        | Add application settings file.<br/>Remember the last wallpaper and recall it after the app restarts.                                        |
-| 4.6.10        | Wikipedia POTD loader added                                           |
-| 4.6.5         | NASA APOD loader added                                                |
-| 4.6.3         | Bing POD loader is ready                                              |
-| 4.5.29-alpha  | C#, switched back to csharp + winforms                                |
-| 3.6.19-alpha  | Windows toast notifications                                           |
-| 3.6.18-alpha  | F#, Bing POD. Changes tray icon according to the new image of the day |
-| 2.11.22-alpha | C#, cross-platform version with Avalonia UI                           |
+| Version       | Notes                                                                                                |
+| ------------- | ---------------------------------------------------------------------------------------------------- |
+| 4.6.23        | Add application settings file.<br/>Remember the last wallpaper and recall it after the app restarts. |
+| 4.6.10        | Wikipedia POTD loader added                                                                          |
+| 4.6.5         | NASA APOD loader added                                                                               |
+| 4.6.3         | Bing POD loader is ready                                                                             |
+| 4.5.29-alpha  | C#, switched back to csharp + winforms                                                               |
+| 3.6.19-alpha  | Windows toast notifications                                                                          |
+| 3.6.18-alpha  | F#, Bing POD. Changes tray icon according to the new image of the day                                |
+| 2.11.22-alpha | C#, cross-platform version with Avalonia UI                                                          |
