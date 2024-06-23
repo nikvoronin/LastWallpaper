@@ -1,4 +1,5 @@
 using LastWallpaper.Abstractions;
+using LastWallpaper.Handlers;
 using LastWallpaper.Models;
 using LastWallpaper.Pods;
 using System;
@@ -34,11 +35,6 @@ internal static class Program
                     StockIconId.ImageFiles )
             };
 
-        var updateUiHandler =
-            new UpdateUiHandler(
-                SynchronizationContext.Current!,
-                notifyIconCtrl );
-
         var activePodsOnly =
             settings.ActivePods.Distinct()
             .Select( podType =>
@@ -49,15 +45,27 @@ internal static class Program
         if (activePodsOnly.Count == 0) // TODO: add logger
             return (int)ErrorLevel.NoPodsDefined;
 
+
+        var frontUpdateHandler =
+            new FrontUpdateHandler(
+                SynchronizationContext.Current!,
+                notifyIconCtrl );
+
+        var podsUpdateHandler =
+            new PodsUpdateHandler(
+                activePodsOnly, 
+                frontUpdateHandler);
+
         Debug.Assert( SynchronizationContext.Current is not null );
         var scheduler =
             new Scheduler(
-                updateUiHandler,
-                activePodsOnly );
+                podsUpdateHandler,
+                activePodsOnly,
+                settings );
 
         var imagoResult = FileManager.LoadLastImago();
         if (imagoResult.IsSuccess)
-            updateUiHandler.InitialUpdate( imagoResult.Value );
+            frontUpdateHandler.RestoreUi( imagoResult.Value );
 
         notifyIconCtrl.ContextMenuStrip =
             CreateContextMenu( scheduler );

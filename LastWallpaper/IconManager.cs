@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -10,6 +11,8 @@ public static class IconManager
     // TODO: add strategies - thumbnail, k-tile, ...
     public static Icon CreateIcon( string imagePath )
     {
+        if (!File.Exists( imagePath )) throw new FileNotFoundException();
+
         using var src = new Bitmap( imagePath );
         using var dst =
             new Bitmap(

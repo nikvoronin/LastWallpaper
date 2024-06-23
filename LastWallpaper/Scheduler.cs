@@ -3,7 +3,6 @@ using LastWallpaper.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,11 +12,13 @@ public sealed class Scheduler : IDisposable
 {
     public Scheduler(
         IUpdateHandler updateHandler,
-        IReadOnlyCollection<IPotdLoader> pods )
+        IReadOnlyCollection<IPotdLoader> pods,
+        AppSettings settings)
     {
+        Debug.Assert( updateHandler is not null );
         Debug.Assert( pods is not null );
 
-        _pods = pods;
+        _checkImageUpdateAfterPeriod = settings.UpdateEvery;
         _updateHandler = updateHandler;
         _cts = new CancellationTokenSource();
     }
@@ -32,39 +33,13 @@ public sealed class Scheduler : IDisposable
             OnTimerTick,
             null,
             StartImmediately,
-            (long)CheckNewImagePeriod.TotalMilliseconds );
+            (long)_checkImageUpdateAfterPeriod.TotalMilliseconds );
     }
 
     private void OnTimerTick( object? _ ) => Update();
 
-    public void Update()
-    {
-        Debug.Assert( _cts is not null );
-
-        var ct = _cts.Token;
-        Task.Run( async () => {
-            var news = new Dictionary<string, Imago>();
-
-            foreach (var pod in _pods) {
-                try {
-                    ct.ThrowIfCancellationRequested();
-
-                    var result = await pod.UpdateAsync( ct );
-                    if (result.IsSuccess)
-                        news.TryAdd( pod.Name, result.Value );
-                }
-                catch (OperationCanceledException) {
-                    break;
-                }
-            }
-
-            // TODO: share news with Selector
-            if (news.Count > 0) {
-                var imago = news.Values.First();
-                _updateHandler?.HandleUpdate( imago );
-            }
-        } );
-    }
+    public void Update() =>
+        Task.Run( () => _updateHandler.HandleUpdate( _cts.Token ) );
 
     public void Dispose()
     {
@@ -79,11 +54,9 @@ public sealed class Scheduler : IDisposable
     }
 
     private Timer? _timer;
-    private readonly IReadOnlyCollection<IPotdLoader> _pods;
     private readonly CancellationTokenSource _cts;
     private readonly IUpdateHandler _updateHandler;
+    private readonly TimeSpan _checkImageUpdateAfterPeriod;
 
     private const int StartImmediately = 0;
-
-    private static readonly TimeSpan CheckNewImagePeriod = TimeSpan.FromMinutes( 57 );
 }

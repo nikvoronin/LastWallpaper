@@ -2,6 +2,7 @@
 using LastWallpaper.Pods.Bing;
 using LastWallpaper.Pods.Nasa;
 using LastWallpaper.Pods.Wikimedia;
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -11,6 +12,9 @@ public class AppSettings
 {
     [JsonPropertyName( "toast_expire_days" )]
     public int ToastExpireDays { get; init; } = 2;
+
+    [JsonPropertyName( "update_every" )]
+    public TimeSpan UpdateEvery { get; init; } = TimeSpan.FromMinutes( 57 );
 
     [JsonPropertyName( "user_agent" )]
     public string UserAgent { get; init; } =

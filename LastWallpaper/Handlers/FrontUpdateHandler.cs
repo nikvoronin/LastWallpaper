@@ -1,18 +1,19 @@
 ﻿using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using System;
+using System.IO;
 using System.Threading;
 #if !DEBUG
 using System.Threading.Tasks;
 #endif
 using System.Windows.Forms;
 
-namespace LastWallpaper;
+namespace LastWallpaper.Handlers;
 
-public sealed class UpdateUiHandler(
+public sealed class FrontUpdateHandler(
     SynchronizationContext uiContext,
     NotifyIcon notifyIconCtrl )
-    : IUpdateHandler, IDisposable
+    : IParameterizedUpdateHandler<Imago>, IDisposable
 {
     private void UpdateInternal(
         Imago imago,
@@ -23,8 +24,12 @@ public sealed class UpdateUiHandler(
             _currentIconHandle = 0;
         }
 
-        _notifyIconCtrl.Icon = IconManager.CreateIcon( imago.Filename );
-        _currentIconHandle = _notifyIconCtrl.Icon.Handle;
+        try {
+            _notifyIconCtrl.Icon = IconManager.CreateIcon( imago.Filename );
+            _currentIconHandle = _notifyIconCtrl.Icon.Handle;
+        }
+        catch (FileNotFoundException) { }
+        
         _notifyIconCtrl.Text =
             $"{Program.AppName} #{imago.PodName}\n{imago.Created:D} {imago.Created:t}";
 
@@ -44,10 +49,10 @@ public sealed class UpdateUiHandler(
         }
     }
 
-    public void InitialUpdate( Imago imago ) =>
+    public void RestoreUi( Imago imago ) =>
         UpdateInternal( imago, restoreUi: true );
 
-    public void HandleUpdate( Imago imago ) =>
+    public void HandleUpdate( Imago imago, CancellationToken _ ) =>
         UpdateInternal( imago );
 
     public void Dispose()

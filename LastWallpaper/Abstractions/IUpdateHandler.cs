@@ -1,8 +1,8 @@
-﻿using LastWallpaper.Models;
+﻿using System.Threading;
 
 namespace LastWallpaper.Abstractions;
 
 public interface IUpdateHandler
 {
-    void HandleUpdate(Imago imago);
+    void HandleUpdate( CancellationToken ct );
 }
