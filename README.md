@@ -44,7 +44,10 @@ See also [Release Notes](#release-notes) chapter.
 
 See [appsettings.json](https://github.com/nikvoronin/LastWallpaper/blob/main/LastWallpaper/appsettings.json) file in the application folder.
 
+Format for date-time options (periods/timeout/etc) is: `days . hours : minutes : seconds . milliseconds`. For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.789".
+
 - __update_every__ - check pod updates every.
+- __update_timeout__ - timeout for updating all pods.
 - __toast_expire_in__ - toast message will disappear after this period of time.
 - __active_pods__ - active pods list. Will updated in appear order. The first one with positive result become a wallpaper.
 - __bing__
@@ -59,7 +62,8 @@ See [appsettings.json](https://github.com/nikvoronin/LastWallpaper/blob/main/Las
 ```json
 {
   "update_every": "00:57:00",
-  "toast_expire_in": "2.00:00:00", // days . hours : minutes : seconds
+  "update_timeout": "00:05:00",
+  "toast_expire_in": "2.00:00:00",
 
   "active_pods": [ "bing", "wikipedia", "apod" ],
   
