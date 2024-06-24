@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 #if !DEBUG
 using System.Threading.Tasks;
@@ -14,9 +15,9 @@ namespace LastWallpaper.Handlers;
 public sealed class PodsUpdateHandler(
     IReadOnlyCollection<IPotdLoader> _pods,
     IParameterizedUpdateHandler<Imago> _frontUpdateHandler )
-    : IUpdateHandler
+    : IAsyncUpdateHandler
 {
-    public async void HandleUpdate( CancellationToken ct )
+    public async Task HandleUpdateAsync( CancellationToken ct )
     {
         var news = new Dictionary<string, Imago>();
 

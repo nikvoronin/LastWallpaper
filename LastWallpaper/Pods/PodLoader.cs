@@ -19,15 +19,21 @@ public abstract class PodLoader : IPotdLoader
         if (Interlocked.CompareExchange( ref _interlocked, 1, 0 ) != 0)
             return Result.Fail( "Update already in progress." );
 
+        var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource( ct );
+        timeoutCts.CancelAfter( UpdateBypassTimeout );
+
         Result<Imago> result;
         try {
-            result = await UpdateInternalAsync( ct );
+            result = await UpdateInternalAsync( timeoutCts.Token );
         }
         catch (Exception e)
-        when (e is not OperationCanceledException) {
+        when (
+            e is not OperationCanceledException
+            || timeoutCts.IsCancellationRequested )
+        {
             result = Result.Fail(
                 new ExceptionalError(
-                    $"Error on updating #{Name} POD", e ) );
+                    $"Error while updating #{Name} POD", e ) );
         }
         finally {
             Interlocked.Exchange( ref _interlocked, 0 );
@@ -41,6 +47,9 @@ public abstract class PodLoader : IPotdLoader
     private int _interlocked;
     protected readonly HttpClient _client;
     protected readonly IPotdLoaderSettings _settings;
+
+    private static readonly TimeSpan UpdateBypassTimeout = 
+        TimeSpan.FromMinutes( 5 );
 
     protected PodLoader(
         PodType superType,

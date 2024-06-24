@@ -1,4 +1,5 @@
-﻿using LastWallpaper.Abstractions;
+﻿using FluentResults;
+using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace LastWallpaper;
 public sealed class Scheduler : IDisposable
 {
     public Scheduler(
-        IUpdateHandler updateHandler,
+        IAsyncUpdateHandler updateHandler,
         IReadOnlyCollection<IPotdLoader> pods,
         AppSettings settings)
     {
@@ -30,16 +31,24 @@ public sealed class Scheduler : IDisposable
         if (_timer is not null) return;
 
         _timer = new(
-            OnTimerTick,
+            _ => Update(),
             null,
             StartImmediately,
             (long)_checkImageUpdateAfterPeriod.TotalMilliseconds );
     }
 
-    private void OnTimerTick( object? _ ) => Update();
+    public async void Update()
+    {
+        if (Interlocked.CompareExchange( ref _interlocked, 1, 0 ) != 0)
+            return;
 
-    public void Update() =>
-        Task.Run( () => _updateHandler.HandleUpdate( _cts.Token ) );
+        try {
+            await _updateHandler.HandleUpdateAsync( _cts.Token );
+        }
+        finally {
+            Interlocked.Exchange( ref _interlocked, 0 );
+        }
+    }
 
     public void Dispose()
     {
@@ -54,8 +63,9 @@ public sealed class Scheduler : IDisposable
     }
 
     private Timer? _timer;
+    private int _interlocked;
     private readonly CancellationTokenSource _cts;
-    private readonly IUpdateHandler _updateHandler;
+    private readonly IAsyncUpdateHandler _updateHandler;
     private readonly TimeSpan _checkImageUpdateAfterPeriod;
 
     private const int StartImmediately = 0;
