@@ -1,6 +1,6 @@
 # The Last Wallpaper
 
-Picture Of The Day (POTD) as windows desktop wallpaper.
+Picture Of The Day (POTD) on desktop.
 
 - [What's New](#whats-new)
 - [Documentation](#documentation)
@@ -83,7 +83,7 @@ See [appsettings.json](https://github.com/nikvoronin/LastWallpaper/blob/main/Las
 
 | Version       | Notes                                                                                                |
 | ------------- | ---------------------------------------------------------------------------------------------------- |
-| 4.6.23        | Add application settings file.<br/>Remember the last wallpaper and recall it after the app restarts. |
+| 4.6.24        | Add application settings file.<br/>Remember the last wallpaper and recall it after the app restarts. |
 | 4.6.10        | Wikipedia POTD loader added                                                                          |
 | 4.6.5         | NASA APOD loader added                                                                               |
 | 4.6.3         | Bing POD loader is ready                                                                             |
