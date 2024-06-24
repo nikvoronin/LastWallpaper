@@ -60,7 +60,6 @@ internal static class Program
         var scheduler =
             new Scheduler(
                 podsUpdateHandler,
-                activePodsOnly,
                 settings );
 
         var imagoResult = FileManager.LoadLastImago();

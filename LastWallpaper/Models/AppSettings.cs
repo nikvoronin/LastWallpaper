@@ -15,6 +15,9 @@ public class AppSettings
 
     [JsonPropertyName( "update_every" )]
     public TimeSpan UpdateEvery { get; init; } = TimeSpan.FromMinutes( 57 );
+    
+    [JsonPropertyName( "update_timeout" )]
+    public TimeSpan SchedulerUpdateTimeout { get; init; } = TimeSpan.FromMinutes( 5 );
 
     [JsonPropertyName( "user_agent" )]
     public string UserAgent { get; init; } =

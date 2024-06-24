@@ -1,11 +1,8 @@
-﻿using FluentResults;
-using LastWallpaper.Abstractions;
+﻿using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace LastWallpaper;
 
@@ -13,13 +10,13 @@ public sealed class Scheduler : IDisposable
 {
     public Scheduler(
         IAsyncUpdateHandler updateHandler,
-        IReadOnlyCollection<IPotdLoader> pods,
-        AppSettings settings)
+        AppSettings settings )
     {
         Debug.Assert( updateHandler is not null );
-        Debug.Assert( pods is not null );
 
         _checkImageUpdateAfterPeriod = settings.UpdateEvery;
+        _podsUpdateTimeout = settings.SchedulerUpdateTimeout;
+
         _updateHandler = updateHandler;
         _cts = new CancellationTokenSource();
     }
@@ -42,9 +39,13 @@ public sealed class Scheduler : IDisposable
         if (Interlocked.CompareExchange( ref _interlocked, 1, 0 ) != 0)
             return;
 
+        var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource( _cts.Token );
+        timeoutCts.CancelAfter( _podsUpdateTimeout );
+
         try {
-            await _updateHandler.HandleUpdateAsync( _cts.Token );
+            await _updateHandler.HandleUpdateAsync( timeoutCts.Token );
         }
+        catch (OperationCanceledException) when (timeoutCts.IsCancellationRequested) { }
         finally {
             Interlocked.Exchange( ref _interlocked, 0 );
         }
@@ -67,6 +68,7 @@ public sealed class Scheduler : IDisposable
     private readonly CancellationTokenSource _cts;
     private readonly IAsyncUpdateHandler _updateHandler;
     private readonly TimeSpan _checkImageUpdateAfterPeriod;
+    private readonly TimeSpan _podsUpdateTimeout;
 
     private const int StartImmediately = 0;
 }

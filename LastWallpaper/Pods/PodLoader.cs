@@ -8,9 +8,12 @@ using System.Threading.Tasks;
 
 namespace LastWallpaper.Pods;
 
-public abstract class PodLoader : IPotdLoader
+public abstract class PodLoader(
+    PodType superType,
+    HttpClient client,
+    IPotdLoaderSettings settings ) : IPotdLoader
 {
-    public string Name { get; }
+    public string Name { get; } = superType.ToString().ToLower();
     public abstract IPotdLoaderSettings Settings { get; }
 
     public async Task<Result<Imago>> UpdateAsync( CancellationToken ct )
@@ -19,17 +22,12 @@ public abstract class PodLoader : IPotdLoader
         if (Interlocked.CompareExchange( ref _interlocked, 1, 0 ) != 0)
             return Result.Fail( "Update already in progress." );
 
-        var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource( ct );
-        timeoutCts.CancelAfter( UpdateBypassTimeout );
-
         Result<Imago> result;
         try {
-            result = await UpdateInternalAsync( timeoutCts.Token );
+            result = await UpdateInternalAsync( ct );
         }
         catch (Exception e)
-        when (
-            e is not OperationCanceledException
-            || timeoutCts.IsCancellationRequested )
+        when ( e is not OperationCanceledException )
         {
             result = Result.Fail(
                 new ExceptionalError(
@@ -45,20 +43,6 @@ public abstract class PodLoader : IPotdLoader
     protected abstract Task<Result<Imago>> UpdateInternalAsync( CancellationToken ct );
 
     private int _interlocked;
-    protected readonly HttpClient _client;
-    protected readonly IPotdLoaderSettings _settings;
-
-    private static readonly TimeSpan UpdateBypassTimeout = 
-        TimeSpan.FromMinutes( 5 );
-
-    protected PodLoader(
-        PodType superType,
-        HttpClient client,
-        IPotdLoaderSettings settings )
-    {
-        _client = client;
-        _settings = settings;
-
-        Name = superType.ToString().ToLower();
-    }
+    protected readonly HttpClient _client = client;
+    protected readonly IPotdLoaderSettings _settings = settings;
 }
