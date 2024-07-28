@@ -44,7 +44,8 @@ See also [Release Notes](#release-notes) chapter.
 
 See [appsettings.json](https://github.com/nikvoronin/LastWallpaper/blob/main/LastWallpaper/appsettings.json) file in the application folder.
 
-Format for date-time options (periods/timeout/etc) is: `days . hours : minutes : seconds . milliseconds`. For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.789".
+Format for date-time options (periods/timeout/etc) is: `days.hours:minutes:seconds.milliseconds`.\
+For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.789".
 
 - __update_every__ - check pod updates every.
 - __update_timeout__ - timeout for updating all pods.
@@ -56,8 +57,8 @@ Format for date-time options (periods/timeout/etc) is: `days . hours : minutes :
         - "1920x1080" - FullHD
         - "1280x720" - HD
 - __apod__
-    - __throttling_hours__ - next update after this period. Be aware that APOD free but limited with 50 requests per IP address per day.
-    - __api_key__ - if you have you payed api key.
+    - __throttling_hours__ - next update will happen after this period. Be aware that APOD free but limited with 50 requests per IP address per day.
+    - __api_key__ - if you have your own paid API key.
 
 ```json
 {
@@ -85,13 +86,35 @@ Format for date-time options (periods/timeout/etc) is: `days . hours : minutes :
 
 ## Release Notes
 
-| Version       | Notes                                                                                                |
-| ------------- | ---------------------------------------------------------------------------------------------------- |
-| 4.6.24        | Add application settings file.<br/>Remember the last wallpaper and recall it after the app restarts. |
-| 4.6.10        | Wikipedia POTD loader added                                                                          |
-| 4.6.5         | NASA APOD loader added                                                                               |
-| 4.6.3         | Bing POD loader is ready                                                                             |
-| 4.5.29-alpha  | C#, switched back to csharp + winforms                                                               |
-| 3.6.19-alpha  | Windows toast notifications                                                                          |
-| 3.6.18-alpha  | F#, Bing POD. Changes tray icon according to the new image of the day                                |
-| 2.11.22-alpha | C#, cross-platform version with Avalonia UI                                                          |
+### 4.6.24
+
+- Add application settings file.
+- Remember the last wallpaper and recall it after the app restarts.
+
+### 4.6.10
+
+- Wikipedia POTD loader added
+
+### 4.6.5
+
+- NASA APOD loader added
+
+### 4.6.3
+
+- Bing POD loader is ready
+
+### 4.5.29-alpha
+
+- C#, switched back to csharp + winforms
+
+### 3.6.19-alpha
+
+- Windows toast notifications
+
+### 3.6.18-alpha
+
+- F#, Bing POD. Changes tray icon according to the new image of the day
+
+### 2.11.22-alpha
+
+- C#, cross-platform version with Avalonia UI.

@@ -6,10 +6,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-#if !DEBUG
-using System.Threading.Tasks;
-#endif
-
 namespace LastWallpaper.Handlers;
 
 public sealed class PodsUpdateHandler(
