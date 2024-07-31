@@ -53,9 +53,9 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
 - __active_pods__ - active pods list. Will updated in appear order. The first one with positive result become a wallpaper.
 - __bing__
     - __resolution__ - resolution of the picture:
-        - "UHD" - 4K (3840x2160px)
-        - "1920x1080" - FullHD
-        - "1280x720" - HD
+        - "UltraHD" or "UHD" - 4K, 3840x2160 px
+        - "FullHD" or "FHD" - 1920x1080 px
+        - "HD" - 1280x720 px
 - __apod__
     - __throttling_hours__ - next update will happen after this period. Be aware that APOD free but limited with 50 requests per IP address per day.
     - __api_key__ - if you have your own paid API key.
