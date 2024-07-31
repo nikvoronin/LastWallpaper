@@ -35,14 +35,14 @@ internal static class Program
                     StockIconId.ImageFiles )
             };
 
-        var activePodsOnly =
+        var activePods =
             settings.ActivePods.Distinct()
             .Select( podType =>
                 PodsFactory.CreatePod( podType, client, settings ) )
             .OfType<IPotdLoader>()
             .ToList();
 
-        if (activePodsOnly.Count == 0) // TODO: add logger
+        if (activePods.Count == 0) // TODO: add logger
             return (int)ErrorLevel.NoPodsDefined;
 
         var frontUpdateHandler =
@@ -53,7 +53,7 @@ internal static class Program
 
         var podsUpdateHandler =
             new PodsUpdateHandler(
-                activePodsOnly,
+                activePods,
                 frontUpdateHandler );
 
         Debug.Assert( SynchronizationContext.Current is not null );
@@ -63,11 +63,15 @@ internal static class Program
                 settings );
 
         var imagoResult = FileManager.LoadLastImago();
-        if (imagoResult.IsSuccess)
-            frontUpdateHandler.RestoreUi( imagoResult.Value );
+        if (imagoResult.IsSuccess) {
+            frontUpdateHandler.HandleUpdate(
+                new(
+                    hasNews: false,
+                    imagoResult.Value ),
+                CancellationToken.None );
+        }
 
-        notifyIconCtrl.ContextMenuStrip =
-            CreateContextMenu( scheduler );
+        notifyIconCtrl.ContextMenuStrip = CreateContextMenu( scheduler );
         notifyIconCtrl.Visible = true;
 
         scheduler.Start();
@@ -137,6 +141,6 @@ internal static class Program
             } );
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.6.24";
+    public const string AppVersion = "4.7.31";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 }

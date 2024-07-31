@@ -11,7 +11,8 @@ namespace LastWallpaper.Pods;
 public abstract class PodLoader(
     PodType superType,
     HttpClient client,
-    IPotdLoaderSettings settings ) : IPotdLoader
+    IPotdLoaderSettings settings )
+    : IPotdLoader
 {
     public string Name { get; } = superType.ToString().ToLower();
     public abstract IPotdLoaderSettings Settings { get; }
@@ -27,8 +28,7 @@ public abstract class PodLoader(
             result = await UpdateInternalAsync( ct );
         }
         catch (Exception e)
-        when ( e is not OperationCanceledException )
-        {
+        when (e is not OperationCanceledException) {
             result = Result.Fail(
                 new ExceptionalError(
                     $"Error while updating #{Name} POD", e ) );

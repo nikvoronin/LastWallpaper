@@ -14,12 +14,18 @@ public sealed class FrontUpdateHandler(
     SynchronizationContext _uiContext,
     NotifyIcon _notifyIconCtrl,
     AppSettings settings )
-    : IParameterizedUpdateHandler<Imago>, IDisposable
+    : IParameterizedUpdateHandler<FrontUpdateParameters>, IDisposable
 {
-    private void UpdateInternal(
-        Imago imago,
-        bool restoreUi = false )
+    public void HandleUpdate(
+        FrontUpdateParameters updateParameters,
+        CancellationToken ct )
     {
+        var imago =
+            updateParameters.HasNews ? updateParameters.Imago
+            : FileManager.LoadLastImago().ValueOrDefault;
+
+        if (imago is null) return;
+
         if (_currentIconHandle != 0) {
             IconManager.DestroyIcon( _currentIconHandle );
             _currentIconHandle = 0;
@@ -30,11 +36,11 @@ public sealed class FrontUpdateHandler(
             _currentIconHandle = _notifyIconCtrl.Icon.Handle;
         }
         catch (FileNotFoundException) { }
-        
+
         _notifyIconCtrl.Text =
             $"{Program.AppName} #{imago.PodName}\n{imago.Created:D} {imago.Created:t}";
 
-        if (!restoreUi) {
+        if (updateParameters.HasNews) {
 #if !DEBUG
             Task.Run( () =>
                 WindowsRegistry.SetWallpaper( imago.Filename ) );
@@ -50,12 +56,6 @@ public sealed class FrontUpdateHandler(
             FileManager.SaveCurrentImago( imago );
         }
     }
-
-    public void RestoreUi( Imago imago ) =>
-        UpdateInternal( imago, restoreUi: true );
-
-    public void HandleUpdate( Imago imago, CancellationToken _ ) =>
-        UpdateInternal( imago );
 
     public void Dispose()
     {

@@ -14,12 +14,16 @@ public static class PodsFactory
         HttpClient client,
         AppSettings settings )
         => podType switch {
+
             PodType.Bing =>
                 new BingPodLoader( client, settings.BingOptions ),
+
             PodType.Apod =>
                 new NasaApodLoader( client, settings.ApodOptions ),
+            
             PodType.Wikipedia =>
                 new WikipediaPodLoader( client, settings.WikipediaOptions ),
+
             _ => null
         };
 }

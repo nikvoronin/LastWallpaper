@@ -10,7 +10,7 @@ namespace LastWallpaper.Handlers;
 
 public sealed class PodsUpdateHandler(
     IReadOnlyCollection<IPotdLoader> _pods,
-    IParameterizedUpdateHandler<Imago> _frontUpdateHandler )
+    IParameterizedUpdateHandler<FrontUpdateParameters> _frontUpdateHandler )
     : IAsyncUpdateHandler
 {
     public async Task HandleUpdateAsync( CancellationToken ct )
@@ -18,22 +18,18 @@ public sealed class PodsUpdateHandler(
         var news = new Dictionary<string, Imago>();
 
         foreach (var pod in _pods) {
-            try {
-                ct.ThrowIfCancellationRequested();
+            ct.ThrowIfCancellationRequested();
 
-                var result = await pod.UpdateAsync( ct );
-                if (result.IsSuccess)
-                    news.TryAdd( pod.Name, result.Value );
-            }
-            catch (OperationCanceledException) {
-                break;
-            }
+            var result = await pod.UpdateAsync( ct );
+            if (result.IsSuccess)
+                news.TryAdd( pod.Name, result.Value );
         }
 
         // TODO: share news with Selector
-        if (news.Count > 0) {
-            var imago = news.Values.First();
-            _frontUpdateHandler?.HandleUpdate( imago, ct );
-        }
+        _frontUpdateHandler?.HandleUpdate(
+            new(
+                news.Count > 0,
+                news.Values.FirstOrDefault() ),
+            ct );
     }
 }
