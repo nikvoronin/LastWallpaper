@@ -1,5 +1,6 @@
 using LastWallpaper.Abstractions;
-using LastWallpaper.Handlers;
+using LastWallpaper.Logic;
+using LastWallpaper.Logic.Handlers;
 using LastWallpaper.Models;
 using LastWallpaper.Pods;
 using System;
@@ -38,7 +39,7 @@ internal static class Program
         var activePods =
             settings.ActivePods.Distinct()
             .Select( podType =>
-                PodsFactory.CreatePod( podType, client, settings ) )
+                PodsFactory.Create( podType, client, settings ) )
             .OfType<IPotdLoader>()
             .ToList();
 
@@ -49,6 +50,7 @@ internal static class Program
             new FrontUpdateHandler(
                 SynchronizationContext.Current!,
                 notifyIconCtrl,
+                IconManagerFactory.Create( settings.TrayIcon ),
                 settings );
 
         var podsUpdateHandler =
@@ -141,6 +143,6 @@ internal static class Program
             } );
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.7.31";
+    public const string AppVersion = "4.8.1";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 }

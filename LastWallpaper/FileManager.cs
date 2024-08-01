@@ -51,13 +51,7 @@ public static class FileManager
                 appSettings =
                     JsonSerializer.Deserialize<AppSettings>(
                         File.ReadAllText( appSettingsFileName ),
-                        new JsonSerializerOptions {
-                            AllowTrailingCommas = true,
-                            Converters =
-                            {
-                                new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseLower)
-                            }
-                        } );
+                        _jsonSerializerOptions );
             }
             catch { }
         }
@@ -110,6 +104,16 @@ public static class FileManager
 
     private static string? _cachePath;
     private static string? _albumPath;
+
+    private static JsonSerializerOptions _jsonSerializerOptions =
+        new JsonSerializerOptions {
+            AllowTrailingCommas = true,
+            PropertyNameCaseInsensitive = true,
+            Converters =
+            {
+                new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseLower)
+            }
+        };
 
     private const string CacheFolderName = "cache";
     private const string LastWallpaperFileName = "lastwallpaper.json";

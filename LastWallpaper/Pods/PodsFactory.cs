@@ -9,7 +9,7 @@ namespace LastWallpaper.Pods;
 
 public static class PodsFactory
 {
-    public static IPotdLoader? CreatePod(
+    public static IPotdLoader? Create(
         PodType podType,
         HttpClient client,
         AppSettings settings )

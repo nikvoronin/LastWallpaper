@@ -19,6 +19,9 @@ public class AppSettings
     [JsonPropertyName( "update_timeout" )]
     public TimeSpan SchedulerUpdateTimeout { get; init; } = TimeSpan.FromMinutes( 5 );
 
+    [JsonPropertyName( "tray_icon" )]
+    public TrayIconType TrayIcon { get; init; } = TrayIconType.Replica;
+
     [JsonPropertyName( "user_agent" )]
     public string UserAgent { get; init; } =
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";

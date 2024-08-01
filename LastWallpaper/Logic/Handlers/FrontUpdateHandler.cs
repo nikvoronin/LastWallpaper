@@ -1,6 +1,7 @@
 ﻿using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Threading;
 #if !DEBUG
@@ -8,14 +9,23 @@ using System.Threading.Tasks;
 #endif
 using System.Windows.Forms;
 
-namespace LastWallpaper.Handlers;
+namespace LastWallpaper.Logic.Handlers;
 
-public sealed class FrontUpdateHandler(
-    SynchronizationContext _uiContext,
-    NotifyIcon _notifyIconCtrl,
-    AppSettings settings )
-    : IParameterizedUpdateHandler<FrontUpdateParameters>, IDisposable
+public sealed class FrontUpdateHandler :
+    IParameterizedUpdateHandler<FrontUpdateParameters>, IDisposable
 {
+    public FrontUpdateHandler(
+        SynchronizationContext uiContext,
+        NotifyIcon notifyIconCtrl,
+        IIconManager iconManager,
+        AppSettings settings )
+    {
+        _uiContext = uiContext;
+        _notifyIconCtrl = notifyIconCtrl;
+        _iconManager = iconManager;
+        _settings = settings;
+    }
+
     public void HandleUpdate(
         FrontUpdateParameters updateParameters,
         CancellationToken ct )
@@ -26,14 +36,12 @@ public sealed class FrontUpdateHandler(
 
         if (imago is null) return;
 
-        if (_currentIconHandle != 0) {
-            IconManager.DestroyIcon( _currentIconHandle );
-            _currentIconHandle = 0;
-        }
+        if (_currentIcon is not null)
+            _iconManager.DestroyIcon( _currentIcon );
 
         try {
-            _notifyIconCtrl.Icon = IconManager.CreateIcon( imago.Filename );
-            _currentIconHandle = _notifyIconCtrl.Icon.Handle;
+            _notifyIconCtrl.Icon = _iconManager.CreateIcon( imago.Filename );
+            _currentIcon = _notifyIconCtrl.Icon;
         }
         catch (FileNotFoundException) { }
 
@@ -50,7 +58,7 @@ public sealed class FrontUpdateHandler(
                     imago.Filename,
                     imago.Title,
                     imago.Copyright,
-                    settings.ToastExpireIn ),
+                    _settings.ToastExpireIn ),
                 null );
 
             FileManager.SaveCurrentImago( imago );
@@ -59,9 +67,13 @@ public sealed class FrontUpdateHandler(
 
     public void Dispose()
     {
-        if (_currentIconHandle != 0)
-            IconManager.DestroyIcon( _currentIconHandle );
+        if (_currentIcon is not null)
+            _iconManager.DestroyIcon( _currentIcon );
     }
 
-    private nint _currentIconHandle = 0;
+    private Icon? _currentIcon;
+    private readonly SynchronizationContext _uiContext;
+    private readonly NotifyIcon _notifyIconCtrl;
+    private readonly IIconManager _iconManager;
+    private readonly AppSettings _settings;
 }

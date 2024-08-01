@@ -1,19 +1,16 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 
-namespace LastWallpaper;
+namespace LastWallpaper.Logic;
 
-public static class IconManager
+public class ReplicaIconManager : IconManager
 {
-    // TODO: add strategies - thumbnail, k-tile, ...
-    public static Icon CreateIcon( string imagePath )
+    public override Icon CreateIcon( string sourceImagePath )
     {
-        if (!File.Exists( imagePath )) throw new FileNotFoundException();
+        if (!File.Exists( sourceImagePath )) throw new FileNotFoundException();
 
-        using var src = new Bitmap( imagePath );
+        using var src = new Bitmap( sourceImagePath );
         using var dst =
             new Bitmap(
                 DefaultTrayIconSize.Width,
@@ -23,7 +20,7 @@ public static class IconManager
         g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
         g.DrawImage( src, 0, 0, dst.Width, dst.Height );
 
-        using var pen = WidePenBy( FindBrightestColor( dst ), 24 );
+        using var pen = WidePenBy( FindBrightestColor( dst ) );
         g.DrawRectangle( pen, 0, 0, dst.Width - 1, dst.Height - 1 );
 
         return Icon.FromHandle( dst.GetHicon() );
@@ -52,10 +49,5 @@ public static class IconManager
     }
 
     private static Pen PenBy( Color color ) => new( color );
-    private static Pen WidePenBy( Color color, int width ) => new( color, width );
-
-    private static Size DefaultTrayIconSize = new( 256, 256 );
-
-    [DllImport( "user32.dll", CharSet = CharSet.Auto )]
-    public extern static bool DestroyIcon( IntPtr handle );
+    private static Pen WidePenBy( Color color, int width = 24 ) => new( color, width );
 }
