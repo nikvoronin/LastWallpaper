@@ -1,17 +1,14 @@
 ﻿using FluentResults;
-using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
+using LastWallpaper.Pods.Bing.Models;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using static LastWallpaper.Pods.Bing.BingPodLoader;
 
 namespace LastWallpaper.Pods.Bing;
 
@@ -102,44 +99,4 @@ public sealed class BingPodLoader(
     // Hardcoded json format, latest (today) zero-indexed one image.
     private const string RequestPicturesList =
         "https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1";
-
-    public enum ImageResolution { UHD, UltraHD, FHD, FullHD, HD }
-    public static class ImageResolutions
-    {
-        public static string GetValue( ImageResolution resolutionName )
-            => resolutionName switch {
-                ImageResolution.FullHD
-                    or ImageResolution.FHD => FullHD,
-
-                ImageResolution.HD => HD,
-
-                _ => UltraHD // ImageResolution.UltraHD or .UHD
-            };
-
-        public const string HD = "1280x720";
-        public const string FullHD = "1920x1080";
-        public const string UltraHD = "UHD";
-    }
-
-    public class ImageInfo
-    {
-        [JsonPropertyName( "startdate" )] public required string StartDate { get; init; }
-
-        [JsonPropertyName( "urlbase" )] public required string UrlBase { get; init; }
-
-        [JsonPropertyName( "copyright" )] public string? Copyright { get; set; }
-    }
-
-    public class BingHpImages
-    {
-        [JsonPropertyName( "images" )]
-        public IReadOnlyList<ImageInfo>? Images { get; set; }
-    }
-}
-
-public class BingSettings : IPotdLoaderSettings
-{
-    [JsonPropertyName( "resolution" )]
-    public ImageResolution Resolution { get; init; } =
-        ImageResolution.UltraHD;
 }

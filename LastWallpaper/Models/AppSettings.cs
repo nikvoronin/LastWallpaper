@@ -1,5 +1,4 @@
-﻿using LastWallpaper.Abstractions;
-using LastWallpaper.Pods.Bing;
+﻿using LastWallpaper.Pods.Bing.Models;
 using LastWallpaper.Pods.Nasa;
 using LastWallpaper.Pods.Wikimedia;
 using System;

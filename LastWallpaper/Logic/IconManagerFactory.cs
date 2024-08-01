@@ -1,4 +1,5 @@
 ﻿using LastWallpaper.Abstractions;
+using LastWallpaper.Models;
 using System;
 using System.Diagnostics;
 

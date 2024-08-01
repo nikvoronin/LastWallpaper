@@ -1,4 +1,4 @@
-﻿namespace LastWallpaper.Abstractions;
+﻿namespace LastWallpaper.Models;
 
 public enum ErrorLevel
 {
