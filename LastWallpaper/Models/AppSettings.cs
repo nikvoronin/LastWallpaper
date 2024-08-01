@@ -1,5 +1,5 @@
 ﻿using LastWallpaper.Pods.Bing.Models;
-using LastWallpaper.Pods.Nasa;
+using LastWallpaper.Pods.Nasa.Models;
 using LastWallpaper.Pods.Wikimedia;
 using System;
 using System.Collections.Generic;

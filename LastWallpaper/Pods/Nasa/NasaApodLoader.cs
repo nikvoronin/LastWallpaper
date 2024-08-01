@@ -1,13 +1,12 @@
 ﻿using FluentResults;
-using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
+using LastWallpaper.Pods.Nasa.Models;
 using System;
 using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -96,24 +95,4 @@ public sealed class NasaApodLoader(
     // Hardcoded latest (today) one image.
     private static readonly CompositeFormat RequestLatestPictureUrlFormat =
         CompositeFormat.Parse( "https://api.nasa.gov/planetary/apod?api_key={0}" );
-
-    public class ImageInfo
-    {
-        [JsonPropertyName( "copyright" )] public string? Copyright { get; init; }
-        [JsonPropertyName( "date" )] public required string Date { get; init; }
-        [JsonPropertyName( "hdurl" )] public required string HdImageUrl { get; init; }
-        [JsonPropertyName( "media_type" )] public required string MediaType { get; init; }
-        [JsonPropertyName( "title" )] public required string Title { get; init; }
-    }
-}
-
-public class ApodSettings : IPotdLoaderSettings
-{
-    [JsonPropertyName( "throttling_hours" )]
-    public TimeSpan ThrottlingHours { get; init; } = TimeSpan.FromHours( 23 );
-
-    [JsonPropertyName( "api_key" )]
-    public string ApiKey { get; init; } = DefaultApiKey;
-
-    public const string DefaultApiKey = "DEMO_KEY";
 }
