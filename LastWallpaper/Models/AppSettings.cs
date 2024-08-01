@@ -1,6 +1,6 @@
 ﻿using LastWallpaper.Pods.Bing.Models;
 using LastWallpaper.Pods.Nasa.Models;
-using LastWallpaper.Pods.Wikimedia;
+using LastWallpaper.Pods.Wikimedia.Models;
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;

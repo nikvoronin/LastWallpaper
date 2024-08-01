@@ -1,18 +1,12 @@
 ﻿using FluentResults;
-using HtmlAgilityPack;
-using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
+using LastWallpaper.Pods.Wikimedia.Models;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,7 +23,7 @@ public sealed class WikipediaPodLoader(
         CancellationToken ct )
     {
         var jsonPotdFilename =
-            await _client.GetFromJsonAsync<WikiMediaResponse>(
+            await _client.GetFromJsonAsync<WmResponse>(
                 string.Format(
                     CultureInfo.InvariantCulture,
                     WmQueryPotdFilenameFormat,
@@ -39,7 +33,7 @@ public sealed class WikipediaPodLoader(
         var potdFilename = jsonPotdFilename?.Query.Pages[0].Images?[0].Value;
 
         var jsonPotdImageLink =
-            await _client.GetFromJsonAsync<WikiMediaResponse>(
+            await _client.GetFromJsonAsync<WmResponse>(
                 string.Format(
                     CultureInfo.InvariantCulture,
                     WmQueryPotdUrlFormat,
@@ -71,7 +65,7 @@ public sealed class WikipediaPodLoader(
         await imageStream.CopyToAsync( fileStream, ct );
 
         var jsonPotdCredits =
-            await _client.GetFromJsonAsync<WikiMediaResponse>(
+            await _client.GetFromJsonAsync<WmResponse>(
                 string.Format(
                     CultureInfo.InvariantCulture,
                     WmQueryPotdCreditsFormat,
@@ -127,112 +121,4 @@ public sealed class WikipediaPodLoader(
 
     private const string WikiMediaQueryBase =
         "https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2";
-}
-
-public sealed class WikiMediaResponse
-{
-    [JsonPropertyName( "query" )]
-    public required WmQuery Query { get; init; }
-
-    public sealed class WmQuery
-    {
-        [JsonPropertyName( "pages" )]
-        public required IReadOnlyList<WmPagedPotds> Pages { get; init; }
-    }
-
-    public sealed class WmPagedPotds
-    {
-        [JsonPropertyName( "pageid" )]
-        public required long PageId { get; init; }
-
-        [JsonPropertyName( "title" )]
-        public required string Title { get; init; }
-
-        [JsonPropertyName( "images" )]
-        [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-        public IReadOnlyList<ImageFilename>? Images { get; init; }
-
-        [JsonPropertyName( "imageinfo" )]
-        [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-        public IReadOnlyList<ImageInfo>? ImageInfos { get; init; }
-
-        public sealed class ImageFilename
-        {
-            [JsonPropertyName( "title" )]
-            public required string Value { get; init; }
-        }
-
-        public sealed class ImageInfo
-        {
-            [JsonPropertyName( "url" )]
-            [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-            public string? Url { get; init; }
-
-            [JsonPropertyName( "extmetadata" )]
-            [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
-            public IReadOnlyDictionary<string, MetaData>? ExtMetaData { get; init; }
-        }
-    }
-}
-
-public class WikipediaSettings : IPotdLoaderSettings
-{
-}
-
-public sealed class MetaData
-{
-    [JsonPropertyName( "value" )] public JsonElement Value { get; init; }
-}
-
-public static class ExtMetaDataExtensions
-{
-    public static string? ObjectName(
-        this IReadOnlyDictionary<string, MetaData> data )
-        => Untagify(
-            data[nameof( ObjectName )]
-            ?.Value
-            .GetString() );
-
-    public static string? ImageDescription(
-        this IReadOnlyDictionary<string, MetaData> data )
-        => Untagify(
-            data[nameof( ImageDescription )]
-            ?.Value
-            .GetString() );
-
-    public static string? Credit(
-        this IReadOnlyDictionary<string, MetaData> data )
-        => Untagify(
-            data[nameof( Credit )]
-            ?.Value
-            .GetString() );
-
-    public static string? Artist(
-        this IReadOnlyDictionary<string, MetaData> data )
-        => Untagify(
-            data[nameof( Artist )]
-            ?.Value
-            .GetString() );
-
-    public static string? Untagify( string? html )
-    {
-        if (html is null) return null;
-
-        _doc.LoadHtml( html );
-
-        return
-            WebUtility.HtmlDecode(
-                string.Concat(
-                    _doc.DocumentNode
-                    .DescendantsAndSelf()
-                    .Select( node =>
-                        node.HasChildNodes ? string.Empty
-                        : node.InnerText
-                            ?.Replace( "\\n", string.Empty )
-                            .Replace( "\n", string.Empty )
-                    )
-                ) );
-    }
-
-    private static readonly HtmlDocument _doc = new();
 }
