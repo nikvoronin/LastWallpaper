@@ -36,10 +36,14 @@ internal static class Program
                     StockIconId.ImageFiles )
             };
 
+        var resourceManager = new ResourceManager();
         var activePods =
             settings.ActivePods.Distinct()
             .Select( podType =>
-                PodsFactory.Create( podType, client, settings ) )
+                PodsFactory.Create(
+                    podType,
+                    client, resourceManager,
+                    settings ) )
             .OfType<IPotdLoader>()
             .ToList();
 

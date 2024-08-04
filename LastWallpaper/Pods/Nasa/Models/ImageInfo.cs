@@ -11,7 +11,10 @@ public class ImageInfo
     public required string Date { get; init; }
 
     [JsonPropertyName("hdurl")]
-    public required string HdImageUrl { get; init; }
+    public string? HdImageUrl { get; init; }
+
+    [JsonPropertyName( "url" )]
+    public string? MediaUrl { get; init; }
 
     [JsonPropertyName("media_type")]
     public required string MediaType { get; init; }

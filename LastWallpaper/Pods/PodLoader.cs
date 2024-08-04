@@ -11,6 +11,7 @@ namespace LastWallpaper.Pods;
 public abstract class PodLoader(
     PodType superType,
     HttpClient client,
+    IResourceManager resourceManager,
     IPotdLoaderSettings settings )
     : IPotdLoader
 {
@@ -44,5 +45,6 @@ public abstract class PodLoader(
 
     private int _interlocked;
     protected readonly HttpClient _client = client;
+    protected readonly IResourceManager _resourceManager = resourceManager;
     protected readonly IPotdLoaderSettings _settings = settings;
 }

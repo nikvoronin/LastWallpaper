@@ -1,4 +1,5 @@
 ﻿using FluentResults;
+using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using LastWallpaper.Pods.Nasa.Models;
 using System;
@@ -14,8 +15,9 @@ namespace LastWallpaper.Pods.Nasa;
 
 public sealed class NasaApodLoader(
     HttpClient client,
+    IResourceManager resourceManager,
     ApodSettings settings )
-    : PodLoader( PodType.Apod, client, settings )
+    : PodLoader( PodType.Apod, client, resourceManager, settings )
 {
     public override ApodSettings Settings => (ApodSettings)_settings;
 
@@ -40,17 +42,36 @@ public sealed class NasaApodLoader(
             await _client.GetFromJsonAsync<ImageInfo>(
                 requestPicturesListUrl, ct );
 
-        if (imageInfo is null) return Result.Fail( "Empty JSON. No updates were found." );
+        if (imageInfo is null)
+            return Result.Fail( "Empty JSON. No updates were found." );
 
-        var filename = imageInfo.Date.Replace( "-", "" );
+        if (imageInfo.MediaType != "image")
+            return Result.Fail( $"Not an image media type:{imageInfo.MediaType}." );
+
+        var imageDateOk =
+            DateTime.TryParseExact(
+                imageInfo.Date,
+                "yyyy-MM-dd",
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out DateTime imageDate );
+
+        if (!imageDateOk) {
+            return Result.Fail(
+                $"Can not parse date-time of the picture: {imageInfo.Date}." );
+        }
+        else {
+            var potdAlreadyKnown =
+                _resourceManager.PotdAlreadyKnown( Name, imageDate );
+
+            if (potdAlreadyKnown)
+                return Result.Fail( "Picture already known." );
+        }
 
         var imageFilename =
             Path.Combine(
                 FileManager.AlbumFolder,
-                $"{Name}{filename}.jpeg" );
-
-        // TODO: check here should we load picture or picture is already known
-        if (File.Exists( imageFilename )) return Result.Fail( "Picture already known." );
+                $"{Name}{imageDate:yyyyMMdd}.jpeg" );
 
         await using var imageStream =
             await _client.GetStreamAsync( imageInfo.HdImageUrl, ct );
@@ -61,16 +82,6 @@ public sealed class NasaApodLoader(
                 FileMode.Create );
 
         await imageStream.CopyToAsync( fileStream, ct );
-
-        var wrongDateTimeFormat =
-            !DateTime.TryParseExact(
-                imageInfo.Date,
-                "yyyy-MM-dd",
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.None,
-                out DateTime imageDate );
-        if (wrongDateTimeFormat)
-            imageDate = DateTime.Now;
 
         var owner =
             imageInfo.Copyright

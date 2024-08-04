@@ -1,4 +1,5 @@
 ﻿using FluentResults;
+using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using LastWallpaper.Pods.Bing.Models;
 using System;
@@ -14,8 +15,9 @@ namespace LastWallpaper.Pods.Bing;
 
 public sealed class BingPodLoader(
     HttpClient client,
+    IResourceManager resourceManager,
     BingSettings settings )
-    : PodLoader( PodType.Bing, client, settings )
+    : PodLoader( PodType.Bing, client, resourceManager, settings )
 {
     public override BingSettings Settings => (BingSettings)_settings;
 
@@ -47,8 +49,25 @@ public sealed class BingPodLoader(
                 FileManager.AlbumFolder,
                 $"{Name}{lastImageInfo.StartDate}.jpeg" );
 
-        // TODO: check here should we load picture or picture is already known
-        if (File.Exists( imageFilename )) return Result.Fail( "Picture already known." );
+        var startDateOk =
+            DateTime.TryParseExact(
+                lastImageInfo.StartDate,
+                "yyyyMMdd",
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out DateTime startDate );
+
+        if (!startDateOk) {
+            return Result.Fail(
+                $"Can not parse date-time of the picture: {lastImageInfo.StartDate}." );
+        }
+        else {
+            var potdAlreadyKnown =
+                _resourceManager.PotdAlreadyKnown( Name, startDate );
+
+            if (potdAlreadyKnown)
+                return Result.Fail( "Picture already known." );
+        }
 
         await using var imageStream =
             await _client.GetStreamAsync( lastImageUrl, ct );
@@ -59,16 +78,6 @@ public sealed class BingPodLoader(
                 FileMode.Create );
 
         await imageStream.CopyToAsync( fileStream, ct );
-
-        var wrongDateTimeFormat =
-            !DateTime.TryParseExact(
-                lastImageInfo.StartDate,
-                "yyyyMMdd",
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.None,
-                out DateTime startDate );
-        if (wrongDateTimeFormat)
-            startDate = DateTime.Now;
 
         (var title,
             var copyrights) = SplitDescription( lastImageInfo.Copyright );

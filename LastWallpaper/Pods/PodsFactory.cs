@@ -12,17 +12,24 @@ public static class PodsFactory
     public static IPotdLoader? Create(
         PodType podType,
         HttpClient client,
+        IResourceManager resourceManager,
         AppSettings settings )
         => podType switch {
 
             PodType.Bing =>
-                new BingPodLoader( client, settings.BingOptions ),
+                new BingPodLoader(
+                    client, resourceManager,
+                    settings.BingOptions ),
 
             PodType.Apod =>
-                new NasaApodLoader( client, settings.ApodOptions ),
-            
+                new NasaApodLoader(
+                    client, resourceManager,
+                    settings.ApodOptions ),
+
             PodType.Wikipedia =>
-                new WikipediaPodLoader( client, settings.WikipediaOptions ),
+                new WikipediaPodLoader(
+                    client, resourceManager,
+                    settings.WikipediaOptions ),
 
             _ => null
         };

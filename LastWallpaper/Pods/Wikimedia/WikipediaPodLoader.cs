@@ -1,4 +1,5 @@
 ﻿using FluentResults;
+using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using LastWallpaper.Pods.Wikimedia.Models;
 using System;
@@ -14,14 +15,23 @@ namespace LastWallpaper.Pods.Wikimedia;
 
 public sealed class WikipediaPodLoader(
     HttpClient client,
+    IResourceManager resourceManager,
     WikipediaSettings settings )
-    : PodLoader( PodType.Wikipedia, client, settings )
+    : PodLoader( PodType.Wikipedia, client, resourceManager, settings )
 {
     public override WikipediaSettings Settings => (WikipediaSettings)_settings;
 
     protected override async Task<Result<Imago>> UpdateInternalAsync(
         CancellationToken ct )
     {
+        var imageDate = DateTime.Now;
+
+        var potdAlreadyKnown =
+            _resourceManager.PotdAlreadyKnown( Name, imageDate );
+
+        if (potdAlreadyKnown)
+            return Result.Fail( "Picture already known." );
+
         var jsonPotdFilename =
             await _client.GetFromJsonAsync<WmResponse>(
                 string.Format(
@@ -47,15 +57,12 @@ public sealed class WikipediaPodLoader(
         await using var imageStream =
             await _client.GetStreamAsync( potdImageDownloadLink, ct );
 
-        var filename = $"{Name}{DateTime.Now:yyyyMMdd}.jpeg";
+        var filename = $"{Name}{imageDate:yyyyMMdd}.jpeg";
 
         var imageFilename =
             Path.Combine(
                 FileManager.AlbumFolder,
                 filename );
-
-        // TODO: check here should we load picture or picture is already known
-        if (File.Exists( imageFilename )) return Result.Fail( "Picture already known." );
 
         await using var fileStream =
             new FileStream(
