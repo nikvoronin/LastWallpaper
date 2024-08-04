@@ -17,9 +17,8 @@ public sealed class BingPodLoader(
     HttpClient client,
     IResourceManager resourceManager,
     BingSettings settings )
-    : PodLoader( client, resourceManager, settings )
+    : PodLoader
 {
-    public override BingSettings Settings => (BingSettings)_settings;
     public override string Name => nameof( PodType.Bing ).ToLower();
 
     protected override async Task<Result<Imago>> UpdateInternalAsync(
@@ -43,7 +42,7 @@ public sealed class BingPodLoader(
                 CultureInfo.InvariantCulture,
                 DownloadPictureUrlFormat,
                 urlBase,
-                ImageResolutions.GetValue( Settings.Resolution ) );
+                ImageResolutions.GetValue( _settings.Resolution ) );
 
         var startDateOk =
             DateTime.TryParseExact(
@@ -103,6 +102,9 @@ public sealed class BingPodLoader(
 
     private static readonly CompositeFormat DownloadPictureUrlFormat =
         CompositeFormat.Parse( "https://www.bing.com{0}_{1}.jpg" );
+    private readonly HttpClient _client = client;
+    private readonly IResourceManager _resourceManager = resourceManager;
+    private readonly BingSettings _settings = settings;
 
     // Hardcoded json format, latest (today) zero-indexed one image.
     private const string RequestPicturesList =

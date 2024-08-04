@@ -17,9 +17,8 @@ public sealed class NasaApodLoader(
     HttpClient client,
     IResourceManager resourceManager,
     ApodSettings settings )
-    : PodLoader( client, resourceManager, settings )
+    : PodLoader
 {
-    public override ApodSettings Settings => (ApodSettings)_settings;
     public override string Name => nameof( PodType.Apod ).ToLower();
 
     protected override async Task<Result<Imago>> UpdateInternalAsync(
@@ -27,12 +26,12 @@ public sealed class NasaApodLoader(
     {
         // TODO:? move throttling block to the scheduler
         var delta = DateTime.UtcNow - _lastUpdateDate;
-        if (delta < Settings.ThrottlingHours) {
+        if (delta < _settings.ThrottlingHours) {
             return Result.Fail(
                 $"Next time. Not now. Last update was {(int)delta.TotalHours} hours ago." );
         }
 
-        var apiKey = Settings.ApiKey;
+        var apiKey = _settings.ApiKey;
         var requestPicturesListUrl =
             string.Format(
                 CultureInfo.InvariantCulture,
@@ -101,6 +100,9 @@ public sealed class NasaApodLoader(
     }
 
     private DateTime _lastUpdateDate = DateTime.MinValue;
+    private readonly ApodSettings _settings = settings;
+    private readonly HttpClient _client = client;
+    private readonly IResourceManager _resourceManager = resourceManager;
 
     // Hardcoded latest (today) one image.
     private static readonly CompositeFormat RequestLatestPictureUrlFormat =

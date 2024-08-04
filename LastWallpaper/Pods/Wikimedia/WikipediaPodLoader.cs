@@ -17,9 +17,8 @@ public sealed class WikipediaPodLoader(
     HttpClient client,
     IResourceManager resourceManager,
     WikipediaSettings settings )
-    : PodLoader( client, resourceManager, settings )
+    : PodLoader
 {
-    public override WikipediaSettings Settings => (WikipediaSettings)_settings;
     public override string Name => nameof( PodType.Wikipedia ).ToLower();
 
     protected override async Task<Result<Imago>> UpdateInternalAsync(
@@ -122,6 +121,10 @@ public sealed class WikipediaPodLoader(
     private static readonly CompositeFormat WmQueryPotdCreditsFormat =
         CompositeFormat.Parse(
             WikiMediaQueryBase + "&prop=imageinfo&iiprop=extmetadata&titles={0}" );
+
+    private readonly HttpClient _client = client;
+    private readonly IResourceManager _resourceManager = resourceManager;
+    private readonly WikipediaSettings _settings = settings;
 
     private const string WikiMediaQueryBase =
         "https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2";

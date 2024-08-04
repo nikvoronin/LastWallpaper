@@ -2,20 +2,15 @@
 using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using System;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace LastWallpaper.Pods;
 
-public abstract class PodLoader(
-    HttpClient client,
-    IResourceManager resourceManager,
-    IPotdLoaderSettings settings )
-    : IPotdLoader
+public abstract class PodLoader : IPotdLoader
 {
     public abstract string Name { get; }
-    public abstract IPotdLoaderSettings Settings { get; }
+    protected abstract Task<Result<Imago>> UpdateInternalAsync( CancellationToken ct );
 
     public async Task<Result<Imago>> UpdateAsync( CancellationToken ct )
     {
@@ -40,10 +35,5 @@ public abstract class PodLoader(
         return result;
     }
 
-    protected abstract Task<Result<Imago>> UpdateInternalAsync( CancellationToken ct );
-
     private int _interlocked;
-    protected readonly HttpClient _client = client;
-    protected readonly IResourceManager _resourceManager = resourceManager;
-    protected readonly IPotdLoaderSettings _settings = settings;
 }
