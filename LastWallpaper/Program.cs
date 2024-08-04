@@ -1,6 +1,7 @@
 using LastWallpaper.Abstractions;
 using LastWallpaper.Logic;
 using LastWallpaper.Logic.Handlers;
+using LastWallpaper.Logic.Icons;
 using LastWallpaper.Models;
 using LastWallpaper.Pods;
 using System;
@@ -71,9 +72,7 @@ internal static class Program
         var imagoResult = FileManager.LoadLastImago();
         if (imagoResult.IsSuccess) {
             frontUpdateHandler.HandleUpdate(
-                new(
-                    hasNews: false,
-                    imagoResult.Value ),
+                new( hasNews: false, imagoResult.Value ),
                 CancellationToken.None );
         }
 
@@ -82,6 +81,7 @@ internal static class Program
 
         scheduler.Start();
         Application.Run();
+
         scheduler.Dispose();
 
         notifyIconCtrl.Visible = false;
@@ -90,8 +90,7 @@ internal static class Program
         return (int)ErrorLevel.ExitOk;
     }
 
-    private static ContextMenuStrip CreateContextMenu(
-        Scheduler scheduler )
+    private static ContextMenuStrip CreateContextMenu( Scheduler scheduler )
     {
         ContextMenuStrip contextMenu = new();
         contextMenu.Items.AddRange(

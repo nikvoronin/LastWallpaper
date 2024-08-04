@@ -10,31 +10,31 @@ public static class WindowsRegistry
 {
     public static void SetWallpaper(
         string imagePath,
-        WallpaperStyle wallpaperStyle = WallpaperStyle.Default )
+        WallpaperStyle wallpaperStyle = WallpaperStyle.Default)
     {
-        var windows = RuntimeInformation.IsOSPlatform( OSPlatform.Windows );
+        var windows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         if (!windows) return;
 
-        if (!_wallpaperStyles.ContainsKey( wallpaperStyle ))
+        if (!_wallpaperStyles.ContainsKey(wallpaperStyle))
             wallpaperStyle = WallpaperStyle.Default;
 
         using var key =
             Registry.CurrentUser
-            .OpenSubKey( @"Control Panel\Desktop", true );
+            .OpenSubKey(@"Control Panel\Desktop", true);
 
         key?.SetValue(
             "WallpaperStyle",
-            _wallpaperStyles[wallpaperStyle] );
+            _wallpaperStyles[wallpaperStyle]);
 
         key?.SetValue(
             "TileWallpaper",
-            wallpaperStyle == WallpaperStyle.Tile ? "1" : "0" );
+            wallpaperStyle == WallpaperStyle.Tile ? "1" : "0");
 
         _ = SystemParametersInfo(
             SPI_SETDESKWALLPAPER,
             0,
             imagePath,
-            SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE );
+            SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE);
     }
 
     static readonly FrozenDictionary<WallpaperStyle, string> _wallpaperStyles =
@@ -52,6 +52,6 @@ public static class WindowsRegistry
     const int SPIF_UPDATEINIFILE = 0x01;
     const int SPIF_SENDWININICHANGE = 0x02;
 
-    [DllImport( "user32.dll", CharSet = CharSet.Unicode )]
-    static extern int SystemParametersInfo( int uAction, int uParam, string lpvParam, int fuWinIni );
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
 }
