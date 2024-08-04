@@ -105,8 +105,8 @@ public static class FileManager
     private static string? _cachePath;
     private static string? _albumPath;
 
-    private static JsonSerializerOptions _jsonSerializerOptions =
-        new JsonSerializerOptions {
+    private static readonly JsonSerializerOptions _jsonSerializerOptions =
+        new() {
             AllowTrailingCommas = true,
             PropertyNameCaseInsensitive = true,
             Converters =
