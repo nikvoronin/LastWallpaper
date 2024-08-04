@@ -79,15 +79,13 @@ public static class FileManager
 
     public static string CacheFolder {
         get {
-            if (_cachePath is null) {
-                _cachePath =
-                    Path.Combine(
-                        GetAppFolder(),
-                        CacheFolderName );
+            _cachePath ??=
+                Path.Combine(
+                    GetAppFolder(),
+                    CacheFolderName );
 
-                if (!Directory.Exists( _cachePath ))
-                    Directory.CreateDirectory( _cachePath );
-            }
+            if (!Directory.Exists( _cachePath ))
+                Directory.CreateDirectory( _cachePath );
 
             return _cachePath;
         }
@@ -95,12 +93,6 @@ public static class FileManager
 
     public static string GetAppFolder() =>
         Path.GetDirectoryName( Application.ExecutablePath )!;
-
-    public static void ClearCache()
-    {
-        if (_cachePath is not null)
-            Directory.Delete( _cachePath, true );
-    }
 
     private static string? _cachePath;
     private static string? _albumPath;

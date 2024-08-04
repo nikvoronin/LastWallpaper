@@ -17,9 +17,10 @@ public sealed class BingPodLoader(
     HttpClient client,
     IResourceManager resourceManager,
     BingSettings settings )
-    : PodLoader( PodType.Bing, client, resourceManager, settings )
+    : PodLoader( client, resourceManager, settings )
 {
     public override BingSettings Settings => (BingSettings)_settings;
+    public override string Name => nameof( PodType.Bing ).ToLower();
 
     protected override async Task<Result<Imago>> UpdateInternalAsync(
         CancellationToken ct )
@@ -44,11 +45,6 @@ public sealed class BingPodLoader(
                 urlBase,
                 ImageResolutions.GetValue( Settings.Resolution ) );
 
-        var imageFilename =
-            Path.Combine(
-                FileManager.AlbumFolder,
-                $"{Name}{lastImageInfo.StartDate}.jpeg" );
-
         var startDateOk =
             DateTime.TryParseExact(
                 lastImageInfo.StartDate,
@@ -63,7 +59,7 @@ public sealed class BingPodLoader(
         }
         else {
             var potdAlreadyKnown =
-                _resourceManager.PotdAlreadyKnown( Name, startDate );
+                _resourceManager.IsPotdAlreadyKnown( Name, startDate );
 
             if (potdAlreadyKnown)
                 return Result.Fail( "Picture already known." );
@@ -72,9 +68,12 @@ public sealed class BingPodLoader(
         await using var imageStream =
             await _client.GetStreamAsync( lastImageUrl, ct );
 
+        var cachedImageFilename =
+            _resourceManager.CreateTemporaryCacheFilename();
+
         await using var fileStream =
             new FileStream(
-                imageFilename,
+                cachedImageFilename,
                 FileMode.Create );
 
         await imageStream.CopyToAsync( fileStream, ct );
@@ -84,7 +83,7 @@ public sealed class BingPodLoader(
 
         var result = new Imago() {
             PodName = Name,
-            Filename = imageFilename,
+            Filename = cachedImageFilename,
             Created = startDate.Date + DateTime.Now.TimeOfDay,
             Title = title,
             Copyright = copyrights,

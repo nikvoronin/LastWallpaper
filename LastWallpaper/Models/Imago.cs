@@ -5,7 +5,7 @@ namespace LastWallpaper.Models;
 /// <summary>
 /// Description of common image of the day.
 /// </summary>
-public class Imago
+public record Imago
 {
     public required string PodName { get; init; }
     public required string Filename { get; init; }

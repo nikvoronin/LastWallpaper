@@ -17,9 +17,10 @@ public sealed class WikipediaPodLoader(
     HttpClient client,
     IResourceManager resourceManager,
     WikipediaSettings settings )
-    : PodLoader( PodType.Wikipedia, client, resourceManager, settings )
+    : PodLoader( client, resourceManager, settings )
 {
     public override WikipediaSettings Settings => (WikipediaSettings)_settings;
+    public override string Name => nameof( PodType.Wikipedia ).ToLower();
 
     protected override async Task<Result<Imago>> UpdateInternalAsync(
         CancellationToken ct )
@@ -27,7 +28,7 @@ public sealed class WikipediaPodLoader(
         var imageDate = DateTime.Now;
 
         var potdAlreadyKnown =
-            _resourceManager.PotdAlreadyKnown( Name, imageDate );
+            _resourceManager.IsPotdAlreadyKnown( Name, imageDate );
 
         if (potdAlreadyKnown)
             return Result.Fail( "Picture already known." );
@@ -57,16 +58,12 @@ public sealed class WikipediaPodLoader(
         await using var imageStream =
             await _client.GetStreamAsync( potdImageDownloadLink, ct );
 
-        var filename = $"{Name}{imageDate:yyyyMMdd}.jpeg";
-
-        var imageFilename =
-            Path.Combine(
-                FileManager.AlbumFolder,
-                filename );
+        var cachedImageFilename =
+            _resourceManager.CreateTemporaryCacheFilename();
 
         await using var fileStream =
             new FileStream(
-                imageFilename,
+                cachedImageFilename,
                 FileMode.Create );
 
         await imageStream.CopyToAsync( fileStream, ct );
@@ -104,7 +101,7 @@ public sealed class WikipediaPodLoader(
 
         var result = new Imago() {
             PodName = Name,
-            Filename = imageFilename,
+            Filename = cachedImageFilename,
             Created = DateTime.Now,
             Title = title,
             Copyright = copyrights,

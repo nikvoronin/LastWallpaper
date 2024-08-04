@@ -6,7 +6,12 @@ namespace LastWallpaper;
 
 public class ResourceManager : IResourceManager
 {
-    public bool PotdAlreadyKnown( string podName, DateTimeOffset updateTime )
+    public string CreateTemporaryCacheFilename() =>
+        Path.Combine(
+            FileManager.CacheFolder,
+            Guid.NewGuid().ToString() );
+
+    public bool IsPotdAlreadyKnown( string podName, DateTimeOffset updateTime )
     {
         var filename =
             Path.Combine(

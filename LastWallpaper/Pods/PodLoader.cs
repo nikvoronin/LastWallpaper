@@ -9,13 +9,12 @@ using System.Threading.Tasks;
 namespace LastWallpaper.Pods;
 
 public abstract class PodLoader(
-    PodType superType,
     HttpClient client,
     IResourceManager resourceManager,
     IPotdLoaderSettings settings )
     : IPotdLoader
 {
-    public string Name { get; } = superType.ToString().ToLower();
+    public abstract string Name { get; }
     public abstract IPotdLoaderSettings Settings { get; }
 
     public async Task<Result<Imago>> UpdateAsync( CancellationToken ct )

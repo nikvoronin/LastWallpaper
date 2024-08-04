@@ -17,9 +17,10 @@ public sealed class NasaApodLoader(
     HttpClient client,
     IResourceManager resourceManager,
     ApodSettings settings )
-    : PodLoader( PodType.Apod, client, resourceManager, settings )
+    : PodLoader( client, resourceManager, settings )
 {
     public override ApodSettings Settings => (ApodSettings)_settings;
+    public override string Name => nameof( PodType.Apod ).ToLower();
 
     protected override async Task<Result<Imago>> UpdateInternalAsync(
         CancellationToken ct )
@@ -62,23 +63,21 @@ public sealed class NasaApodLoader(
         }
         else {
             var potdAlreadyKnown =
-                _resourceManager.PotdAlreadyKnown( Name, imageDate );
+                _resourceManager.IsPotdAlreadyKnown( Name, imageDate );
 
             if (potdAlreadyKnown)
                 return Result.Fail( "Picture already known." );
         }
 
-        var imageFilename =
-            Path.Combine(
-                FileManager.AlbumFolder,
-                $"{Name}{imageDate:yyyyMMdd}.jpeg" );
+        var cachedImageFilename =
+            _resourceManager.CreateTemporaryCacheFilename();
 
         await using var imageStream =
             await _client.GetStreamAsync( imageInfo.HdImageUrl, ct );
 
         await using var fileStream =
             new FileStream(
-                imageFilename,
+                cachedImageFilename,
                 FileMode.Create );
 
         await imageStream.CopyToAsync( fileStream, ct );
@@ -90,7 +89,7 @@ public sealed class NasaApodLoader(
 
         var result = new Imago() {
             PodName = Name,
-            Filename = imageFilename,
+            Filename = cachedImageFilename,
             Created = imageDate.Date + DateTime.Now.TimeOfDay,
             Title = imageInfo.Title,
             Copyright = owner,

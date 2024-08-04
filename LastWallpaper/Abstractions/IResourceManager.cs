@@ -14,7 +14,9 @@ public interface IResourceManager
     /// <returns>
     /// <see langword="true"/> if it has been previously loaded.
     /// </returns>
-    public bool PotdAlreadyKnown(
+    public bool IsPotdAlreadyKnown(
         string podName,
         DateTimeOffset updateTime );
+
+    public string CreateTemporaryCacheFilename();
 }
