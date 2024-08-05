@@ -4,7 +4,6 @@ using LastWallpaper.Models;
 using LastWallpaper.Pods.Nasa.Models;
 using System;
 using System.Globalization;
-using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -60,24 +59,15 @@ public sealed class NasaApodLoader(
             return Result.Fail(
                 $"Can not parse date-time of the picture: {imageInfo.Date}." );
         }
-        else {
-            var potdAlreadyKnown =
-                _resourceManager.IsPotdAlreadyKnown( Name, imageDate );
-
-            if (potdAlreadyKnown)
-                return Result.Fail( "Picture already known." );
-        }
-
-        var cachedImageFilename =
-            _resourceManager.CreateTemporaryCacheFilename();
+        else if (_resourceManager.PotdExists( Name, imageDate ))
+            return Result.Fail( "Picture already known." );
 
         await using var imageStream =
             await _client.GetStreamAsync( imageInfo.HdImageUrl, ct );
 
         await using var fileStream =
-            new FileStream(
-                cachedImageFilename,
-                FileMode.Create );
+            _resourceManager.CreateTemporaryFileStream();
+        var cachedImageFilename = fileStream.Name;
 
         await imageStream.CopyToAsync( fileStream, ct );
 

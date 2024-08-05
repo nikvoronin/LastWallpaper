@@ -4,7 +4,6 @@ using LastWallpaper.Models;
 using LastWallpaper.Pods.Bing.Models;
 using System;
 using System.Globalization;
-using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -56,24 +55,15 @@ public sealed class BingPodLoader(
             return Result.Fail(
                 $"Can not parse date-time of the picture: {lastImageInfo.StartDate}." );
         }
-        else {
-            var potdAlreadyKnown =
-                _resourceManager.IsPotdAlreadyKnown( Name, startDate );
-
-            if (potdAlreadyKnown)
-                return Result.Fail( "Picture already known." );
-        }
+        else if (_resourceManager.PotdExists( Name, startDate ))
+            return Result.Fail( "Picture already known." );
 
         await using var imageStream =
             await _client.GetStreamAsync( lastImageUrl, ct );
 
-        var cachedImageFilename =
-            _resourceManager.CreateTemporaryCacheFilename();
-
         await using var fileStream =
-            new FileStream(
-                cachedImageFilename,
-                FileMode.Create );
+            _resourceManager.CreateTemporaryFileStream();
+        var cachedImageFilename = fileStream.Name;
 
         await imageStream.CopyToAsync( fileStream, ct );
 
@@ -89,19 +79,21 @@ public sealed class BingPodLoader(
         };
 
         return Result.Ok( result );
-    }
 
-    private static (string? title, string? copyrights) SplitDescription( string? description )
-    {
-        var descriptionParts = description?.Split( " (©" ) ?? [];
-        var hasParts = descriptionParts.Length == 2;
-        return
-            hasParts ? (descriptionParts[0], $"©{descriptionParts[1][..^1]}")
-            : (description, null);
+        static (string? title, string? copyrights) SplitDescription( string? description )
+        {
+            var descriptionParts = description?.Split( " (©" ) ?? [];
+            var hasParts = descriptionParts.Length == 2;
+
+            return
+                hasParts ? (descriptionParts[0], $"©{descriptionParts[1][..^1]}")
+                : (description, null);
+        }
     }
 
     private static readonly CompositeFormat DownloadPictureUrlFormat =
         CompositeFormat.Parse( "https://www.bing.com{0}_{1}.jpg" );
+
     private readonly HttpClient _client = client;
     private readonly IResourceManager _resourceManager = resourceManager;
     private readonly BingSettings _settings = settings;

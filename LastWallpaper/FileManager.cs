@@ -14,8 +14,7 @@ public static class FileManager
         File.WriteAllBytes(
             LastWallpaperFileName,
             JsonSerializer.SerializeToUtf8Bytes(
-                imago,
-                new JsonSerializerOptions { WriteIndented = true } ) );
+                imago, _intendedJsonSerializerOptions ) );
 
     public static Result<Imago> LoadLastImago()
     {
@@ -61,17 +60,15 @@ public static class FileManager
 
     public static string AlbumFolder {
         get {
-            if (_albumPath is null) {
-                _albumPath =
-                    Path.Combine(
-                        Environment.GetFolderPath(
-                            Environment.SpecialFolder.MyPictures ),
-                        Program.AppName,
-                        DateTime.Now.Year.ToString() );
+            _albumPath ??=
+                Path.Combine(
+                    Environment.GetFolderPath(
+                        Environment.SpecialFolder.MyPictures ),
+                    Program.AppName,
+                    DateTime.Now.Year.ToString() );
 
-                if (!Directory.Exists( _albumPath ))
-                    Directory.CreateDirectory( _albumPath );
-            }
+            if (!Directory.Exists( _albumPath ))
+                Directory.CreateDirectory( _albumPath );
 
             return _albumPath;
         }
@@ -91,11 +88,16 @@ public static class FileManager
         }
     }
 
-    public static string GetAppFolder() =>
+    private static string GetAppFolder() =>
         Path.GetDirectoryName( Application.ExecutablePath )!;
 
     private static string? _cachePath;
     private static string? _albumPath;
+
+    private static readonly JsonSerializerOptions _intendedJsonSerializerOptions =
+        new() {
+            WriteIndented = true
+        };
 
     private static readonly JsonSerializerOptions _jsonSerializerOptions =
         new() {

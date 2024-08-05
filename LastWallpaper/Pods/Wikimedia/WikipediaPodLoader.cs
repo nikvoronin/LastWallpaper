@@ -4,7 +4,6 @@ using LastWallpaper.Models;
 using LastWallpaper.Pods.Wikimedia.Models;
 using System;
 using System.Globalization;
-using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -26,10 +25,7 @@ public sealed class WikipediaPodLoader(
     {
         var imageDate = DateTime.Now;
 
-        var potdAlreadyKnown =
-            _resourceManager.IsPotdAlreadyKnown( Name, imageDate );
-
-        if (potdAlreadyKnown)
+        if (_resourceManager.PotdExists( Name, imageDate ))
             return Result.Fail( "Picture already known." );
 
         var jsonPotdFilename =
@@ -52,18 +48,15 @@ public sealed class WikipediaPodLoader(
 
         var potdImageDownloadLink = jsonPotdImageLink?.Query.Pages[0].ImageInfos?[0].Url;
 
-        if (potdImageDownloadLink is null) return Result.Fail( "No image url were found." );
+        if (potdImageDownloadLink is null)
+            return Result.Fail( "No image url were found." );
 
         await using var imageStream =
             await _client.GetStreamAsync( potdImageDownloadLink, ct );
 
-        var cachedImageFilename =
-            _resourceManager.CreateTemporaryCacheFilename();
-
         await using var fileStream =
-            new FileStream(
-                cachedImageFilename,
-                FileMode.Create );
+            _resourceManager.CreateTemporaryFileStream();
+        var cachedImageFilename = fileStream.Name;
 
         await imageStream.CopyToAsync( fileStream, ct );
 

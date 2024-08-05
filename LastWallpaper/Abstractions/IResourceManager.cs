@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace LastWallpaper.Abstractions;
 
@@ -8,15 +9,15 @@ public interface IResourceManager
     /// Checks whether the image has been previously loaded and is known to the application.
     /// </summary>
     /// <param name="podName">Pod name.</param>
-    /// <param name="updateTime">
-    /// Update date-time of the picture-of-the-day.
+    /// <param name="potdCreationTime">
+    /// Date-time when the picture-of-the-day was created.
     /// </param>
     /// <returns>
     /// <see langword="true"/> if it has been previously loaded.
     /// </returns>
-    public bool IsPotdAlreadyKnown(
+    public bool PotdExists(
         string podName,
-        DateTimeOffset updateTime );
+        DateTimeOffset potdCreationTime );
 
-    public string CreateTemporaryCacheFilename();
+    public FileStream CreateTemporaryFileStream();
 }
