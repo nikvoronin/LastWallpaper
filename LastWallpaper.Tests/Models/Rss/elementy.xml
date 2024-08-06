@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>&quot;Элементы&quot;: картинки дня</title>
+    <link>https://elementy.ru/</link>
+    <description></description>
+    <lastBuildDate>06 Aug 2024 11:01:00 +0300</lastBuildDate>
+    <image>
+      <title>&quot;Элементы&quot;: картинки дня</title>
+      <url>http://elementy.ru/images/eltdesign/title.gif</url>
+      <link>https://elementy.ru/</link>
+    </image>
+    <item>
+      <enclosure type="image/jpeg" url="https://elementy.ru/images/kartinka_dnya/potd_diodon_1_703.jpeg"/>
+      <category>Ихтиология</category>
+      <description></description>
+      <link>https://elementy.ru/kartinka_dnya/1921/Kolyuchiy_shar</link>
+      <pubDate>05 Aug 2024 05:33:29 +0300</pubDate>
+      <title>Колючий шар</title>
+    </item>
+    <item>
+      <enclosure type="image/jpeg" url="https://elementy.ru/images/kartinka_dnya/potd_notomys_1_703.jpg"/>
+      <category>Зоология</category>
+      <description></description>
+      <link>https://elementy.ru/kartinka_dnya/1924/Tushkanchikovaya_mysh</link>
+      <pubDate>02 Aug 2024 05:46:00 +0300</pubDate>
+      <title>Тушканчиковая мышь</title>
+    </item>
+    <item>
+      <enclosure type="image/jpeg" url="https://elementy.ru/images/kartinka_dnya/potd_saaremaa_fauna_1_703.jpg"/>
+      <category>Эволюция</category>
+      <description></description>
+      <link>https://elementy.ru/kartinka_dnya/1922/Fauna_Saaremaa</link>
+      <pubDate>31 Jul 2024 04:30:00 +0300</pubDate>
+      <title>Фауна Сааремаа</title>
+    </item>
+    <item>
+      <enclosure type="image/jpeg" url="https://elementy.ru/images/kartinka_dnya/potd_snail_mucus_1_703.jpg"/>
+      <category>Зоология</category>
+      <description>Виноградная улитка выделяет несколько видов слизи, различающихся по функциям и составу. </description>
+      <link>https://elementy.ru/kartinka_dnya/1919/Sliz_ulitki_i_dver_zakryt_i_v_gosti_skhodit</link>
+      <pubDate>29 Jul 2024 06:37:00 +0300</pubDate>
+      <title>Слизь улитки: и дверь закрыть, и в гости сходить</title>
+    </item>
+    <item>
+      <enclosure type="image/jpeg" url="https://elementy.ru/images/kartinka_dnya/potd_brain_balance_1_703.jpeg"/>
+      <category>Нейробиология</category>
+      <description></description>
+      <link>https://elementy.ru/kartinka_dnya/1920/Vesy_dlya_mozgovoy_aktivnosti</link>
+      <pubDate>26 Jul 2024 05:47:38 +0300</pubDate>
+      <title>Весы для мозговой активности</title>
+    </item>
+    <item>
+      <enclosure type="image/jpeg" url="https://elementy.ru/images/kartinka_dnya/potd_poison_fangblenny_1_703.jpg"/>
+      <category>Ихтиология</category>
+      <description>Лирохвостые морские собачки (род Meiacanthus) — единственные рыбы с ядовитыми зубами, которые используются для защиты, а не нападения. Эти маленькие рифовые рыбки питаются мелкими беспозвоночными, а ядом поражают пытающихся проглотить их хищных рыб. Яд содержит компоненты, понижающие кровяное давление, что приводит к нарушению координации нападающего. Под ядовитых собачек мимикрируют другие собачки, как безобидные, так и поедающие кожу и чешую других рыб.</description>
+      <link>https://elementy.ru/kartinka_dnya/1918/Yadovitaya_morskaya_sobachka</link>
+      <pubDate>24 Jul 2024 05:25:00 +0300</pubDate>
+      <title>Ядовитая морская собачка</title>
+    </item>
+    <item>
+      <enclosure type="image/jpeg" url="https://elementy.ru/images/kartinka_dnya/potd_сyphochilus_1_703.jpg"/>
+      <category>Энтомология</category>
+      <description></description>
+      <link>https://elementy.ru/kartinka_dnya/1910/Samyy_belyy_zhuk</link>
+      <pubDate>22 Jul 2024 04:57:00 +0300</pubDate>
+      <title>Самый белый жук</title>
+    </item>
+    <item>
+      <enclosure type="image/jpeg" url="https://elementy.ru/images/kartinka_dnya/potd_ichthyostega_1_703.jpg"/>
+      <category>Палеонтология</category>
+      <description>Ихтиостегу, девонское четвероногое позвоночное животное, открыли еще в 1931 году, но до сих пор образ ее жизни остается загадкой. Пытаемся в ней разобраться в картинке дня.</description>
+      <link>https://elementy.ru/kartinka_dnya/1917/Zagadochnaya_ikhtiostega</link>
+      <pubDate>19 Jul 2024 17:08:00 +0300</pubDate>
+      <title>Загадочная ихтиостега</title>
+    </item>
+    <item>
+      <enclosure type="image/jpeg" url="https://elementy.ru/images/kartinka_dnya/potd_cameraria_ohridella_1_703.jpg"/>
+      <category>Энтомология</category>
+      <description></description>
+      <link>https://elementy.ru/kartinka_dnya/1916/Kashtanovaya_miniruyushchaya_mol</link>
+      <pubDate>17 Jul 2024 06:06:29 +0300</pubDate>
+      <title>Каштановая минирующая моль</title>
+    </item>
+    <item>
+      <enclosure type="image/jpeg" url="https://elementy.ru/images/kartinka_dnya/potd_koolasuchus_1_703.jpg"/>
+      <category>Палеонтология</category>
+      <description></description>
+      <link>https://elementy.ru/kartinka_dnya/1915/Kulazukh_reliktovyy_temnospondil</link>
+      <pubDate>15 Jul 2024 00:51:00 +0300</pubDate>
+      <title>Кулазух, реликтовый темноспондил</title>
+    </item>
+
+  </channel>
+</rss>
