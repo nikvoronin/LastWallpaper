@@ -146,6 +146,6 @@ internal static class Program
             } );
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.8.4";
+    public const string AppVersion = "4.8.6";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 }
