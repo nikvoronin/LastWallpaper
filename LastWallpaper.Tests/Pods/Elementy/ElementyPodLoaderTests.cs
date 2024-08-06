@@ -1,0 +1,24 @@
+using FluentAssertions;
+using LastWallpaper.Pods.Bing;
+
+namespace LastWallpaper.Tests.Pods.Elementy;
+
+public class ElementyPodLoaderTests
+{
+    public const string _xmlFileName = "./Models/Rss/elementy.xml";
+
+    [Fact]
+    public void CanParseUrlWithImageFile()
+    {
+        // Arrange
+        const string sourceUrl = "gopher://site.org/images/science/potd_diodon_2_703.jpeg";
+        const string expected = "gopher://site.org/images/science/potd_diodon_2.jpeg";
+
+        // Act
+        var actual = ElementyPodLoader.ConvertToHdFileUrl( sourceUrl );
+
+        // Assert
+        actual.Should().NotBeNullOrWhiteSpace()
+            .And.Be( expected );
+    }
+}

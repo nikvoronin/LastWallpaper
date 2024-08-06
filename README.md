@@ -15,23 +15,22 @@ __System requirements:__ Windows 10 x64, .NET Desktop Runtime 8.0.
 
 ## What's New
 
-23 Jun 2024
+6 Aug 2024
 
-- Add application settings file.
-- Remember the last wallpaper and recall it after the app restarts.
+- Add Elementy (science picture of the day).
 
 Not so far
 
+- Add application settings file.
+- Remember the last wallpaper and recall it after the app restarts.
 - Wikipedia POTD loader added.
 - NASA APOD loader added.
-- Bing POD loader is ready.
-- Switched back to the csharp + winforms.
 
 See also [Release Notes](#release-notes) chapter.
 
 ## Documentation
 
-- // TODO: https://www.natgeotv.com/ca/photo-of-the-day
+- [Elementy RSS Feed](/docs/elementy_aug-2024.md). Science picture of the day.
 - [Wikipedia POTD](/docs/wikipedia_jun-2024.md) (Picture Of The Day)
 - Bing image of the day. API:
     - [May 2024](/docs/bing_may-2024.md)
@@ -39,6 +38,7 @@ See also [Release Notes](#release-notes) chapter.
 - [NASA Open APIs Portal](https://api.nasa.gov/), free but limited with 50 requests per IP address per day.
 - [Windows 10 Toast Notifications](/docs/win10_toast_notifications.md)
 - [Windows Desktop Wallpaper](/docs/windows_desktop_wallpaper.md)
+- // TODO: https://www.natgeotv.com/ca/photo-of-the-day
 
 ## Application Settings
 
@@ -54,6 +54,10 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
   - "replica" - a tiny replica of desktop image.
   - "mosaic" - nine tiles with main accent colors of desktop image.
 - __active_pods__ - active pods list. Will updated in appear order. The first one with positive result become a wallpaper.
+  - "bing" - bing.com
+  - "wikipedia" - Wikipedia POTD
+  - "apod" - NASA APOD
+  - "elementy" - Elementy (science picture of the day).
 - __bing__
     - __resolution__ - resolution of the picture:
         - "UltraHD" or "UHD" - 4K, 3840x2160 px
@@ -70,7 +74,7 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
   "toast_expire_in": "2.00:00:00",
   "tray_icon": "replica",
 
-  "active_pods": [ "bing", "wikipedia", "apod" ],
+  "active_pods": [ "bing", "apod" ],
   
   "bing": {
     "resolution": "UHD"
@@ -86,6 +90,10 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
 ```
 
 ## Release Notes
+
+### 4.8.6
+
+- Add Elementy (science picture of the day).
 
 ### 4.6.24
 

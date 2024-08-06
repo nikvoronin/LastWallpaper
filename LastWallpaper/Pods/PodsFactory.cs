@@ -1,4 +1,5 @@
 ﻿using LastWallpaper.Abstractions;
+using LastWallpaper.Logic;
 using LastWallpaper.Models;
 using LastWallpaper.Pods.Bing;
 using LastWallpaper.Pods.Nasa;
@@ -29,6 +30,11 @@ public static class PodsFactory
             PodType.Wikipedia =>
                 new WikipediaPodLoader(
                     client, resourceManager ),
+
+            PodType.Elementy =>
+                new ElementyPodLoader(
+                    client, resourceManager,
+                    new RssReader(client) ),
 
             _ => null
         };

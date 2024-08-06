@@ -4,5 +4,6 @@ public enum PodType
 {
     Bing,
     Apod,
-    Wikipedia
+    Wikipedia,
+    Elementy
 }
