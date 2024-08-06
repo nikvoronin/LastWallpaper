@@ -81,9 +81,6 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
     "api_key": "DEMO_KEY"
   },
 
-  "wikipedia": {
-  },
-
   "user_agent": "LastWallpaper/4.6.23 (Windows NT 10.0; Win64; x64)"
 }
 ```

@@ -14,8 +14,7 @@ namespace LastWallpaper.Pods.Wikimedia;
 
 public sealed class WikipediaPodLoader(
     HttpClient client,
-    IResourceManager resourceManager,
-    WikipediaSettings settings )
+    IResourceManager resourceManager )
     : PodLoader
 {
     public override string Name => nameof( PodType.Wikipedia ).ToLower();
