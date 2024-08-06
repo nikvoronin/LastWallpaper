@@ -33,7 +33,4 @@ public class AppSettings
 
     [JsonPropertyName( "apod" )]
     public ApodSettings ApodOptions { get; init; } = new();
-
-    [JsonPropertyName( "wikipedia" )]
-    public WikipediaSettings WikipediaOptions { get; init; } = new();
 }

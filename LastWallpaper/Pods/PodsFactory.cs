@@ -28,8 +28,7 @@ public static class PodsFactory
 
             PodType.Wikipedia =>
                 new WikipediaPodLoader(
-                    client, resourceManager,
-                    settings.WikipediaOptions ),
+                    client, resourceManager ),
 
             _ => null
         };

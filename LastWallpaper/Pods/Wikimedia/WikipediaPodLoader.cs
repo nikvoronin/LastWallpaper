@@ -116,7 +116,6 @@ public sealed class WikipediaPodLoader(
 
     private readonly HttpClient _client = client;
     private readonly IResourceManager _resourceManager = resourceManager;
-    private readonly WikipediaSettings _settings = settings;
 
     private const string WikiMediaQueryBase =
         "https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2";
