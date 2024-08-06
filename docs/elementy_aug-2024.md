@@ -51,6 +51,8 @@
 
 Url of the original image contain in `eclosure::url` attribute. Just remove image resolution marker `_703` coming before a file extension. See next example:
 
-> item : enclosure : url
-> https://elementy.ru/images/kartinka_dnya/potd_diodon_1_703.jpeg
-> https://elementy.ru/images/kartinka_dnya/potd_diodon_1.jpeg
+```text
+item : enclosure : url
+https://elementy.ru/images/kartinka_dnya/potd_diodon_1_703.jpeg
+https://elementy.ru/images/kartinka_dnya/potd_diodon_1.jpeg
+```
