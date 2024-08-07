@@ -47,7 +47,9 @@ internal static class Program
             .Select( podType =>
                 PodsFactory.Create(
                     podType,
-                    httpClient, resourceManager,
+                    httpClient,
+                    resourceManager,
+                    new RssReader(),
                     settings ) )
             .OfType<IPotdLoader>()
             .ToList();
@@ -78,7 +80,7 @@ internal static class Program
         if (imagoResult.IsSuccess) {
             frontUpdateHandler.HandleUpdate(
                 new(
-                    hasNews: false, 
+                    hasNews: false,
                     imagoResult.Value ),
                 CancellationToken.None );
         }

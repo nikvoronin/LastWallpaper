@@ -1,7 +1,8 @@
 ﻿using LastWallpaper.Abstractions;
-using LastWallpaper.Logic;
 using LastWallpaper.Models;
+using LastWallpaper.Models.Rss;
 using LastWallpaper.Pods.Bing;
+using LastWallpaper.Pods.Elementy;
 using LastWallpaper.Pods.Nasa;
 using LastWallpaper.Pods.Wikimedia;
 using System.Net.Http;
@@ -14,27 +15,32 @@ public static class PodsFactory
         PodType podType,
         HttpClient client,
         IResourceManager resourceManager,
+        IFeedReader<RssFeed> rssReader,
         AppSettings settings )
         => podType switch {
 
             PodType.Bing =>
                 new BingPodLoader(
-                    client, resourceManager,
+                    client,
+                    resourceManager,
                     settings.BingOptions ),
 
             PodType.Apod =>
                 new NasaApodLoader(
-                    client, resourceManager,
+                    client,
+                    resourceManager,
                     settings.ApodOptions ),
 
             PodType.Wikipedia =>
                 new WikipediaPodLoader(
-                    client, resourceManager ),
+                    client,
+                    resourceManager ),
 
             PodType.Elementy =>
                 new ElementyPodLoader(
-                    client, resourceManager,
-                    new RssReader(client) ),
+                    client,
+                    resourceManager,
+                    rssReader ),
 
             _ => null
         };

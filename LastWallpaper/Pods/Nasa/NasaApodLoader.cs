@@ -66,11 +66,10 @@ public sealed class NasaApodLoader(
         else if (_resourceManager.PotdExists( Name, imageDate ))
             return Result.Fail( "Picture already known." );
 
-        var cachedImageFilename =
-            (await DownloadToTemporaryFileAsync( imageInfo.HdImageUrl!, ct ))
-            .ValueOrDefault;
+        var cachedFilenameResult =
+            await DownloadToTemporaryFileAsync( imageInfo.HdImageUrl!, ct );
 
-        if (cachedImageFilename is null)
+        if (cachedFilenameResult.IsFailed)
             return Result.Fail(
                 $"Can not download media from {imageInfo.HdImageUrl}." );
 
@@ -81,7 +80,7 @@ public sealed class NasaApodLoader(
 
         var result = new Imago() {
             PodName = Name,
-            Filename = cachedImageFilename,
+            Filename = cachedFilenameResult.Value,
             Created = imageDate.Date + DateTime.Now.TimeOfDay,
             Title = imageInfo.Title,
             Copyright = owner,

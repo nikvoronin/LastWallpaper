@@ -33,10 +33,12 @@ public class RssReaderTests
                 } );
 
         var httpClient = new HttpClient( httpMessageHandler.Object );
-        var rssReader = new RssReader( httpClient );
+        var rssReader = new RssReader();
 
         // Act
-        var actual = await rssReader.ParseFeedAsync( url, CancellationToken.None );
+        var actual =
+            await rssReader.ParseFeedAsync(
+                url, httpClient, CancellationToken.None );
 
         // Assert
         actual.Should().NotBeNull();

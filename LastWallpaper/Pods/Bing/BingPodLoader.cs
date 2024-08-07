@@ -58,11 +58,10 @@ public sealed class BingPodLoader(
         else if (_resourceManager.PotdExists( Name, startDate ))
             return Result.Fail( "Picture already known." );
 
-        var cachedImageFilename =
-            (await DownloadToTemporaryFileAsync( lastImageUrl, ct ))
-            .ValueOrDefault;
+        var cachedFilenameResult =
+            await DownloadToTemporaryFileAsync( lastImageUrl, ct );
 
-        if (cachedImageFilename is null)
+        if (cachedFilenameResult.IsFailed)
             return Result.Fail(
                 $"Can not download media from {lastImageUrl}." );
 
@@ -71,7 +70,7 @@ public sealed class BingPodLoader(
 
         var result = new Imago() {
             PodName = Name,
-            Filename = cachedImageFilename,
+            Filename = cachedFilenameResult.Value,
             Created = startDate.Date + DateTime.Now.TimeOfDay,
             Title = title,
             Copyright = copyrights,

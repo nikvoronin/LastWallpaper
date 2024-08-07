@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LastWallpaper.Pods.Bing;
+namespace LastWallpaper.Pods.Elementy;
 
 public sealed class ElementyPodLoader(
     HttpClient httpClient,
@@ -22,7 +22,7 @@ public sealed class ElementyPodLoader(
         CancellationToken ct )
     {
         var feedResult =
-            await _feedReader.ParseFeedAsync( RssFeedUrl, ct );
+            await _feedReader.ParseFeedAsync( RssFeedUrl, _httpClient, ct );
 
         if (feedResult.IsFailed)
             return Result.Fail( "Failed to update an RSS feed." );
@@ -38,17 +38,16 @@ public sealed class ElementyPodLoader(
 
         var hdUrl = ConvertToHdFileUrl( lastItem.Enclosure.Url );
 
-        var cachedImageFilename =
-            (await DownloadToTemporaryFileAsync( hdUrl, ct ))
-            .ValueOrDefault;
+        var cachedFilenameResult =
+            await DownloadToTemporaryFileAsync( hdUrl, ct );
 
-        if (cachedImageFilename is null)
+        if (cachedFilenameResult.IsFailed)
             return Result.Fail(
                 $"Can not download media from {hdUrl}." );
 
         var result = new Imago() {
             PodName = Name,
-            Filename = cachedImageFilename,
+            Filename = cachedFilenameResult.Value,
             Created = lastItem.PubDate.Date + DateTime.Now.TimeOfDay,
             Title = $"{lastItem.Title}. {lastItem.Category}.",
             Copyright = lastItem.Description,

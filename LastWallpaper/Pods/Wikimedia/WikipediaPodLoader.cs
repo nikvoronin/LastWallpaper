@@ -50,11 +50,10 @@ public sealed class WikipediaPodLoader(
         if (potdImageDownloadLink is null)
             return Result.Fail( "No image url were found." );
 
-        var cachedImageFilename =
-            (await DownloadToTemporaryFileAsync( potdImageDownloadLink, ct ))
-            .ValueOrDefault;
+        var cachedFilenameResult =
+            await DownloadToTemporaryFileAsync( potdImageDownloadLink, ct );
 
-        if (cachedImageFilename is null)
+        if (cachedFilenameResult.IsFailed)
             return Result.Fail(
                 $"Can not download media from {potdImageDownloadLink}." );
 
@@ -91,7 +90,7 @@ public sealed class WikipediaPodLoader(
 
         var result = new Imago() {
             PodName = Name,
-            Filename = cachedImageFilename,
+            Filename = cachedFilenameResult.Value,
             Created = DateTime.Now,
             Title = title,
             Copyright = copyrights,

@@ -8,11 +8,14 @@ using System.Xml.Serialization;
 
 namespace LastWallpaper.Logic;
 
-public class RssReader( HttpClient httpClient ) : IFeedReader<RssFeed>
+public class RssReader : IFeedReader<RssFeed>
 {
-    public async Task<Result<RssFeed>> ParseFeedAsync( string url, CancellationToken ct )
+    public async Task<Result<RssFeed>> ParseFeedAsync(
+        string url,
+        HttpClient httpClient,
+        CancellationToken ct )
     {
-        await using var stream = await _httpClient.GetStreamAsync( url, ct );
+        await using var stream = await httpClient.GetStreamAsync( url, ct );
         var serializer = new XmlSerializer( typeof( RssFeed ) );
         var feed = serializer.Deserialize( stream ) as RssFeed;
 
@@ -20,6 +23,4 @@ public class RssReader( HttpClient httpClient ) : IFeedReader<RssFeed>
             feed is not null ? Result.Ok( feed )
             : Result.Fail( "Can not read RSS." );
     }
-
-    private readonly HttpClient _httpClient = httpClient;
 }

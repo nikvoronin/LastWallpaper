@@ -1,5 +1,5 @@
 using FluentAssertions;
-using LastWallpaper.Pods.Bing;
+using LastWallpaper.Pods.Elementy;
 
 namespace LastWallpaper.Tests.Pods.Elementy;
 
