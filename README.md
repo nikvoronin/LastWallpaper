@@ -1,6 +1,7 @@
 # The Last Wallpaper
 
-Picture Of The Day (POTD) on desktop.
+Picture Of The Day (POTD) on desktop.\
+-- Bing, NASA, Wikipedia, Elementy
 
 - [What's New](#whats-new)
 - [Documentation](#documentation)
