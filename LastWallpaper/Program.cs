@@ -65,7 +65,8 @@ internal static class Program
         var podsUpdateHandler =
             new PodsUpdateHandler(
                 activePods,
-                frontUpdateHandler );
+                frontUpdateHandler,
+                resourceManager );
 
         Debug.Assert( SynchronizationContext.Current is not null );
         var scheduler =

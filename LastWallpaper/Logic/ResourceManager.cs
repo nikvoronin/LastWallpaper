@@ -6,6 +6,13 @@ namespace LastWallpaper;
 
 public class ResourceManager : IResourceManager
 {
+    public string CreateAlbumFilename(
+        string podName,
+        DateTimeOffset potdCreationTime )
+        => Path.Combine(
+            FileManager.AlbumFolder,
+            $"{podName}{potdCreationTime:yyyyMMdd}.jpeg" );
+
     public FileStream CreateTemporaryFileStream() =>
         new(
             Path.Combine(
@@ -13,9 +20,10 @@ public class ResourceManager : IResourceManager
                 Guid.NewGuid().ToString() ),
             FileMode.Create );
 
-    public bool PotdExists( string podName, DateTimeOffset updateTime ) =>
-        File.Exists(
-            Path.Combine(
-                FileManager.AlbumFolder,
-                $"{podName}{updateTime:yyyyMMdd}.jpeg" ) );
+    public bool PotdExists(
+        string podName,
+        DateTimeOffset updateTime )
+        => File.Exists(
+            CreateAlbumFilename(
+                podName, updateTime ) );
 }

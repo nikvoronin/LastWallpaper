@@ -19,5 +19,19 @@ public interface IResourceManager
         string podName,
         DateTimeOffset potdCreationTime );
 
+    /// <summary>
+    /// Creates filename based on pod name and creation time.
+    /// </summary>
+    /// <param name="podName">Name of the pod</param>
+    /// <param name="potdCreationTime">Potd creation or update date-time.</param>
+    /// <returns>Filename with full path inside album folder.</returns>
+    public string CreateAlbumFilename(
+        string podName,
+        DateTimeOffset potdCreationTime );
+
+    /// <summary>
+    /// Open file stream to temporary cache file.
+    /// </summary>
+    /// <returns><see cref="FileStream"/> to temporary cache file.</returns>
     public FileStream CreateTemporaryFileStream();
 }
