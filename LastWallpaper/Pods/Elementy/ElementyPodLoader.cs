@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 namespace LastWallpaper.Pods.Bing;
 
 public sealed class ElementyPodLoader(
-    HttpClient client,
+    HttpClient httpClient,
     IResourceManager resourceManager,
     IFeedReader<RssFeed> feedReader )
-    : PodLoader
+    : HttpPodLoader( httpClient, resourceManager )
 {
     public override string Name => nameof( PodType.Elementy ).ToLower();
 
@@ -33,19 +33,18 @@ public sealed class ElementyPodLoader(
             return Result.Fail( "Picture is already known." );
 
         if (lastItem.Enclosure.Type != "image/jpeg")
-            return Result.Fail( 
+            return Result.Fail(
                 $"The media type '{lastItem.Enclosure.Type}' is not supported." );
 
         var hdUrl = ConvertToHdFileUrl( lastItem.Enclosure.Url );
 
-        await using var imageStream =
-            await _client.GetStreamAsync( hdUrl, ct );
+        var cachedImageFilename =
+            (await DownloadToTemporaryFileAsync( hdUrl, ct ))
+            .ValueOrDefault;
 
-        await using var fileStream =
-            _resourceManager.CreateTemporaryFileStream();
-        var cachedImageFilename = fileStream.Name;
-
-        await imageStream.CopyToAsync( fileStream, ct );
+        if (cachedImageFilename is null)
+            return Result.Fail(
+                $"Can not download media from {hdUrl}." );
 
         var result = new Imago() {
             PodName = Name,
@@ -69,8 +68,6 @@ public sealed class ElementyPodLoader(
         return $"{uri.Scheme}://{uri.Host}{string.Concat( uri.Segments[..^1] )}{hdFilename}";
     }
 
-    private readonly HttpClient _client = client;
-    private readonly IResourceManager _resourceManager = resourceManager;
     private readonly IFeedReader<RssFeed> _feedReader = feedReader;
 
     private const string RssFeedUrl = "https://elementy.ru/rss/kartinka_dnya";

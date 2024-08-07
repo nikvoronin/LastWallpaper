@@ -13,10 +13,10 @@ using System.Threading.Tasks;
 namespace LastWallpaper.Pods.Bing;
 
 public sealed class BingPodLoader(
-    HttpClient client,
+    HttpClient httpClient,
     IResourceManager resourceManager,
     BingSettings settings )
-    : PodLoader
+    : HttpPodLoader( httpClient, resourceManager )
 {
     public override string Name => nameof( PodType.Bing ).ToLower();
 
@@ -24,7 +24,7 @@ public sealed class BingPodLoader(
         CancellationToken ct )
     {
         var json =
-            await _client.GetFromJsonAsync<BingHpImages>(
+            await _httpClient.GetFromJsonAsync<BingHpImages>(
                 RequestPicturesList, ct );
 
         var noUpdates = (json?.Images?.Count ?? 0) == 0;
@@ -58,14 +58,13 @@ public sealed class BingPodLoader(
         else if (_resourceManager.PotdExists( Name, startDate ))
             return Result.Fail( "Picture already known." );
 
-        await using var imageStream =
-            await _client.GetStreamAsync( lastImageUrl, ct );
+        var cachedImageFilename =
+            (await DownloadToTemporaryFileAsync( lastImageUrl, ct ))
+            .ValueOrDefault;
 
-        await using var fileStream =
-            _resourceManager.CreateTemporaryFileStream();
-        var cachedImageFilename = fileStream.Name;
-
-        await imageStream.CopyToAsync( fileStream, ct );
+        if (cachedImageFilename is null)
+            return Result.Fail(
+                $"Can not download media from {lastImageUrl}." );
 
         (var title,
             var copyrights) = SplitDescription( lastImageInfo.Copyright );
@@ -94,8 +93,6 @@ public sealed class BingPodLoader(
     private static readonly CompositeFormat DownloadPictureUrlFormat =
         CompositeFormat.Parse( "https://www.bing.com{0}_{1}.jpg" );
 
-    private readonly HttpClient _client = client;
-    private readonly IResourceManager _resourceManager = resourceManager;
     private readonly BingSettings _settings = settings;
 
     // Hardcoded json format, latest (today) zero-indexed one image.

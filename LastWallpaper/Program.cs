@@ -25,8 +25,8 @@ internal static class Program
         SynchronizationContext.SetSynchronizationContext(
             new WindowsFormsSynchronizationContext() );
 
-        var client = new HttpClient();
-        client.DefaultRequestHeaders.Add(
+        var httpClient = new HttpClient();
+        httpClient.DefaultRequestHeaders.Add(
             "User-Agent", settings.UserAgent );
 
         var notifyIconCtrl =
@@ -39,11 +39,15 @@ internal static class Program
 
         var resourceManager = new ResourceManager();
         var activePods =
+#if !DEBUG
             settings.ActivePods.Distinct()
+#else
+            new PodType[] { PodType.Bing, PodType.Apod, PodType.Wikipedia, PodType.Elementy }
+#endif
             .Select( podType =>
                 PodsFactory.Create(
                     podType,
-                    client, resourceManager,
+                    httpClient, resourceManager,
                     settings ) )
             .OfType<IPotdLoader>()
             .ToList();

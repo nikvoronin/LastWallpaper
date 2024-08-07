@@ -18,6 +18,7 @@ public sealed class PodsUpdateHandler(
     {
         var news = new Dictionary<string, Imago>();
 
+        // TODO: try download async simultaneously
         foreach (var pod in _pods) {
             ct.ThrowIfCancellationRequested();
 
@@ -26,6 +27,7 @@ public sealed class PodsUpdateHandler(
 
             var imago = result.Value;
 
+            // TODO: move transfer of temp files out of the download cycle
             try {
                 var albumImageFilename =
                     Path.Combine(

@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 namespace LastWallpaper.Pods.Wikimedia;
 
 public sealed class WikipediaPodLoader(
-    HttpClient client,
+    HttpClient httpClient,
     IResourceManager resourceManager )
-    : PodLoader
+    : HttpPodLoader( httpClient, resourceManager )
 {
     public override string Name => nameof( PodType.Wikipedia ).ToLower();
 
@@ -28,7 +28,7 @@ public sealed class WikipediaPodLoader(
             return Result.Fail( "Picture already known." );
 
         var jsonPotdFilename =
-            await _client.GetFromJsonAsync<WmResponse>(
+            await _httpClient.GetFromJsonAsync<WmResponse>(
                 string.Format(
                     CultureInfo.InvariantCulture,
                     WmQueryPotdFilenameFormat,
@@ -38,7 +38,7 @@ public sealed class WikipediaPodLoader(
         var potdFilename = jsonPotdFilename?.Query.Pages[0].Images?[0].Value;
 
         var jsonPotdImageLink =
-            await _client.GetFromJsonAsync<WmResponse>(
+            await _httpClient.GetFromJsonAsync<WmResponse>(
                 string.Format(
                     CultureInfo.InvariantCulture,
                     WmQueryPotdUrlFormat,
@@ -50,17 +50,16 @@ public sealed class WikipediaPodLoader(
         if (potdImageDownloadLink is null)
             return Result.Fail( "No image url were found." );
 
-        await using var imageStream =
-            await _client.GetStreamAsync( potdImageDownloadLink, ct );
+        var cachedImageFilename =
+            (await DownloadToTemporaryFileAsync( potdImageDownloadLink, ct ))
+            .ValueOrDefault;
 
-        await using var fileStream =
-            _resourceManager.CreateTemporaryFileStream();
-        var cachedImageFilename = fileStream.Name;
-
-        await imageStream.CopyToAsync( fileStream, ct );
+        if (cachedImageFilename is null)
+            return Result.Fail(
+                $"Can not download media from {potdImageDownloadLink}." );
 
         var jsonPotdCredits =
-            await _client.GetFromJsonAsync<WmResponse>(
+            await _httpClient.GetFromJsonAsync<WmResponse>(
                 string.Format(
                     CultureInfo.InvariantCulture,
                     WmQueryPotdCreditsFormat,
@@ -113,9 +112,6 @@ public sealed class WikipediaPodLoader(
     private static readonly CompositeFormat WmQueryPotdCreditsFormat =
         CompositeFormat.Parse(
             WikiMediaQueryBase + "&prop=imageinfo&iiprop=extmetadata&titles={0}" );
-
-    private readonly HttpClient _client = client;
-    private readonly IResourceManager _resourceManager = resourceManager;
 
     private const string WikiMediaQueryBase =
         "https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2";

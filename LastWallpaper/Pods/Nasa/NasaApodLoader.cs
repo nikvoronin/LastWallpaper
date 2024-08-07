@@ -13,10 +13,10 @@ using System.Threading.Tasks;
 namespace LastWallpaper.Pods.Nasa;
 
 public sealed class NasaApodLoader(
-    HttpClient client,
+    HttpClient httpClient,
     IResourceManager resourceManager,
     ApodSettings settings )
-    : PodLoader
+    : HttpPodLoader( httpClient, resourceManager )
 {
     public override string Name => nameof( PodType.Apod ).ToLower();
 
@@ -38,14 +38,18 @@ public sealed class NasaApodLoader(
                 apiKey );
 
         var imageInfo =
-            await _client.GetFromJsonAsync<ImageInfo>(
+            await _httpClient.GetFromJsonAsync<ImageInfo>(
                 requestPicturesListUrl, ct );
 
         if (imageInfo is null)
             return Result.Fail( "Empty JSON. No updates were found." );
 
-        if (imageInfo.MediaType != "image")
-            return Result.Fail( $"Not an image media type:{imageInfo.MediaType}." );
+        var notAnImage =
+            imageInfo.MediaType != "image"
+            || string.IsNullOrWhiteSpace( imageInfo.HdImageUrl );
+        if (notAnImage)
+            return Result.Fail(
+                $"Not an image media type:{imageInfo.MediaType}." );
 
         var imageDateOk =
             DateTime.TryParseExact(
@@ -62,14 +66,13 @@ public sealed class NasaApodLoader(
         else if (_resourceManager.PotdExists( Name, imageDate ))
             return Result.Fail( "Picture already known." );
 
-        await using var imageStream =
-            await _client.GetStreamAsync( imageInfo.HdImageUrl, ct );
+        var cachedImageFilename =
+            (await DownloadToTemporaryFileAsync( imageInfo.HdImageUrl!, ct ))
+            .ValueOrDefault;
 
-        await using var fileStream =
-            _resourceManager.CreateTemporaryFileStream();
-        var cachedImageFilename = fileStream.Name;
-
-        await imageStream.CopyToAsync( fileStream, ct );
+        if (cachedImageFilename is null)
+            return Result.Fail(
+                $"Can not download media from {imageInfo.HdImageUrl}." );
 
         var owner =
             imageInfo.Copyright
@@ -91,8 +94,6 @@ public sealed class NasaApodLoader(
 
     private DateTime _lastUpdateDate = DateTime.MinValue;
     private readonly ApodSettings _settings = settings;
-    private readonly HttpClient _client = client;
-    private readonly IResourceManager _resourceManager = resourceManager;
 
     // Hardcoded latest (today) one image.
     private static readonly CompositeFormat RequestLatestPictureUrlFormat =
