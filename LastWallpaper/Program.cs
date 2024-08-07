@@ -77,7 +77,9 @@ internal static class Program
         var imagoResult = FileManager.LoadLastImago();
         if (imagoResult.IsSuccess) {
             frontUpdateHandler.HandleUpdate(
-                new( hasNews: false, imagoResult.Value ),
+                new(
+                    hasNews: false, 
+                    imagoResult.Value ),
                 CancellationToken.None );
         }
 
@@ -151,6 +153,6 @@ internal static class Program
             } );
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.8.6";
+    public const string AppVersion = "4.8.7";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 }
