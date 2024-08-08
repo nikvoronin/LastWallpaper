@@ -53,26 +53,26 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
 - __update_timeout__ - timeout for updating all pods.
 - __toast_expire_in__ - toast message will disappear after this period of time.
 - __tray_icon__ - what will the tray icon look like:
-  - "replica" - a tiny replica of desktop image.
-  - "mosaic" - nine tiles with main accent colors of desktop image.
+  - __replica__ - a tiny replica of desktop image.
+  - __mosaic__ - nine tiles with main accent colors of desktop image.
 - __wallpaper_fit__ - specifies how the desktop wallpaper should be displayed.
-  - "default" - the best fit. It is equal to "fill".
-  - "center" - center the image; do not stretch.
-  - "tile" - tile the image across all monitors.
-  - "stretch" - stretch the image to exactly fit on the monitor, without maintain aspect ratio.
-  - "span" - spans a single image across all monitors attached to the system.
-  - "fit" - stretch the image to exactly the height or width of the monitor without changing its aspect ratio or cropping the image. This can result in colored letterbox bars on either side or on above and below of the image.
-  - "fill" - stretch the image to fill the screen, cropping the image as necessary to avoid letterbox bars. This one is used as "default".
+  - __default__ - the best fit. It is equal to "fill".
+  - __center__ - center the image; do not stretch.
+  - __tile__ - tile the image across all monitors.
+  - __stretch__ - stretch the image to exactly fit on the monitor, without maintain aspect ratio.
+  - __span__ - spans a single image across all monitors attached to the system.
+  - __fit__ - stretch the image to exactly the height or width of the monitor without changing its aspect ratio or cropping the image. This can result in colored letterbox bars on either side or on above and below of the image.
+  - __fill__ - stretch the image to fill the screen, cropping the image as necessary to avoid letterbox bars. This one is used as "default".
 - __active_pods__ - active pods list. Will updated in appear order. The first one with positive result become a wallpaper.
-  - "bing" - bing.com
-  - "wikipedia" - Wikipedia POTD
-  - "apod" - NASA APOD
-  - "elementy" - Elementy (science picture of the day).
+  - __bing__ - bing.com
+  - __wikipedia__ - Wikipedia POTD
+  - __apod__ - NASA APOD
+  - __elementy__ - Elementy (science picture of the day).
 - __bing__
     - __resolution__ - resolution of the picture:
-        - "UltraHD" or "UHD" - 4K, 3840x2160 px
-        - "FullHD" or "FHD" - 1920x1080 px
-        - "HD" - 1280x720 px
+        - __UltraHD__ or __UHD__ - 4K, 3840x2160 px
+        - __FullHD__ or __FHD__ - 1920x1080 px
+        - __HD__ - 1280x720 px
 - __apod__
     - __throttling_hours__ - next update will happen after this period. Be aware that APOD free but limited with 50 requests per IP address per day.
     - __api_key__ - if you have your own paid API key.
