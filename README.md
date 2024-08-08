@@ -16,8 +16,9 @@ __System requirements:__ Windows 10 x64, .NET Desktop Runtime 8.0.
 
 ## What's New
 
-6 Aug 2024
+8 Aug 2024
 
+- Add configurable wallpaper fit parameter.
 - Add Elementy (science picture of the day).
 
 Not so far
@@ -100,10 +101,6 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
 ```
 
 ## Release Notes
-
-### Upcoming
-
-- Add Elementy (science picture of the day).
 
 ### 4.6.24
 
