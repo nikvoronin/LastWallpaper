@@ -37,6 +37,19 @@ public interface IResourceManager
     /// <returns><see cref="FileStream"/> to temporary cache file.</returns>
     public FileStream CreateTemporaryFileStream();
 
+    /// <summary>
+    /// Restore description about the last known wallpaper.
+    /// </summary>
+    /// <returns>
+    /// Description of the last known wallpaper.
+    /// </returns>
     public Result<PodUpdateResult> RestoreLastWallpaper();
+    
+    /// <summary>
+    /// Store description about given wallpaper.
+    /// </summary>
+    /// <param name="imago">
+    /// Wallpaper description.
+    /// </param>
     public void RememberLastWallpaper( PodUpdateResult imago );
 }
