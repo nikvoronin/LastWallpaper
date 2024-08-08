@@ -27,9 +27,9 @@ public sealed class PodsUpdateHandler(
         var imagos =
             podUpdateTasks
             .Where( t => t.Result.IsSuccess )
-            .Select( t => RenameCachedFile( t.Result.Value, ct ) )
-            // At the moment, important to materialize enumerable
-            // because we should rename all cached files.
+            .Select( t => MapCachedFile( t.Result.Value, ct ) )
+            // Important to materialize enumerable
+            // because we should map all cached files.
             .ToList();
 
         // TODO: share imagos with Selector to select the best one
@@ -46,7 +46,7 @@ public sealed class PodsUpdateHandler(
         return Task.CompletedTask;
     }
 
-    private PodUpdateResult RenameCachedFile(
+    private PodUpdateResult MapCachedFile(
         PodUpdateResult imago,
         CancellationToken ct )
     {
@@ -55,20 +55,20 @@ public sealed class PodsUpdateHandler(
         try {
             var albumImageFilename =
                 _resourceManager.CreateAlbumFilename(
-                    imago.PodName,
-                    imago.Created );
+                    imago.PodName, imago.Created );
 
-            var cachedFile =
-                imago.Filename != albumImageFilename;
+            var copyToAlbum =
+                imago.CopyToAlbum
+                && imago.Filename != albumImageFilename;
 
-            if (cachedFile)
+            if (copyToAlbum)
                 File.Move( imago.Filename, albumImageFilename );
 
             return
                 imago with {
                     Created = imago.Created.Date + DateTime.Now.TimeOfDay,
                     Filename =
-                        cachedFile ? albumImageFilename
+                        copyToAlbum ? albumImageFilename
                         : imago.Filename
                 };
 

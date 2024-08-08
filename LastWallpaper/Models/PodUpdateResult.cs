@@ -10,6 +10,7 @@ public record PodUpdateResult
     public required string PodName { get; init; }
     public required string Filename { get; init; }
     public required DateTime Created { get; init; }
+    public bool CopyToAlbum { get; init; } = true;
     public string? Copyright { get; init; }
     public string? Title { get; init; }
     public string? Description { get; init; }
