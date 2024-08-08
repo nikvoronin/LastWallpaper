@@ -85,7 +85,12 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
   "tray_icon": "replica",
   "wallpaper_fit": "fill",
 
-  "active_pods": [ "bing", "apod" ],
+  "active_pods": [ 
+    "bing", 
+    "apod",
+    "elementy",
+    "wikipedia"
+  ],
   
   "bing": {
     "resolution": "UHD"
