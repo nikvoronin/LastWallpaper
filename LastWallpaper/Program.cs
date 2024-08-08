@@ -25,6 +25,7 @@ internal static class Program
         #region Application Folders
         var appFolder =
             Path.GetDirectoryName( Application.ExecutablePath )!;
+
         var albumFolder =
             Path.Combine(
                 Environment.GetFolderPath(
@@ -40,10 +41,10 @@ internal static class Program
 
         if (!Directory.Exists( albumFolder ))
             Directory.CreateDirectory( albumFolder );
-
         #endregion
 
-        AppSettings settings = LoadAppSettings( appFolder );
+        AppSettings settings =
+            LoadAppSettings( Path.Combine( appFolder, AppSettingsFileName ) );
 
         ApplicationConfiguration.Initialize();
         SynchronizationContext.SetSynchronizationContext(
@@ -185,11 +186,8 @@ internal static class Program
                 CreateNoWindow = true
             } );
 
-    private static AppSettings LoadAppSettings( string appFolder )
+    private static AppSettings LoadAppSettings( string appSettingsFileName )
     {
-        var appSettingsFileName =
-            Path.Combine( appFolder, AppSettingsFileName );
-
         AppSettings? appSettings = null;
 
         if (File.Exists( appSettingsFileName )) {
