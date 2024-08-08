@@ -33,15 +33,20 @@ public sealed class PodsUpdateHandler(
             .ToList();
 
         // TODO: share imagos with Selector to select the best one
-        var imago = imagos.FirstOrDefault();
+        var imago =
+            imagos.FirstOrDefault()
+            ?? _resourceManager
+                .RestoreLastWallpaper()
+                .ValueOrDefault;
+
         _frontUpdateHandler?.HandleUpdate(
             new FrontUpdateParameters(
-                updateWallpaper: imago is not null,
-                imago ?? FileManager.LoadLastImago().ValueOrDefault ),
+                updateWallpaper: imagos.Count > 0,
+                imago ),
             ct );
 
         if (imago is not null)
-            FileManager.SaveCurrentImago( imago );
+            _resourceManager.RememberLastWallpaper( imago );
 
         return Task.CompletedTask;
     }

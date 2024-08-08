@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FluentResults;
+using LastWallpaper.Models;
+using System;
 using System.IO;
 
 namespace LastWallpaper.Abstractions;
@@ -34,4 +36,7 @@ public interface IResourceManager
     /// </summary>
     /// <returns><see cref="FileStream"/> to temporary cache file.</returns>
     public FileStream CreateTemporaryFileStream();
+
+    public Result<PodUpdateResult> RestoreLastWallpaper();
+    public void RememberLastWallpaper( PodUpdateResult imago );
 }

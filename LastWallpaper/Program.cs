@@ -7,8 +7,11 @@ using LastWallpaper.Pods;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -19,7 +22,28 @@ internal static class Program
     [STAThread]
     static int Main()
     {
-        AppSettings settings = FileManager.LoadAppSettings();
+        #region Application Folders
+        var appFolder =
+            Path.GetDirectoryName( Application.ExecutablePath )!;
+        var albumFolder =
+            Path.Combine(
+                Environment.GetFolderPath(
+                    Environment.SpecialFolder.MyPictures ),
+                AppName,
+                DateTime.Now.Year.ToString() );
+
+        var cacheFolder =
+            Path.Combine( appFolder, CacheFolderName );
+
+        if (!Directory.Exists( cacheFolder ))
+            Directory.CreateDirectory( cacheFolder );
+
+        if (!Directory.Exists( albumFolder ))
+            Directory.CreateDirectory( albumFolder );
+
+        #endregion
+
+        AppSettings settings = LoadAppSettings( appFolder );
 
         ApplicationConfiguration.Initialize();
         SynchronizationContext.SetSynchronizationContext(
@@ -37,7 +61,10 @@ internal static class Program
                     StockIconId.ImageFiles )
             };
 
-        var resourceManager = new ResourceManager();
+        var resourceManager =
+            new ResourceManager(
+                appFolder, albumFolder, cacheFolder );
+
         var activePods =
 #if !DEBUG
             settings.ActivePods.Distinct()
@@ -78,7 +105,7 @@ internal static class Program
                 podsUpdateHandler,
                 settings );
 
-        var imagoResult = FileManager.LoadLastImago(); // TODO: move lastImago to resourceManager
+        var imagoResult = resourceManager.RestoreLastWallpaper();
         if (imagoResult.IsSuccess) {
             frontUpdateHandler.HandleUpdate(
                 new FrontUpdateParameters(
@@ -87,7 +114,8 @@ internal static class Program
                 CancellationToken.None );
         }
 
-        notifyIconCtrl.ContextMenuStrip = CreateContextMenu( scheduler );
+        notifyIconCtrl.ContextMenuStrip =
+            CreateContextMenu( scheduler, albumFolder );
         notifyIconCtrl.Visible = true;
 
         scheduler.Start();
@@ -101,7 +129,8 @@ internal static class Program
         return (int)ErrorLevel.ExitOk;
     }
 
-    private static ContextMenuStrip CreateContextMenu( Scheduler scheduler )
+    private static ContextMenuStrip CreateContextMenu(
+        Scheduler scheduler, string albumFolder )
     {
         ContextMenuStrip contextMenu = new();
         contextMenu.Items.AddRange(
@@ -119,7 +148,7 @@ internal static class Program
                     null, (_,_) => {
                         try {
                             ExecShellProcess(
-                                "explorer", FileManager.AlbumFolder);
+                                "explorer", albumFolder);
                         } catch {}
                     } )
                 {
@@ -156,7 +185,41 @@ internal static class Program
                 CreateNoWindow = true
             } );
 
+    private static AppSettings LoadAppSettings( string appFolder )
+    {
+        var appSettingsFileName =
+            Path.Combine( appFolder, AppSettingsFileName );
+
+        AppSettings? appSettings = null;
+
+        if (File.Exists( appSettingsFileName )) {
+            try {
+                appSettings =
+                    JsonSerializer.Deserialize<AppSettings>(
+                        File.ReadAllText( appSettingsFileName ),
+                        _jsonSerializerOptions );
+            }
+            catch { }
+        }
+
+        return appSettings ?? new();
+    }
+
+    private static readonly JsonSerializerOptions _jsonSerializerOptions =
+        new() {
+            AllowTrailingCommas = true,
+            PropertyNameCaseInsensitive = true,
+            Converters =
+            {
+                new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseLower)
+            }
+        };
+
     public const string AppName = "The Last Wallpaper";
     public const string AppVersion = "4.8.8";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
+
+    private const string CacheFolderName = "cache";
+    public const string LastWallpaperFileName = "lastwallpaper.json";
+    private const string AppSettingsFileName = "appsettings.json";
 }
