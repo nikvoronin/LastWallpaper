@@ -17,7 +17,7 @@ public abstract class HttpPodLoader(
     /// <param name="url">Source url to download from.</param>
     /// <param name="ct">Token to cancel the operation.</param>
     /// <returns>Filename of a temporary file.</returns>
-    public async Task<Result<string>> DownloadToTemporaryFileAsync(
+    public async Task<Result<string>> DownloadFileAsync(
         string url, CancellationToken ct )
     {
         await using var imageStream =

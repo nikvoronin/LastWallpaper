@@ -19,5 +19,5 @@ public interface IPotdLoader
     /// <returns>
     /// Collection of pathes to downloaded images or empty collection otherwise.
     /// </returns>
-    Task<Result<Imago>> UpdateAsync( CancellationToken ct );
+    Task<Result<PodUpdateResult>> UpdateAsync( CancellationToken ct );
 }

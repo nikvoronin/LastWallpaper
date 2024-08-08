@@ -10,15 +10,15 @@ namespace LastWallpaper.Pods;
 public abstract class PodLoader : IPotdLoader
 {
     public abstract string Name { get; }
-    protected abstract Task<Result<Imago>> UpdateInternalAsync( CancellationToken ct );
+    protected abstract Task<Result<PodUpdateResult>> UpdateInternalAsync( CancellationToken ct );
 
-    public async Task<Result<Imago>> UpdateAsync( CancellationToken ct )
+    public async Task<Result<PodUpdateResult>> UpdateAsync( CancellationToken ct )
     {
         ct.ThrowIfCancellationRequested();
         if (Interlocked.CompareExchange( ref _interlocked, 1, 0 ) != 0)
             return Result.Fail( "Update already in progress." );
 
-        Result<Imago> result;
+        Result<PodUpdateResult> result;
         try {
             result = await UpdateInternalAsync( ct );
         }

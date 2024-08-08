@@ -28,21 +28,27 @@ public sealed class PodsUpdateHandler(
             podUpdateTasks
             .Where( t => t.Result.IsSuccess )
             .Select( t => RenameCachedFile( t.Result.Value, ct ) )
-            // At the moment it is important to materialize enumerable
+            // At the moment, important to materialize enumerable
             // because we should rename all cached files.
             .ToList();
 
-        // TODO: share news with Selector
+        // TODO: share imagos with Selector to select the best one
+        var imago = imagos.FirstOrDefault();
         _frontUpdateHandler?.HandleUpdate(
-            new(
-                imagos.Count != 0,
-                imagos.FirstOrDefault() ),
+            new FrontUpdateParameters(
+                updateWallpaper: imago is not null,
+                imago ?? FileManager.LoadLastImago().ValueOrDefault ),
             ct );
+
+        if (imago is not null)
+            FileManager.SaveCurrentImago( imago );
 
         return Task.CompletedTask;
     }
 
-    private Imago RenameCachedFile( Imago imago, CancellationToken ct )
+    private PodUpdateResult RenameCachedFile(
+        PodUpdateResult imago,
+        CancellationToken ct )
     {
         ct.ThrowIfCancellationRequested();
 
@@ -59,8 +65,13 @@ public sealed class PodsUpdateHandler(
                 File.Move( imago.Filename, albumImageFilename );
 
             return
-                cachedFile ? imago with { Filename = albumImageFilename }
-                : imago;
+                imago with {
+                    Created = imago.Created.Date + DateTime.Now.TimeOfDay,
+                    Filename =
+                        cachedFile ? albumImageFilename
+                        : imago.Filename
+                };
+
         }
         catch (IOException) { }
         catch (UnauthorizedAccessException) { }

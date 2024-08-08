@@ -18,7 +18,7 @@ public sealed class ElementyPodLoader(
 {
     public override string Name => nameof( PodType.Elementy ).ToLower();
 
-    protected override async Task<Result<Imago>> UpdateInternalAsync(
+    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
         CancellationToken ct )
     {
         var feedResult =
@@ -39,16 +39,16 @@ public sealed class ElementyPodLoader(
         var hdUrl = ConvertToHdFileUrl( lastItem.Enclosure.Url );
 
         var cachedFilenameResult =
-            await DownloadToTemporaryFileAsync( hdUrl, ct );
+            await DownloadFileAsync( hdUrl, ct );
 
         if (cachedFilenameResult.IsFailed)
             return Result.Fail(
                 $"Can not download media from {hdUrl}." );
 
-        var result = new Imago() {
+        var result = new PodUpdateResult() {
             PodName = Name,
             Filename = cachedFilenameResult.Value,
-            Created = lastItem.PubDate.Date + DateTime.Now.TimeOfDay,
+            Created = lastItem.PubDate.Date,
             Title = $"{lastItem.Title}. {lastItem.Category}.",
             Copyright = lastItem.Description,
         };

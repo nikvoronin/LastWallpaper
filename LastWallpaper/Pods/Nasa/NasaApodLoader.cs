@@ -20,7 +20,7 @@ public sealed class NasaApodLoader(
 {
     public override string Name => nameof( PodType.Apod ).ToLower();
 
-    protected override async Task<Result<Imago>> UpdateInternalAsync(
+    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
         CancellationToken ct )
     {
         // TODO:? move throttling block to the scheduler
@@ -67,7 +67,7 @@ public sealed class NasaApodLoader(
             return Result.Fail( "Picture already known." );
 
         var cachedFilenameResult =
-            await DownloadToTemporaryFileAsync( imageInfo.HdImageUrl!, ct );
+            await DownloadFileAsync( imageInfo.HdImageUrl!, ct );
 
         if (cachedFilenameResult.IsFailed)
             return Result.Fail(
@@ -78,10 +78,10 @@ public sealed class NasaApodLoader(
                 ?.Trim().Replace( "\n", "" )
                 ?? "(cc) Public domain";
 
-        var result = new Imago() {
+        var result = new PodUpdateResult() {
             PodName = Name,
             Filename = cachedFilenameResult.Value,
-            Created = imageDate.Date + DateTime.Now.TimeOfDay,
+            Created = imageDate.Date,
             Title = imageInfo.Title,
             Copyright = owner,
         };

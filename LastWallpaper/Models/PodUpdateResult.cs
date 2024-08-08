@@ -3,9 +3,9 @@
 namespace LastWallpaper.Models;
 
 /// <summary>
-/// Description of common image of the day.
+/// Parameter set of pod update results.
 /// </summary>
-public record Imago
+public record PodUpdateResult
 {
     public required string PodName { get; init; }
     public required string Filename { get; init; }

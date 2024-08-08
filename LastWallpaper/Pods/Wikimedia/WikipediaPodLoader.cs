@@ -19,7 +19,7 @@ public sealed class WikipediaPodLoader(
 {
     public override string Name => nameof( PodType.Wikipedia ).ToLower();
 
-    protected override async Task<Result<Imago>> UpdateInternalAsync(
+    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
         CancellationToken ct )
     {
         var imageDate = DateTime.Now;
@@ -51,7 +51,7 @@ public sealed class WikipediaPodLoader(
             return Result.Fail( "No image url were found." );
 
         var cachedFilenameResult =
-            await DownloadToTemporaryFileAsync( potdImageDownloadLink, ct );
+            await DownloadFileAsync( potdImageDownloadLink, ct );
 
         if (cachedFilenameResult.IsFailed)
             return Result.Fail(
@@ -88,7 +88,7 @@ public sealed class WikipediaPodLoader(
             artist.Length + credit.Length > 100 ? artist
             : $"{artist}/{credit}";
 
-        var result = new Imago() {
+        var result = new PodUpdateResult() {
             PodName = Name,
             Filename = cachedFilenameResult.Value,
             Created = DateTime.Now,

@@ -21,6 +21,9 @@ public class AppSettings
     [JsonPropertyName( "tray_icon" )]
     public TrayIconType TrayIcon { get; init; } = TrayIconType.Replica;
 
+    [JsonPropertyName( "wallpaper_fit" )]
+    public WallpaperStyle WallpaperFit { get; init; } = WallpaperStyle.Default;
+
     [JsonPropertyName( "user_agent" )]
     public string UserAgent { get; init; } =
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";

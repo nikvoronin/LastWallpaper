@@ -1,7 +1,9 @@
 ﻿namespace LastWallpaper.Models;
 
-public class FrontUpdateParameters( bool hasNews, Imago? imago )
+public class FrontUpdateParameters(
+    bool updateWallpaper,
+    PodUpdateResult podUpdateResult )
 {
-    public readonly bool HasNews = hasNews;
-    public readonly Imago? Imago = imago;
+    public readonly bool ShouldUpdateWallpaper = updateWallpaper;
+    public readonly PodUpdateResult UpdateResult = podUpdateResult;
 }

@@ -20,7 +20,7 @@ public sealed class BingPodLoader(
 {
     public override string Name => nameof( PodType.Bing ).ToLower();
 
-    protected override async Task<Result<Imago>> UpdateInternalAsync(
+    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
         CancellationToken ct )
     {
         var json =
@@ -59,7 +59,7 @@ public sealed class BingPodLoader(
             return Result.Fail( "Picture already known." );
 
         var cachedFilenameResult =
-            await DownloadToTemporaryFileAsync( lastImageUrl, ct );
+            await DownloadFileAsync( lastImageUrl, ct );
 
         if (cachedFilenameResult.IsFailed)
             return Result.Fail(
@@ -68,10 +68,10 @@ public sealed class BingPodLoader(
         (var title,
             var copyrights) = SplitDescription( lastImageInfo.Copyright );
 
-        var result = new Imago() {
+        var result = new PodUpdateResult() {
             PodName = Name,
             Filename = cachedFilenameResult.Value,
-            Created = startDate.Date + DateTime.Now.TimeOfDay,
+            Created = startDate.Date,
             Title = title,
             Copyright = copyrights,
         };

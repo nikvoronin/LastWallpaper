@@ -10,13 +10,13 @@ namespace LastWallpaper;
 
 public static class FileManager
 {
-    public static void SaveCurrentImago( Imago imago ) =>
+    public static void SaveCurrentImago( PodUpdateResult imago ) =>
         File.WriteAllBytes(
             LastWallpaperFileName,
             JsonSerializer.SerializeToUtf8Bytes(
                 imago, _intendedJsonSerializerOptions ) );
 
-    public static Result<Imago> LoadLastImago()
+    public static Result<PodUpdateResult> LoadLastImago()
     {
         var lastWallpaperFilename =
             Path.Combine(
@@ -26,7 +26,7 @@ public static class FileManager
         if (File.Exists( lastWallpaperFilename )) {
             try {
                 return Result.Ok(
-                    JsonSerializer.Deserialize<Imago>(
+                    JsonSerializer.Deserialize<PodUpdateResult>(
                         File.ReadAllText( lastWallpaperFilename ) )
                     ?? throw new InvalidDataException() );
             }

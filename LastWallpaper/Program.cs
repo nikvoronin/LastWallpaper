@@ -76,11 +76,11 @@ internal static class Program
                 podsUpdateHandler,
                 settings );
 
-        var imagoResult = FileManager.LoadLastImago();
+        var imagoResult = FileManager.LoadLastImago(); // TODO: move lastImago to resourceManager
         if (imagoResult.IsSuccess) {
             frontUpdateHandler.HandleUpdate(
-                new(
-                    hasNews: false,
+                new FrontUpdateParameters(
+                    updateWallpaper: false,
                     imagoResult.Value ),
                 CancellationToken.None );
         }
@@ -155,6 +155,6 @@ internal static class Program
             } );
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.8.7";
+    public const string AppVersion = "4.8.8";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 }

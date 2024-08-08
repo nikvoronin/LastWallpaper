@@ -11,29 +11,19 @@ using System.Windows.Forms;
 
 namespace LastWallpaper.Logic.Handlers;
 
-public sealed class FrontUpdateHandler :
-    IParameterizedUpdateHandler<FrontUpdateParameters>, IDisposable
+public sealed class FrontUpdateHandler(
+    SynchronizationContext uiContext,
+    NotifyIcon notifyIconCtrl,
+    IIconManager iconManager,
+    AppSettings settings )
+    : IParameterizedUpdateHandler<FrontUpdateParameters>
+    , IDisposable
 {
-    public FrontUpdateHandler(
-        SynchronizationContext uiContext,
-        NotifyIcon notifyIconCtrl,
-        IIconManager iconManager,
-        AppSettings settings )
-    {
-        _uiContext = uiContext;
-        _notifyIconCtrl = notifyIconCtrl;
-        _iconManager = iconManager;
-        _settings = settings;
-    }
-
     public void HandleUpdate(
         FrontUpdateParameters updateParameters,
         CancellationToken ct )
     {
-        var imago =
-            updateParameters.HasNews ? updateParameters.Imago
-            : FileManager.LoadLastImago().ValueOrDefault;
-
+        var imago = updateParameters.UpdateResult;
         if (imago is null) return;
 
         if (_currentIcon is not null)
@@ -48,10 +38,13 @@ public sealed class FrontUpdateHandler :
         _notifyIconCtrl.Text =
             $"{Program.AppName} #{imago.PodName}\n{imago.Created:D} {imago.Created:t}";
 
-        if (updateParameters.HasNews) {
+        if (updateParameters.ShouldUpdateWallpaper) {
 #if !DEBUG
             Task.Run( () =>
-                WindowsRegistry.SetWallpaper( imago.Filename ) );
+                WindowsRegistry.SetWallpaper(
+                    imago.Filename,
+                    _settings.WallpaperFit ),
+                    ct );
 #endif
             _uiContext?.Post( _ =>
                 ToastNotifications.ShowToast(
@@ -60,8 +53,6 @@ public sealed class FrontUpdateHandler :
                     imago.Copyright,
                     _settings.ToastExpireIn ),
                 null );
-
-            FileManager.SaveCurrentImago( imago );
         }
     }
 
@@ -72,8 +63,8 @@ public sealed class FrontUpdateHandler :
     }
 
     private Icon? _currentIcon;
-    private readonly SynchronizationContext _uiContext;
-    private readonly NotifyIcon _notifyIconCtrl;
-    private readonly IIconManager _iconManager;
-    private readonly AppSettings _settings;
+    private readonly SynchronizationContext _uiContext = uiContext;
+    private readonly NotifyIcon _notifyIconCtrl = notifyIconCtrl;
+    private readonly IIconManager _iconManager = iconManager;
+    private readonly AppSettings _settings = settings;
 }

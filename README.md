@@ -54,6 +54,14 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
 - __tray_icon__ - what will the tray icon look like:
   - "replica" - a tiny replica of desktop image.
   - "mosaic" - nine tiles with main accent colors of desktop image.
+- __wallpaper_fit__ - specifies how the desktop wallpaper should be displayed.
+  - "default" - the best fit. It is equal to "fill".
+  - "center" - center the image; do not stretch.
+  - "tile" - tile the image across all monitors.
+  - "stretch" - stretch the image to exactly fit on the monitor, without maintain aspect ratio.
+  - "span" - spans a single image across all monitors attached to the system.
+  - "fit" - stretch the image to exactly the height or width of the monitor without changing its aspect ratio or cropping the image. This can result in colored letterbox bars on either side or on above and below of the image.
+  - "fill" - stretch the image to fill the screen, cropping the image as necessary to avoid letterbox bars. This one is used as "default".
 - __active_pods__ - active pods list. Will updated in appear order. The first one with positive result become a wallpaper.
   - "bing" - bing.com
   - "wikipedia" - Wikipedia POTD
@@ -74,6 +82,7 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
   "update_timeout": "00:05:00",
   "toast_expire_in": "2.00:00:00",
   "tray_icon": "replica",
+  "wallpaper_fit": "fill",
 
   "active_pods": [ "bing", "apod" ],
   
