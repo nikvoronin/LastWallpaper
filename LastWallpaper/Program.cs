@@ -42,7 +42,9 @@ internal static class Program
 #if !DEBUG
             settings.ActivePods.Distinct()
 #else
-            new PodType[] { PodType.Bing, PodType.Apod, PodType.Wikipedia, PodType.Elementy }
+            new PodType[] {
+                PodType.Bing, PodType.Apod, PodType.Wikipedia,
+                PodType.Elementy, PodType.Astrobin }
 #endif
             .Select( podType =>
                 PodsFactory.Create(

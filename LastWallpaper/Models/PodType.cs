@@ -5,5 +5,6 @@ public enum PodType
     Bing,
     Apod,
     Wikipedia,
-    Elementy
+    Elementy,
+    Astrobin
 }
