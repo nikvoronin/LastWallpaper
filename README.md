@@ -32,8 +32,9 @@ See also [Release Notes](#release-notes) chapter.
 
 ## Documentation
 
+- [AstroBin IOTD](/docs/astrobin_aug-2024.md) (Image Of The Day). Home of astrophotography.
 - [Elementy RSS Feed](/docs/elementy_aug-2024.md). Science picture of the day.
-- [Wikipedia POTD](/docs/wikipedia_jun-2024.md) (Picture Of The Day)
+- [Wikipedia POTD](/docs/wikipedia_jun-2024.md) (Picture Of The Day).
 - Bing image of the day. API:
     - [May 2024](/docs/bing_may-2024.md)
     - [Nov 2022](/docs/bing_nov-2022.md)
