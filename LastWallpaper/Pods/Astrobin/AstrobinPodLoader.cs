@@ -63,16 +63,20 @@ public sealed class AstrobinPodLoader(
             ?.InnerText ?? string.Empty; // TODO? should we try to get from hdPageKeySegment
 
         var author =
-            ( descriptionNode
-            .Descendants( "a" ).FirstOrDefault( x =>
-                x.HasClass( "astrobin-username" ) )
-            ?.InnerText ?? string.Empty ) // TODO? should we try to get from hdPageKeySegment
+            (
+                descriptionNode
+                .Descendants( "a" ).FirstOrDefault( x =>
+                    x.HasClass( "astrobin-username" ) )
+                ?.InnerText ?? string.Empty // TODO? should we try to get from hdPageKeySegment
+            )
             .Replace( "\n", string.Empty );
 
         var pubDateRaw =
-            ( descriptionNode
-            .Descendants( "p" ).FirstOrDefault()
-            ?.InnerText ?? string.Empty )
+            (
+                descriptionNode
+                .Descendants( "p" ).FirstOrDefault()
+                ?.InnerText ?? string.Empty
+            )
             .Replace( "\n", string.Empty )
             .Split( ',' )
             .FirstOrDefault();
