@@ -16,10 +16,7 @@ public class AstrobinPodLoaderTests
             new AbinIotdDescription() {
                 Author = "Henning Schmidt",
                 Title = "High-Resolution-Animation of Saturn from 2018 to 2024",
-                PubDate =
-                    DateTime.ParseExact(
-                        "08/10/2024", "MM/dd/yyyy",
-                        CultureInfo.InvariantCulture ),
+                PubDate = new DateTime( 2024, 8, 10 ),
                 HdPageUrl = "https://www.astrobin.com/full/2i47ur/0/",
             };
 
@@ -44,7 +41,8 @@ public class AstrobinPodLoaderTests
     public void CanExtractFullImageUrl()
     {
         // Arrange
-        var expected = "https://cdn.astrobin.com/thumbs/rS59lKRrZJEs_2560x0_esdlMP5Y.jpg";
+        const string expected =
+            "https://cdn.astrobin.com/thumbs/rS59lKRrZJEs_2560x0_esdlMP5Y.jpg";
 
         using var stream = File.OpenRead( _htmlFullImageFileName );
         var doc = new HtmlDocument();
