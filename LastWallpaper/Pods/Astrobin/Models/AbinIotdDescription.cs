@@ -7,5 +7,5 @@ public class AbinIotdDescription
     public string HdPageUrl;
     public string Author;
     public string Title;
-    public DateTimeOffset PubDate;
+    public DateTime PubDate;
 }

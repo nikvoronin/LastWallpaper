@@ -23,22 +23,60 @@ public sealed class AstrobinPodLoader(
     protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
         CancellationToken ct )
     {
-        await using var stream =
+        await using var streamA =
             await _httpClient.GetStreamAsync( AstrobinIotdArchiveUrl, ct );
-        _doc.Load( stream );
+        _doc.Load( streamA );
 
         var iotdResult = ExtractIotdInfo( _doc.DocumentNode );
         if (iotdResult.IsFailed) return Result.Fail( iotdResult.Errors );
 
         var iotdInfo = iotdResult.Value;
 
-        return Result.Fail( "Not implemented yet." );
+        await using var streamHd =
+            await _httpClient.GetStreamAsync( iotdInfo.HdPageUrl, ct );
+        _doc.Load( streamHd );
+
+        var hdImageResult = ExtractHdImageUrl( _doc.DocumentNode );
+        if (hdImageResult.IsFailed) return Result.Fail( hdImageResult.Errors );
+
+        var hdImageUrl = hdImageResult.Value;
+
+        var cachedFilenameResult =
+            await DownloadFileAsync( hdImageUrl, ct );
+
+        if (cachedFilenameResult.IsFailed)
+            return Result.Fail(
+                $"Can not download media from {hdImageUrl}." );
+
+        var result = new PodUpdateResult() {
+            PodName = Name,
+            Filename = cachedFilenameResult.Value,
+            Created = iotdInfo.PubDate,
+            Title = iotdInfo.Title,
+            Copyright = iotdInfo.Author,
+        };
+
+        return Result.Ok( result );
     }
 
-    public static Result<AbinIotdDescription> ExtractIotdInfo( HtmlNode docNode )
+    public static Result<string> ExtractHdImageUrl( HtmlNode documentNode )
+    {
+        var hdImageUrl =
+            documentNode
+                .Descendants( "figure" ).FirstOrDefault()
+                ?.Descendants( "img" ).FirstOrDefault()
+                ?.ChildAttributes( "src" ).FirstOrDefault()
+                ?.Value;
+
+        return
+            hdImageUrl is null ? Result.Fail( "Can not find high resolution image." )
+            : Result.Ok( hdImageUrl );
+    }
+
+    public static Result<AbinIotdDescription> ExtractIotdInfo( HtmlNode documentNode )
     {
         var hdPageKeySegment =
-            docNode
+            documentNode
                 .Descendants( "figure" ).FirstOrDefault()
                 ?.Descendants( "a" ).FirstOrDefault()
                 ?.ChildAttributes( "href" ).FirstOrDefault()
@@ -48,7 +86,7 @@ public sealed class AstrobinPodLoader(
             return Result.Fail( "Can not find the last image." );
 
         var descriptionNode =
-            docNode
+            documentNode
                 .Descendants( "div" )
                 .FirstOrDefault( x =>
                     x.HasClass( "data" )
@@ -85,13 +123,13 @@ public sealed class AstrobinPodLoader(
             .Split( ',' )
             .FirstOrDefault();
 
-        if (!DateTimeOffset.TryParseExact(
+        if (!DateTime.TryParseExact(
             pubDateRaw,
             "MM/dd/yyyy",
             CultureInfo.InvariantCulture,
             DateTimeStyles.None,
-            out DateTimeOffset pubDate ))
-            pubDate = DateTimeOffset.Now;
+            out DateTime pubDate ))
+            pubDate = DateTime.Now;
 
         var iotdInfo =
             new AbinIotdDescription() {

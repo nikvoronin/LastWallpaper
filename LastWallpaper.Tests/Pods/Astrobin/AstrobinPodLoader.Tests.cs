@@ -8,8 +8,6 @@ namespace LastWallpaper.Tests.Pods.Elementy;
 
 public class AstrobinPodLoaderTests
 {
-    public const string _htmlFileName = "./samples/www.astrobin.com-iotd-archive.html";
-
     [Fact]
     public void CanExtractIotdInfo()
     {
@@ -19,14 +17,14 @@ public class AstrobinPodLoaderTests
                 Author = "Henning Schmidt",
                 Title = "High-Resolution-Animation of Saturn from 2018 to 2024",
                 PubDate =
-                    DateTimeOffset.ParseExact(
+                    DateTime.ParseExact(
                         "08/10/2024", "MM/dd/yyyy",
                         CultureInfo.InvariantCulture ),
                 HdPageUrl = "https://www.astrobin.com/full/2i47ur/0/",
             };
 
-        using var stream = File.OpenRead( _htmlFileName );
-        HtmlDocument doc = new();
+        using var stream = File.OpenRead( _htmlArchiveFileName );
+        var doc = new HtmlDocument();
         doc.Load( stream );
         var docNode = doc.DocumentNode;
 
@@ -41,4 +39,32 @@ public class AstrobinPodLoaderTests
         actual.Value
             .Should().BeEquivalentTo( expected );
     }
+
+    [Fact]
+    public void CanExtractFullImageUrl()
+    {
+        // Arrange
+        var expected = "https://cdn.astrobin.com/thumbs/rS59lKRrZJEs_2560x0_esdlMP5Y.jpg";
+
+        using var stream = File.OpenRead( _htmlFullImageFileName );
+        var doc = new HtmlDocument();
+        doc.Load( stream );
+        var docNode = doc.DocumentNode;
+
+        // Act
+        var actual = AstrobinPodLoader.ExtractHdImageUrl( docNode );
+
+        // Assert
+        actual.Should().NotBeNull();
+
+        actual.IsSuccess
+            .Should().BeTrue();
+        actual.Value
+            .Should().Be( expected );
+    }
+
+    public const string _htmlArchiveFileName =
+        "./samples/www.astrobin.com-iotd-archive.html";
+    public const string _htmlFullImageFileName =
+        "./samples/www.astrobin.com-full-FIGURE_HREF-0.html";
 }
