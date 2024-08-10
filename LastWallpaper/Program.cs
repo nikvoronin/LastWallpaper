@@ -73,9 +73,9 @@ internal static class Program
             settings.ActivePods.Distinct()
 #else
             new PodType[] {
-                //PodType.Bing, PodType.Apod, PodType.Wikipedia,
-                //PodType.Elementy, 
-                PodType.Astrobin }
+                PodType.Bing, PodType.Apod, PodType.Wikipedia,
+                PodType.Elementy, PodType.Astrobin
+            }
 #endif
             .Select( podType =>
                 PodsFactory.Create(
@@ -217,7 +217,7 @@ internal static class Program
         };
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.8.8";
+    public const string AppVersion = "4.8.10";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
     private const string CacheFolderName = "cache";
