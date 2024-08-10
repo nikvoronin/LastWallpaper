@@ -1,7 +1,7 @@
 # The Last Wallpaper
 
 Picture Of The Day (POTD) on desktop.\
--- Bing, NASA, Wikipedia, Elementy
+-- Bing, NASA, Wikipedia, Elementy, AstroBin
 
 - [What's New](#whats-new)
 - [Documentation](#documentation)
@@ -16,8 +16,9 @@ __System requirements:__ Windows 10 x64, .NET Desktop Runtime 8.0.
 
 ## What's New
 
-8 Aug 2024
+10 Aug 2024
 
+- Add AstroBin - home of astrophotography.
 - Add configurable wallpaper fit parameter.
 - Add Elementy (science picture of the day).
 
@@ -69,6 +70,7 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
   - __wikipedia__ - Wikipedia POTD
   - __apod__ - NASA APOD
   - __elementy__ - Elementy (science picture of the day).
+  - __astrobin__ - AstroBin IOTD.
 - __bing__
     - __resolution__ - resolution of the picture:
         - __UltraHD__ or __UHD__ - 4K, 3840x2160 px
