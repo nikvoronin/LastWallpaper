@@ -5,8 +5,6 @@ namespace LastWallpaper.Tests.Pods.Elementy;
 
 public class ElementyPodLoaderTests
 {
-    public const string _xmlFileName = "./Models/Rss/elementy.xml";
-
     [Fact]
     public void CanParseUrlWithImageFile()
     {

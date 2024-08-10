@@ -27,7 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Models\Rss\elementy.xml">
+    <None Update="samples\elementy.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="samples\www.astrobin.com-iotd-archive.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

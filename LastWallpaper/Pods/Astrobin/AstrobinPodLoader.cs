@@ -23,7 +23,11 @@ public sealed class AstrobinPodLoader(
     protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
         CancellationToken ct )
     {
-        var iotdResult = await GetIotdInfoAsync( ct );
+        await using var stream =
+            await _httpClient.GetStreamAsync( AstrobinIotdArchiveUrl, ct );
+        _doc.Load( stream );
+
+        var iotdResult = ExtractIotdInfo( _doc.DocumentNode );
         if (iotdResult.IsFailed) return Result.Fail( iotdResult.Errors );
 
         var iotdInfo = iotdResult.Value;
@@ -31,14 +35,10 @@ public sealed class AstrobinPodLoader(
         return Result.Fail( "Not implemented yet." );
     }
 
-    private async Task<Result<AbinIotdDescription>> GetIotdInfoAsync( CancellationToken ct )
+    public static Result<AbinIotdDescription> ExtractIotdInfo( HtmlNode docNode )
     {
-        await using var stream =
-            await _httpClient.GetStreamAsync( AstrobinIotdArchiveUrl, ct );
-        _doc.Load( stream );
-
         var hdPageKeySegment =
-            _doc.DocumentNode
+            docNode
                 .Descendants( "figure" ).FirstOrDefault()
                 ?.Descendants( "a" ).FirstOrDefault()
                 ?.ChildAttributes( "href" ).FirstOrDefault()
@@ -48,7 +48,7 @@ public sealed class AstrobinPodLoader(
             return Result.Fail( "Can not find the last image." );
 
         var descriptionNode =
-            _doc.DocumentNode
+            docNode
                 .Descendants( "div" )
                 .FirstOrDefault( x =>
                     x.HasClass( "data" )
@@ -69,7 +69,9 @@ public sealed class AstrobinPodLoader(
                     x.HasClass( "astrobin-username" ) )
                 ?.InnerText ?? string.Empty // TODO? should we try to get from hdPageKeySegment
             )
-            .Replace( "\n", string.Empty );
+            .Replace( "\n", string.Empty )
+            .Replace( "\r", string.Empty )
+            .Trim();
 
         var pubDateRaw =
             (
@@ -78,6 +80,8 @@ public sealed class AstrobinPodLoader(
                 ?.InnerText ?? string.Empty
             )
             .Replace( "\n", string.Empty )
+            .Replace( "\r", string.Empty )
+            .Trim()
             .Split( ',' )
             .FirstOrDefault();
 

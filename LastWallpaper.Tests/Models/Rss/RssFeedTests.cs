@@ -6,7 +6,7 @@ namespace LastWallpaper.Tests.Models.Rss;
 
 public class RssFeedTests
 {
-    public const string _xmlFileName = "./Models/Rss/elementy.xml";
+    public const string _xmlFileName = "./samples/elementy.xml";
 
     [Fact]
     public void CanBeDeserialized()
@@ -36,8 +36,10 @@ public class RssFeedTests
         // Assert
         actual.Should().NotBeNull();
 
-        actual.Channel.Should().NotBeNull();
-        actual.Channel.Items.Should().NotBeNullOrEmpty();
+        actual.Channel
+            .Should().NotBeNull();
+        actual.Channel.Items
+            .Should().NotBeNullOrEmpty();
 
         var item = actual.Channel.Items[0];
 

@@ -8,7 +8,7 @@ namespace LastWallpaper.Tests.Logic;
 
 public class RssReaderTests
 {
-    public const string _xmlFileName = "./Models/Rss/elementy.xml";
+    public const string _xmlFileName = "./samples/elementy.xml";
 
     [Fact]
     public async void CanDownloadAndParseFeed()
@@ -42,8 +42,14 @@ public class RssReaderTests
 
         // Assert
         actual.Should().NotBeNull();
-        actual.Value.Should().NotBeNull();
-        actual.Value.Channel.Should().NotBeNull();
-        actual.Value.Channel.Items.Should().NotBeNullOrEmpty();
+
+        actual.Value
+            .Should().NotBeNull();
+
+        actual.Value.Channel
+            .Should().NotBeNull();
+
+        actual.Value.Channel.Items
+            .Should().NotBeNullOrEmpty();
     }
 }
