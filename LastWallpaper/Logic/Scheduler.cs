@@ -3,6 +3,7 @@ using LastWallpaper.Models;
 using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace LastWallpaper.Logic;
 
@@ -28,13 +29,15 @@ public sealed class Scheduler : IDisposable
         if (_timer is not null) return;
 
         _timer = new(
-            _ => Update(),
+            _ => UpdateInternal(),
             null,
             StartImmediately,
             (long)_checkImageUpdateAfterPeriod.TotalMilliseconds );
     }
 
-    public async void Update()
+    public void Update() => Task.Run( UpdateInternal );
+
+    private async void UpdateInternal()
     {
         if (Interlocked.CompareExchange( ref _interlocked, 1, 0 ) != 0)
             return;

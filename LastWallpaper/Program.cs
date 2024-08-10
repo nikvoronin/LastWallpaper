@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LastWallpaper;
@@ -71,8 +72,9 @@ internal static class Program
             settings.ActivePods.Distinct()
 #else
             new PodType[] {
-                PodType.Bing, PodType.Apod, PodType.Wikipedia,
-                PodType.Elementy, PodType.Astrobin }
+                //PodType.Bing, PodType.Apod, PodType.Wikipedia,
+                //PodType.Elementy, 
+                PodType.Astrobin }
 #endif
             .Select( podType =>
                 PodsFactory.Create(

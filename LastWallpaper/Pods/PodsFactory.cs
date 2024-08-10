@@ -1,6 +1,7 @@
 ﻿using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using LastWallpaper.Models.Rss;
+using LastWallpaper.Pods.Astrobin;
 using LastWallpaper.Pods.Bing;
 using LastWallpaper.Pods.Elementy;
 using LastWallpaper.Pods.Nasa;
@@ -41,6 +42,11 @@ public static class PodsFactory
                     client,
                     resourceManager,
                     rssReader ),
+
+            PodType.Astrobin =>
+                new AstrobinPodLoader(
+                    client,
+                    resourceManager ),
 
             _ => null
         };
