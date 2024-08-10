@@ -13,7 +13,6 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LastWallpaper;
@@ -46,6 +45,8 @@ internal static class Program
 
         AppSettings settings =
             LoadAppSettings( Path.Combine( appFolder, AppSettingsFileName ) );
+
+        // TODO: add application and domain exception handlers
 
         ApplicationConfiguration.Initialize();
         SynchronizationContext.SetSynchronizationContext(
@@ -93,7 +94,7 @@ internal static class Program
             new FrontUpdateHandler(
                 SynchronizationContext.Current!,
                 notifyIconCtrl,
-                IconManagerFactory.Create( settings.TrayIcon ),
+                IconManagerFactory.Create( settings.TrayIconStyle ),
                 settings );
 
         var podsUpdateHandler =

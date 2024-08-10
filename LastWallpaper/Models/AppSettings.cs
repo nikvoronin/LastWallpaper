@@ -19,7 +19,7 @@ public class AppSettings
     public TimeSpan SchedulerUpdateTimeout { get; init; } = TimeSpan.FromMinutes( 5 );
 
     [JsonPropertyName( "tray_icon" )]
-    public TrayIconType TrayIcon { get; init; } = TrayIconType.Replica;
+    public TrayIconType TrayIconStyle { get; init; } = TrayIconType.Replica;
 
     [JsonPropertyName( "wallpaper_fit" )]
     public WallpaperStyle WallpaperFit { get; init; } = WallpaperStyle.Default;
