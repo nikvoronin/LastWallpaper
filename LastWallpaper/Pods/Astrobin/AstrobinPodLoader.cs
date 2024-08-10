@@ -23,20 +23,22 @@ public sealed class AstrobinPodLoader(
     protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
         CancellationToken ct )
     {
+        var doc = new HtmlDocument();
+
         await using var streamA =
             await _httpClient.GetStreamAsync( AstrobinIotdArchiveUrl, ct );
-        _doc.Load( streamA );
+        doc.Load( streamA );
 
-        var iotdResult = ExtractIotdInfo( _doc.DocumentNode );
+        var iotdResult = ExtractIotdInfo( doc.DocumentNode );
         if (iotdResult.IsFailed) return Result.Fail( iotdResult.Errors );
 
         var iotdInfo = iotdResult.Value;
 
         await using var streamHd =
             await _httpClient.GetStreamAsync( iotdInfo.HdPageUrl, ct );
-        _doc.Load( streamHd );
+        doc.Load( streamHd );
 
-        var hdImageResult = ExtractHdImageUrl( _doc.DocumentNode );
+        var hdImageResult = ExtractHdImageUrl( doc.DocumentNode );
         if (hdImageResult.IsFailed) return Result.Fail( hdImageResult.Errors );
 
         var hdImageUrl = hdImageResult.Value;
@@ -145,8 +147,6 @@ public sealed class AstrobinPodLoader(
 
         return Result.Ok( iotdInfo );
     }
-
-    private static readonly HtmlDocument _doc = new();
 
     private static readonly CompositeFormat HdImagePageUrlFormat =
         CompositeFormat.Parse( AstrobinBaseUrl + "/full{0}0/" );

@@ -39,12 +39,13 @@ public static class WmMetaDataExtensions
     {
         if (html is null) return null;
 
-        _doc.LoadHtml(html);
+        var doc = new HtmlDocument();
+        doc.LoadHtml(html);
 
         return
             WebUtility.HtmlDecode(
                 string.Concat(
-                    _doc.DocumentNode
+                    doc.DocumentNode
                     .DescendantsAndSelf()
                     .Select(node =>
                         node.HasChildNodes ? string.Empty
@@ -54,6 +55,4 @@ public static class WmMetaDataExtensions
                     )
                 ));
     }
-
-    private static readonly HtmlDocument _doc = new();
 }
