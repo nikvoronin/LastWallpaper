@@ -5,7 +5,7 @@
 
 AstroBin implements a basic set of RESTful APIs. AstroBin's APIs currently are limited to retrieving basic information and perform simple searches on images. The supported response types are XML and JSON.
 
-It also has [RSS feed](https://www.astrobin.com/iotd/rss/iotd) and [Atom feed](https://www.astrobin.com/iotd/atom/iotd) feeds but with less resolution images aboard.
+It also has [RSS](https://www.astrobin.com/iotd/rss/iotd) and [Atom](https://www.astrobin.com/iotd/atom/iotd) feeds but with less resolution images aboard.
 
 ## Image-Of-The-Day Archive Page
 
