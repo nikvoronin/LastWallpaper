@@ -1,6 +1,6 @@
-# Astrobin IOTD
+# AstroBin IOTD
 
-- [Astrobin IOTD](https://www.astrobin.com/iotd/archive/). Home of astrophotography. AstroBin is an image hosting platform, social network, and marketplace for astrophotographers.
+- [AstroBin IOTD](https://www.astrobin.com/iotd/archive/). Home of astrophotography. AstroBin is an image hosting platform, social network, and marketplace for astrophotographers.
 - [AstroBin's read-only API](https://www.astrobin.com/help/api/).
 
 AstroBin implements a basic set of RESTful APIs. AstroBin's APIs currently are limited to retrieving basic information and perform simple searches on images. The supported response types are XML and JSON.
@@ -36,13 +36,13 @@ Contains several `figure` elements which contains image info.
 
 ### Full image URL
 
-> https://www.astrobin.com/full/{figure_href}/0/
+> https://www.astrobin.com/full{FIGURE_HREF}0/
 
-The key for a page with full image is `<figure><a href="`. Let's `figure_href` = /pcdsqs/
+The key for a page with full image is `<figure><a href="`. Let's `FIGURE_HREF` = /pcdsqs/
 
 So the result url is: https://www.astrobin.com/full/pcdsqs/0/
 
-### Small image + Title + Author
+### Preview image + Title + Author
 
 ```html
 <figure>
@@ -90,3 +90,12 @@ So the result url is: https://www.astrobin.com/full/pcdsqs/0/
 ```
 
 The first `figure` element contains `img` element with `src` attribute that leads us to the downloadable full size image.
+
+### Video of the day
+
+Sometime there are no image but video:
+
+```html
+<figure>
+    <video class="video...
+```
