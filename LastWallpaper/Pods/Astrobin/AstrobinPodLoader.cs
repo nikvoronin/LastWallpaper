@@ -6,6 +6,7 @@ using LastWallpaper.Pods.Astrobin.Models;
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -135,8 +136,8 @@ public sealed class AstrobinPodLoader(
 
         var iotdInfo =
             new AbinIotdDescription() {
-                Author = author,
-                Title = title,
+                Author = WebUtility.HtmlDecode( author ),
+                Title = WebUtility.HtmlDecode( title ),
                 PubDate = pubDate,
 
                 HdPageUrl = string.Format(
