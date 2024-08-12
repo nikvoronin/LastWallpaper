@@ -16,8 +16,9 @@ __System requirements:__ Windows 10 x64, .NET Desktop Runtime 8.0.
 
 ## What's New
 
-10 Aug 2024
+12 Aug 2024
 
+- Add mosaic tray icon.
 - Add AstroBin - home of astrophotography.
 - Add configurable wallpaper fit parameter.
 - Add Elementy (science picture of the day).
