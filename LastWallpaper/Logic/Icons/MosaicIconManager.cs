@@ -25,8 +25,8 @@ public class MosaicIconManager : IconManager
 
         Vector3[] points = new Vector3[resized.Width * resized.Height];
 
-        for (int y = 0; y < resized.Height; y++) {
-            for (int x = 0; x < resized.Width; x++) {
+        for (var y = 0; y < resized.Height; y++) {
+            for (var x = 0; x < resized.Width; x++) {
                 var pixel = resized.GetPixel( x, y );
                 var lab = _rgb2lab.Convert( RGBColor.FromColor( pixel ) );
                 points[y * resized.Width + x] =
@@ -46,16 +46,15 @@ public class MosaicIconManager : IconManager
 
         int tileSize = result.Width / SqrTilesNum;
 
-        for (int y = 0; y < SqrTilesNum; y++) {
-            for (int x = 0; x < SqrTilesNum; x++) {
+        for (var y = 0; y < SqrTilesNum; y++) {
+            for (var x = 0; x < SqrTilesNum; x++) {
                 var labMean = clusters[y * SqrTilesNum + x].Centroid;
-                Brush brush =
-                    new SolidBrush(
-                        _lab2rgb.Convert(
-                            new LabColor( labMean.X, labMean.Y, labMean.Z ) ) );
+                var color =
+                    _lab2rgb.Convert(
+                        new LabColor( labMean.X, labMean.Y, labMean.Z ) );
 
                 gr.FillRectangle(
-                    brush,
+                    new SolidBrush( color ),
                     x * tileSize, y * tileSize,
                     tileSize, tileSize );
             }

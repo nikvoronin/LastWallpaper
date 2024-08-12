@@ -26,9 +26,9 @@ public sealed class AstrobinPodLoader(
     {
         var doc = new HtmlDocument();
 
-        await using var streamA =
+        await using var stream =
             await _httpClient.GetStreamAsync( AstrobinIotdArchiveUrl, ct );
-        doc.Load( streamA );
+        doc.Load( stream );
 
         var iotdResult = ExtractIotdInfo( doc.DocumentNode );
         if (iotdResult.IsFailed) return Result.Fail( iotdResult.Errors );
