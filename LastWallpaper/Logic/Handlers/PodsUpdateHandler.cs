@@ -39,13 +39,15 @@ public sealed class PodsUpdateHandler(
                 .RestoreLastWallpaper()
                 .ValueOrDefault;
 
+        var hasNews = imagos.Count > 0;
+
         _frontUpdateHandler?.HandleUpdate(
             new FrontUpdateParameters(
-                updateWallpaper: imagos.Count > 0,
+                updateWallpaper: hasNews,
                 imago ),
             ct );
 
-        if (imago is not null)
+        if (hasNews)
             _resourceManager.RememberLastWallpaper( imago );
 
         return Task.CompletedTask;
