@@ -30,8 +30,6 @@ public sealed class WikipediaPodLoader(
         PodLatestUpdate latestUpdate,
         CancellationToken ct )
     {
-        var imageDate = DateTime.Now;
-
         var jsonPotdFilename =
             await _httpClient.GetFromJsonAsync<WmResponse>(
                 string.Format(
