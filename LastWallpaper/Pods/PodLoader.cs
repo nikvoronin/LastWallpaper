@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace LastWallpaper.Pods;
 
-public abstract class PodLoader : IPotdLoader
+public abstract class PodLoader<TPodLatestUpdate>(
+    IResourceManager resourceManager )
+    : IPotdLoader
+    where TPodLatestUpdate : PodLatestUpdate
 {
     public abstract string Name { get; }
-    protected abstract Task<Result<PodUpdateResult>> UpdateInternalAsync( CancellationToken ct );
 
     public async Task<Result<PodUpdateResult>> UpdateAsync( CancellationToken ct )
     {
@@ -20,7 +22,15 @@ public abstract class PodLoader : IPotdLoader
 
         Result<PodUpdateResult> result;
         try {
-            result = await UpdateInternalAsync( ct );
+            var latestUpdate = await FetchLatestUpdateInternalAsync( ct );
+            if (latestUpdate.IsFailed) return Result.Fail( latestUpdate.Errors );
+
+            if (_resourceManager.PotdExists(
+                Name,
+                latestUpdate.Value.PubDate ))
+                return Result.Fail( "Picture already known." );
+
+            result = await UpdateInternalAsync( latestUpdate.Value, ct );
         }
         catch (Exception e)
         when (e is not OperationCanceledException) {
@@ -34,6 +44,14 @@ public abstract class PodLoader : IPotdLoader
 
         return result;
     }
+
+    protected abstract Task<Result<PodUpdateResult>> UpdateInternalAsync(
+        TPodLatestUpdate latestUpdate,
+        CancellationToken ct );
+    protected abstract Task<Result<TPodLatestUpdate>> FetchLatestUpdateInternalAsync(
+        CancellationToken ct );
+
+    protected readonly IResourceManager _resourceManager = resourceManager;
 
     private int _interlocked;
 }

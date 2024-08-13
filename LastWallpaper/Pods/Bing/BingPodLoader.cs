@@ -2,6 +2,7 @@
 using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using LastWallpaper.Pods.Bing.Models;
+using LastWallpaper.Pods.Elementy.Models;
 using System;
 using System.Globalization;
 using System.Net.Http;
@@ -16,11 +17,11 @@ public sealed class BingPodLoader(
     HttpClient httpClient,
     IResourceManager resourceManager,
     BingSettings settings )
-    : HttpPodLoader( httpClient, resourceManager )
+    : HttpPodLoader<BingPodLatestUpdate>( httpClient, resourceManager )
 {
     public override string Name => nameof( PodType.Bing ).ToLower();
 
-    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
+    protected async override Task<Result<BingPodLatestUpdate>> FetchLatestUpdateInternalAsync(
         CancellationToken ct )
     {
         var json =
@@ -32,6 +33,9 @@ public sealed class BingPodLoader(
 
         var lastImageInfo = json!.Images![0];
         if (lastImageInfo is null) return Result.Fail( "Picture of the day was not found." );
+
+        (var title,
+            var copyrights) = SplitDescription( lastImageInfo.Copyright );
 
         var urlBase = lastImageInfo.UrlBase;
         if (urlBase is null) return Result.Fail( "Can not find urlbase of the picture." );
@@ -55,28 +59,14 @@ public sealed class BingPodLoader(
             return Result.Fail(
                 $"Can not parse date-time of the picture: {lastImageInfo.StartDate}." );
         }
-        else if (_resourceManager.PotdExists( Name, startDate ))
-            return Result.Fail( "Picture already known." );
 
-        var cachedFilenameResult =
-            await DownloadFileAsync( lastImageUrl, ct );
-
-        if (cachedFilenameResult.IsFailed)
-            return Result.Fail(
-                $"Can not download media from {lastImageUrl}." );
-
-        (var title,
-            var copyrights) = SplitDescription( lastImageInfo.Copyright );
-
-        var result = new PodUpdateResult() {
-            PodName = Name,
-            Filename = cachedFilenameResult.Value,
-            Created = startDate.Date,
-            Title = title,
-            Copyright = copyrights,
-        };
-
-        return Result.Ok( result );
+        return Result.Ok(
+            new BingPodLatestUpdate() {
+                PubDate = startDate,
+                LastImageUrl = lastImageUrl,
+                Copyright = copyrights,
+                Title = title,
+            } );
 
         static (string? title, string? copyrights) SplitDescription( string? description )
         {
@@ -87,6 +77,28 @@ public sealed class BingPodLoader(
                 hasParts ? (descriptionParts[0], $"©{descriptionParts[1][..^1]}")
                 : (description, null);
         }
+    }
+
+    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
+        BingPodLatestUpdate latestUpdate,
+        CancellationToken ct )
+    {
+        var cachedFilenameResult =
+            await DownloadFileAsync( latestUpdate.LastImageUrl, ct );
+
+        if (cachedFilenameResult.IsFailed)
+            return Result.Fail(
+                $"Can not download media from {latestUpdate.LastImageUrl}." );
+
+        var result = new PodUpdateResult() {
+            PodName = Name,
+            Filename = cachedFilenameResult.Value,
+            Created = latestUpdate.PubDate,
+            Title = latestUpdate.Title,
+            Copyright = latestUpdate.Copyright,
+        };
+
+        return Result.Ok( result );
     }
 
     private static readonly CompositeFormat DownloadPictureUrlFormat =

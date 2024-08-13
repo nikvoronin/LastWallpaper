@@ -17,11 +17,11 @@ namespace LastWallpaper.Pods.Astrobin;
 public sealed class AstrobinPodLoader(
     HttpClient httpClient,
     IResourceManager resourceManager )
-    : HttpPodLoader( httpClient, resourceManager )
+    : HttpPodLoader<AbinPodLatestUpdate>( httpClient, resourceManager )
 {
     public override string Name => nameof( PodType.Astrobin ).ToLower();
 
-    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
+    protected async override Task<Result<AbinPodLatestUpdate>> FetchLatestUpdateInternalAsync(
         CancellationToken ct )
     {
         var doc = new HtmlDocument();
@@ -35,8 +35,20 @@ public sealed class AstrobinPodLoader(
 
         var iotdInfo = iotdResult.Value;
 
-        if (_resourceManager.PotdExists( Name, iotdInfo.PubDate ))
-            return Result.Fail( "Picture already known." );
+        return Result.Ok(
+            new AbinPodLatestUpdate() {
+                PubDate = iotdInfo.PubDate,
+                Document = doc,
+                IotdDescription = iotdInfo
+            } );
+    }
+
+    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
+        AbinPodLatestUpdate latestUpdate,
+        CancellationToken ct )
+    {
+        var doc = latestUpdate.Document;
+        var iotdInfo = latestUpdate.IotdDescription;
 
         await using var streamHd =
             await _httpClient.GetStreamAsync( iotdInfo.HdPageUrl, ct );

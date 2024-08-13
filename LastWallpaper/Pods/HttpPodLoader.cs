@@ -1,15 +1,17 @@
 ﻿using FluentResults;
 using LastWallpaper.Abstractions;
+using LastWallpaper.Models;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace LastWallpaper.Pods;
 
-public abstract class HttpPodLoader(
+public abstract class HttpPodLoader<TPodLatestUpdate>(
     HttpClient httpClient,
     IResourceManager resourceManager )
-    : PodLoader
+    : PodLoader<TPodLatestUpdate>( resourceManager )
+    where TPodLatestUpdate : PodLatestUpdate
 {
     /// <summary>
     /// Download remote resource to local temporary file.
@@ -33,5 +35,4 @@ public abstract class HttpPodLoader(
     }
 
     protected readonly HttpClient _httpClient = httpClient;
-    protected readonly IResourceManager _resourceManager = resourceManager;
 }

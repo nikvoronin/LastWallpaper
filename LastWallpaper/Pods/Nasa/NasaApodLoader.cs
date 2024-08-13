@@ -16,11 +16,11 @@ public sealed class NasaApodLoader(
     HttpClient httpClient,
     IResourceManager resourceManager,
     ApodSettings settings )
-    : HttpPodLoader( httpClient, resourceManager )
+    : HttpPodLoader<NasaApodLatestUpdate>( httpClient, resourceManager )
 {
     public override string Name => nameof( PodType.Apod ).ToLower();
 
-    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
+    protected async override Task<Result<NasaApodLatestUpdate>> FetchLatestUpdateInternalAsync(
         CancellationToken ct )
     {
         // TODO:? move throttling block to the scheduler
@@ -63,8 +63,19 @@ public sealed class NasaApodLoader(
             return Result.Fail(
                 $"Can not parse date-time of the picture: {imageInfo.Date}." );
         }
-        else if (_resourceManager.PotdExists( Name, imageDate ))
-            return Result.Fail( "Picture already known." );
+
+        return Result.Ok(
+            new NasaApodLatestUpdate() {
+                PubDate = imageDate,
+                Description = imageInfo
+            } );
+    }
+
+    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
+        NasaApodLatestUpdate latestUpdate,
+        CancellationToken ct )
+    {
+        var imageInfo = latestUpdate.Description;
 
         var cachedFilenameResult =
             await DownloadFileAsync( imageInfo.HdImageUrl!, ct );
@@ -81,7 +92,7 @@ public sealed class NasaApodLoader(
         var result = new PodUpdateResult() {
             PodName = Name,
             Filename = cachedFilenameResult.Value,
-            Created = imageDate.Date,
+            Created = latestUpdate.PubDate,
             Title = imageInfo.Title,
             Copyright = owner,
         };

@@ -15,17 +15,22 @@ namespace LastWallpaper.Pods.Wikimedia;
 public sealed class WikipediaPodLoader(
     HttpClient httpClient,
     IResourceManager resourceManager )
-    : HttpPodLoader( httpClient, resourceManager )
+    : HttpPodLoader<PodLatestUpdate>( httpClient, resourceManager )
 {
     public override string Name => nameof( PodType.Wikipedia ).ToLower();
 
+    protected override Task<Result<PodLatestUpdate>> FetchLatestUpdateInternalAsync(
+        CancellationToken ct )
+        => Task.FromResult(
+            Result.Ok( new PodLatestUpdate() {
+                PubDate = DateTime.Now
+            } ) );
+
     protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
+        PodLatestUpdate latestUpdate,
         CancellationToken ct )
     {
         var imageDate = DateTime.Now;
-
-        if (_resourceManager.PotdExists( Name, imageDate ))
-            return Result.Fail( "Picture already known." );
 
         var jsonPotdFilename =
             await _httpClient.GetFromJsonAsync<WmResponse>(

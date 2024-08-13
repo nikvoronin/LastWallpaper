@@ -2,7 +2,6 @@ using FluentAssertions;
 using HtmlAgilityPack;
 using LastWallpaper.Pods.Astrobin;
 using LastWallpaper.Pods.Astrobin.Models;
-using System.Globalization;
 
 namespace LastWallpaper.Tests.Pods.Elementy;
 
