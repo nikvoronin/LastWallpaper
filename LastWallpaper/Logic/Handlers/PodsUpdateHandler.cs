@@ -33,6 +33,7 @@ public sealed class PodsUpdateHandler(
             .ToList();
 
         // TODO: share imagos with Selector to select the best one
+        // TODO: use only images with resolution of display or appsettings defined only
         var imago =
             imagos.FirstOrDefault()
             ?? _resourceManager

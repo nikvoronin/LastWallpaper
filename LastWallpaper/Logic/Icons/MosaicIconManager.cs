@@ -2,6 +2,7 @@
 using LastWallpaper.Logic.Classifiers.KMeans;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 
 namespace LastWallpaper.Logic.Icons;
@@ -23,7 +24,7 @@ public class MosaicIconManager : IconManager
         g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
         g.DrawImage( source, 0, 0, resized.Width, resized.Height );
 
-        Vector3[] points = new Vector3[resized.Width * resized.Height];
+        var points = new Vector3[resized.Width * resized.Height];
 
         for (var y = 0; y < resized.Height; y++) {
             for (var x = 0; x < resized.Width; x++) {
@@ -35,7 +36,7 @@ public class MosaicIconManager : IconManager
         }
 
         var clusters =
-            _classifier.Compute( points, SqrTilesNum * SqrTilesNum );
+            _classifier.Compute( points, SqrtNumTiles * SqrtNumTiles );
 
         using var result =
             new Bitmap(
@@ -44,20 +45,20 @@ public class MosaicIconManager : IconManager
 
         using var gr = Graphics.FromImage( result );
 
-        int tileSize = result.Width / SqrTilesNum;
+        var tileSize = result.Width / SqrtNumTiles;
 
-        for (var y = 0; y < SqrTilesNum; y++) {
-            for (var x = 0; x < SqrTilesNum; x++) {
-                var labMean = clusters[y * SqrTilesNum + x].Centroid;
-                var color =
-                    _lab2rgb.Convert(
-                        new LabColor( labMean.X, labMean.Y, labMean.Z ) );
+        foreach (var clusterIx in Enumerable.Range( 0, clusters.Length )) {
+            var labMean = clusters[clusterIx].Centroid;
+            var color =
+                _lab2rgb.Convert(
+                    new LabColor( labMean.X, labMean.Y, labMean.Z ) );
 
-                gr.FillRectangle(
-                    new SolidBrush( color ),
-                    x * tileSize, y * tileSize,
-                    tileSize, tileSize );
-            }
+            var x = clusterIx % SqrtNumTiles;
+            var y = clusterIx / SqrtNumTiles;
+            gr.FillRectangle(
+                new SolidBrush( color ),
+                x * tileSize, y * tileSize,
+                tileSize, tileSize );
         }
 
         return Icon.FromHandle( result.GetHicon() );
@@ -77,6 +78,6 @@ public class MosaicIconManager : IconManager
         .ToRGB( RGBWorkingSpaces.sRGB )
         .Build();
 
-    private const int SqrTilesNum = 3;
+    private const int SqrtNumTiles = 3;
     private const float ResizedImageWidth = 400f;
 }

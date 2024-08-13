@@ -35,6 +35,9 @@ public sealed class AstrobinPodLoader(
 
         var iotdInfo = iotdResult.Value;
 
+        if (_resourceManager.PotdExists( Name, iotdInfo.PubDate ))
+            return Result.Fail( "Picture already known." );
+
         await using var streamHd =
             await _httpClient.GetStreamAsync( iotdInfo.HdPageUrl, ct );
         doc.Load( streamHd );

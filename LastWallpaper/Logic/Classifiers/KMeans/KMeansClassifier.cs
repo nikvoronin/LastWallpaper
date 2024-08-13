@@ -19,12 +19,12 @@ public class KMeansClassifier( IKmInitializer clusterInitializer )
     /// <returns>Array of clusters.</returns>
     public KmCluster[] Compute( Vector3[] volume, int numClusters )
     {
-        KmCluster[] clusters =
+        var clusters =
             _clusterInitializer.Initialize( volume, numClusters );
 
         // TODO: add option for upper limit of iterations
         for (var iteration = 0; iteration < 1000; iteration++) {
-            KmCluster[] newClusters =
+            var newClusters =
                 ArrangePointsParallel( volume, clusters );
 
             if (IsStable( clusters, newClusters ))
@@ -62,7 +62,7 @@ public class KMeansClassifier( IKmInitializer clusterInitializer )
 
         var nodes = new List<KmCluster[]>();
         for (var k = 0; k < numNodes; k++) {
-            KmCluster[] newClusters = new KmCluster[nextClusters.Length];
+            var newClusters = new KmCluster[nextClusters.Length];
             for (int i = 0; i < newClusters.Length; i++)
                 newClusters[i] = new KmCluster();
 
@@ -81,14 +81,14 @@ public class KMeansClassifier( IKmInitializer clusterInitializer )
                 var point = volume[px];
 
                 // TODO? extract distance calculator into class
-                float minDistance =
+                var minDistance =
                     Vector3.Distance(
                         localCentroids[0],
                         point );
 
-                int bestClusterIx = 0;
+                var bestClusterIx = 0;
                 for (int ix = 1; ix < sourceClusters.Length; ix++) {
-                    float distance =
+                    var distance =
                         Vector3.Distance(
                             localCentroids[ix],
                             point );
