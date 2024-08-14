@@ -19,7 +19,7 @@ https://en.wikipedia.org/w/api.php
     / 2024-06-06
 ```
 
-GET request returns JSON below:
+If the requested image file is present then the following JSON response will be returned:
 
 ```json
 {
@@ -67,6 +67,23 @@ Multiple filenames are possible:
                         "title": "File:NNC-US-1856-G$1-Indian head (Ty3).jpg"
                     }
                 ]
+            }
+        ]
+    }
+}
+```
+
+In turn if the image file is missing:
+
+```json
+{
+    "batchcomplete": true,
+    "query": {
+        "pages": [
+            {
+                "ns": 10,
+                "title": "Template:POTD/2024-08-24",
+                "missing": true
             }
         ]
     }

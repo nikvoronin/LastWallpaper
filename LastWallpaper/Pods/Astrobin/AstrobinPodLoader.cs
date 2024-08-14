@@ -17,11 +17,11 @@ namespace LastWallpaper.Pods.Astrobin;
 public sealed class AstrobinPodLoader(
     HttpClient httpClient,
     IResourceManager resourceManager )
-    : HttpPodLoader<AbinPodLatestUpdate>( httpClient, resourceManager )
+    : HttpPodLoader<AbinPodNews>( httpClient, resourceManager )
 {
     public override string Name => nameof( PodType.Astrobin ).ToLower();
 
-    protected async override Task<Result<AbinPodLatestUpdate>> FetchLatestUpdateInternalAsync(
+    protected async override Task<Result<AbinPodNews>> FetchNewsInternalAsync(
         CancellationToken ct )
     {
         var doc = new HtmlDocument();
@@ -36,7 +36,7 @@ public sealed class AstrobinPodLoader(
         var iotdInfo = iotdResult.Value;
 
         return Result.Ok(
-            new AbinPodLatestUpdate() {
+            new AbinPodNews() {
                 PubDate = iotdInfo.PubDate,
                 Document = doc,
                 IotdDescription = iotdInfo
@@ -44,11 +44,10 @@ public sealed class AstrobinPodLoader(
     }
 
     protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
-        AbinPodLatestUpdate latestUpdate,
-        CancellationToken ct )
+        AbinPodNews news, CancellationToken ct )
     {
-        var doc = latestUpdate.Document;
-        var iotdInfo = latestUpdate.IotdDescription;
+        var doc = news.Document;
+        var iotdInfo = news.IotdDescription;
 
         await using var streamHd =
             await _httpClient.GetStreamAsync( iotdInfo.HdPageUrl, ct );

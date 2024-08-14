@@ -11,7 +11,7 @@ public abstract class HttpPodLoader<TPodLatestUpdate>(
     HttpClient httpClient,
     IResourceManager resourceManager )
     : PodLoader<TPodLatestUpdate>( resourceManager )
-    where TPodLatestUpdate : PodLatestUpdate
+    where TPodLatestUpdate : PodNews
 {
     /// <summary>
     /// Download remote resource to local temporary file.

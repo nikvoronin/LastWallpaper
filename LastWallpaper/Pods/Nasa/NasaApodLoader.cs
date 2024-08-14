@@ -16,11 +16,11 @@ public sealed class NasaApodLoader(
     HttpClient httpClient,
     IResourceManager resourceManager,
     ApodSettings settings )
-    : HttpPodLoader<NasaApodLatestUpdate>( httpClient, resourceManager )
+    : HttpPodLoader<NasaApodNews>( httpClient, resourceManager )
 {
     public override string Name => nameof( PodType.Apod ).ToLower();
 
-    protected async override Task<Result<NasaApodLatestUpdate>> FetchLatestUpdateInternalAsync(
+    protected async override Task<Result<NasaApodNews>> FetchNewsInternalAsync(
         CancellationToken ct )
     {
         // TODO:? move throttling block to the scheduler
@@ -65,17 +65,16 @@ public sealed class NasaApodLoader(
         }
 
         return Result.Ok(
-            new NasaApodLatestUpdate() {
+            new NasaApodNews() {
                 PubDate = imageDate,
                 Description = imageInfo
             } );
     }
 
     protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
-        NasaApodLatestUpdate latestUpdate,
-        CancellationToken ct )
+        NasaApodNews news, CancellationToken ct )
     {
-        var imageInfo = latestUpdate.Description;
+        var imageInfo = news.Description;
 
         var cachedFilenameResult =
             await DownloadFileAsync( imageInfo.HdImageUrl!, ct );
@@ -92,7 +91,7 @@ public sealed class NasaApodLoader(
         var result = new PodUpdateResult() {
             PodName = Name,
             Filename = cachedFilenameResult.Value,
-            Created = latestUpdate.PubDate,
+            Created = news.PubDate,
             Title = imageInfo.Title,
             Copyright = owner,
         };

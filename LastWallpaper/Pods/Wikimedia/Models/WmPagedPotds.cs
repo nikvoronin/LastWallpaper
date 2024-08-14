@@ -11,6 +11,10 @@ public sealed class WmPagedPotds
     [JsonPropertyName( "title" )]
     public required string Title { get; init; }
 
+    [JsonPropertyName( "missing" )]
+    [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
+    public bool? Missing { get; init; }
+
     [JsonPropertyName( "images" )]
     [JsonIgnore( Condition = JsonIgnoreCondition.WhenWritingNull )]
     public IReadOnlyList<WmImageFilename>? Images { get; init; }

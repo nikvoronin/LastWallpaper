@@ -2,7 +2,7 @@
 
 namespace LastWallpaper.Pods.Bing.Models;
 
-public class BingPodLatestUpdate : PodLatestUpdate
+public sealed class BingPodNews : PodNews
 {
     public required string LastImageUrl { get; init; }
     public string? Title { get; init; }

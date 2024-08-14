@@ -15,11 +15,11 @@ public sealed class ElementyPodLoader(
     HttpClient httpClient,
     IResourceManager resourceManager,
     IFeedReader<RssFeed> feedReader )
-    : HttpPodLoader<ElementyPodLatestUpdate>( httpClient, resourceManager )
+    : HttpPodLoader<ElementyPodNews>( httpClient, resourceManager )
 {
     public override string Name => nameof( PodType.Elementy ).ToLower();
 
-    protected async override Task<Result<ElementyPodLatestUpdate>> FetchLatestUpdateInternalAsync(
+    protected async override Task<Result<ElementyPodNews>> FetchNewsInternalAsync(
         CancellationToken ct )
     {
         var feedResult =
@@ -35,17 +35,16 @@ public sealed class ElementyPodLoader(
                 $"The media type '{lastItem.Enclosure.Type}' is not supported." );
 
         return Result.Ok(
-            new ElementyPodLatestUpdate() {
+            new ElementyPodNews() {
                 PubDate = lastItem.PubDate.Date,
                 Item = lastItem
             } );
     }
 
     protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
-        ElementyPodLatestUpdate latestUpdate,
-        CancellationToken ct )
+        ElementyPodNews news, CancellationToken ct )
     {
-        var lastItem = latestUpdate.Item;
+        var lastItem = news.Item;
 
         var hdUrl = ConvertToHdFileUrl( lastItem.Enclosure.Url );
 

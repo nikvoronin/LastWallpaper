@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace LastWallpaper.Pods;
 
-public abstract class PodLoader<TPodLatestUpdate>(
+public abstract class PodLoader<TPodNews>(
     IResourceManager resourceManager )
     : IPotdLoader
-    where TPodLatestUpdate : PodLatestUpdate
+    where TPodNews : PodNews
 {
     public abstract string Name { get; }
 
@@ -22,15 +22,15 @@ public abstract class PodLoader<TPodLatestUpdate>(
 
         Result<PodUpdateResult> result;
         try {
-            var latestUpdate = await FetchLatestUpdateInternalAsync( ct );
-            if (latestUpdate.IsFailed) return Result.Fail( latestUpdate.Errors );
+            var newsResult = await FetchNewsInternalAsync( ct );
+            if (newsResult.IsFailed) return Result.Fail( newsResult.Errors );
 
             if (_resourceManager.PotdExists(
                 Name,
-                latestUpdate.Value.PubDate ))
+                newsResult.Value.PubDate ))
                 return Result.Fail( "Picture already known." );
 
-            result = await UpdateInternalAsync( latestUpdate.Value, ct );
+            result = await UpdateInternalAsync( newsResult.Value, ct );
         }
         catch (Exception e)
         when (e is not OperationCanceledException) {
@@ -46,9 +46,8 @@ public abstract class PodLoader<TPodLatestUpdate>(
     }
 
     protected abstract Task<Result<PodUpdateResult>> UpdateInternalAsync(
-        TPodLatestUpdate latestUpdate,
-        CancellationToken ct );
-    protected abstract Task<Result<TPodLatestUpdate>> FetchLatestUpdateInternalAsync(
+        TPodNews news, CancellationToken ct );
+    protected abstract Task<Result<TPodNews>> FetchNewsInternalAsync(
         CancellationToken ct );
 
     protected readonly IResourceManager _resourceManager = resourceManager;

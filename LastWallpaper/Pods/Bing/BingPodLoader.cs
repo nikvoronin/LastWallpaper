@@ -17,11 +17,11 @@ public sealed class BingPodLoader(
     HttpClient httpClient,
     IResourceManager resourceManager,
     BingSettings settings )
-    : HttpPodLoader<BingPodLatestUpdate>( httpClient, resourceManager )
+    : HttpPodLoader<BingPodNews>( httpClient, resourceManager )
 {
     public override string Name => nameof( PodType.Bing ).ToLower();
 
-    protected async override Task<Result<BingPodLatestUpdate>> FetchLatestUpdateInternalAsync(
+    protected async override Task<Result<BingPodNews>> FetchNewsInternalAsync(
         CancellationToken ct )
     {
         var json =
@@ -61,7 +61,7 @@ public sealed class BingPodLoader(
         }
 
         return Result.Ok(
-            new BingPodLatestUpdate() {
+            new BingPodNews() {
                 PubDate = startDate,
                 LastImageUrl = lastImageUrl,
                 Copyright = copyrights,
@@ -80,22 +80,21 @@ public sealed class BingPodLoader(
     }
 
     protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
-        BingPodLatestUpdate latestUpdate,
-        CancellationToken ct )
+        BingPodNews news, CancellationToken ct )
     {
         var cachedFilenameResult =
-            await DownloadFileAsync( latestUpdate.LastImageUrl, ct );
+            await DownloadFileAsync( news.LastImageUrl, ct );
 
         if (cachedFilenameResult.IsFailed)
             return Result.Fail(
-                $"Can not download media from {latestUpdate.LastImageUrl}." );
+                $"Can not download media from {news.LastImageUrl}." );
 
         var result = new PodUpdateResult() {
             PodName = Name,
             Filename = cachedFilenameResult.Value,
-            Created = latestUpdate.PubDate,
-            Title = latestUpdate.Title,
-            Copyright = latestUpdate.Copyright,
+            Created = news.PubDate,
+            Title = news.Title,
+            Copyright = news.Copyright,
         };
 
         return Result.Ok( result );

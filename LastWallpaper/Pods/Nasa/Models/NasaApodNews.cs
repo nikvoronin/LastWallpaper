@@ -2,7 +2,7 @@
 
 namespace LastWallpaper.Pods.Nasa.Models;
 
-public class NasaApodLatestUpdate : PodLatestUpdate
+public sealed class NasaApodNews : PodNews
 {
     public required ImageInfo Description { get; init; }
 }

@@ -15,30 +15,39 @@ namespace LastWallpaper.Pods.Wikimedia;
 public sealed class WikipediaPodLoader(
     HttpClient httpClient,
     IResourceManager resourceManager )
-    : HttpPodLoader<PodLatestUpdate>( httpClient, resourceManager )
+    : HttpPodLoader<WikipediaPodNews>( httpClient, resourceManager )
 {
     public override string Name => nameof( PodType.Wikipedia ).ToLower();
 
-    protected override Task<Result<PodLatestUpdate>> FetchLatestUpdateInternalAsync(
-        CancellationToken ct )
-        => Task.FromResult(
-            Result.Ok( new PodLatestUpdate() {
-                PubDate = DateTime.Now
-            } ) );
-
-    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
-        PodLatestUpdate latestUpdate,
+    protected async override Task<Result<WikipediaPodNews>> FetchNewsInternalAsync(
         CancellationToken ct )
     {
+        var nowDate = DateTime.Now.Date;
+
         var jsonPotdFilename =
             await _httpClient.GetFromJsonAsync<WmResponse>(
                 string.Format(
                     CultureInfo.InvariantCulture,
                     WmQueryPotdFilenameFormat,
-                    DateTime.Now.Date.ToString( "yyyy-MM-dd" ) ),
+                    nowDate.ToString( "yyyy-MM-dd" ) ),
                 ct );
 
-        var potdFilename = jsonPotdFilename?.Query.Pages[0].Images?[0].Value;
+        if (jsonPotdFilename is null
+            || (jsonPotdFilename.Query.Pages[0].Missing ?? false))
+            return Result.Fail( $"No updates for {nowDate}" );
+
+        return Result.Ok(
+            new WikipediaPodNews() {
+                PubDate = nowDate,
+                Response = jsonPotdFilename
+            } );
+
+    }
+
+    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
+        WikipediaPodNews news, CancellationToken ct )
+    {
+        var potdFilename = news.Response.Query.Pages[0].Images?[0].Value;
 
         var jsonPotdImageLink =
             await _httpClient.GetFromJsonAsync<WmResponse>(
