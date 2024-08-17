@@ -70,7 +70,7 @@ public sealed class AstrobinPodLoader(
             Filename = cachedFilenameResult.Value,
             Created = iotdInfo.PubDate,
             Title = iotdInfo.Title,
-            Copyright = iotdInfo.Author,
+            Copyright = $"© {iotdInfo.Author}",
         };
 
         return Result.Ok( result );
@@ -148,6 +148,12 @@ public sealed class AstrobinPodLoader(
             out DateTime pubDate ))
             pubDate = DateTime.Now;
 
+        var hdPageUrlFormat =
+            hdPageKeySegment
+            .Count( x => x == '/' ) > 2
+                ? HdImagePageUrlFormat
+                : HdImagePageUrlFormatZero;
+
         var iotdInfo =
             new AbinIotdDescription() {
                 Author = WebUtility.HtmlDecode( author ),
@@ -156,15 +162,18 @@ public sealed class AstrobinPodLoader(
 
                 HdPageUrl = string.Format(
                     CultureInfo.InvariantCulture,
-                    HdImagePageUrlFormat,
+                    hdPageUrlFormat,
                     hdPageKeySegment )
             };
 
         return Result.Ok( iotdInfo );
     }
 
-    private static readonly CompositeFormat HdImagePageUrlFormat =
+    private static readonly CompositeFormat HdImagePageUrlFormatZero =
         CompositeFormat.Parse( AstrobinBaseUrl + "/full{0}0/" );
+
+    private static readonly CompositeFormat HdImagePageUrlFormat =
+        CompositeFormat.Parse( AstrobinBaseUrl + "/full{0}" );
 
     private const string AstrobinIotdArchiveUrl = AstrobinBaseUrl + "/iotd/archive/";
     private const string AstrobinBaseUrl = "https://www.astrobin.com";

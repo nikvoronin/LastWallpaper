@@ -11,7 +11,7 @@ It also has [RSS](https://www.astrobin.com/iotd/rss/iotd) and [Atom](https://www
 
 > https://www.astrobin.com/iotd/archive/
 
-Contains several `figure` elements which contains image info.
+Contains several `figure` elements which contains image info. See next example:
 
 ```html
 ...
@@ -43,6 +43,10 @@ Contains several `figure` elements which contains image info.
 The key for a page with full image is `<figure><a href="`. Let's `FIGURE_HREF` = /pcdsqs/
 
 So the result url is: https://www.astrobin.com/full/pcdsqs/0/
+
+If there are revisions of image, the key `FIGURE_HREF` may has a predefined tail. For example:  `FIGURE_HREF` = /pcdsqs/C/
+
+Thus the link becomes: https://www.astrobin.com/full/pcdsqs/C/
 
 ### Preview image + Title + Author
 
