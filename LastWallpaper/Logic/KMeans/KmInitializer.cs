@@ -9,7 +9,7 @@ namespace LastWallpaper.Logic.KMeans;
 public class KmInitializer : IKmInitializer
 {
     /// <summary>
-    /// Initialize first iteration by choosing random Centroid volume 
+    /// Initialize first iteration by choosing random Centroid volume
     /// within the given array of volume.
     /// </summary>
     /// <param name="volume">

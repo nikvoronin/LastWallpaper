@@ -9,8 +9,8 @@ namespace LastWallpaper.Logic.KMeans;
 public class KppInitializer : IKmInitializer
 {
     /// <summary>
-    /// Initialize first iteration by choosing first Centroid point at random 
-    /// and next ones with the KMeans++ algorithm.
+    /// Initialize first iteration by choosing first Centroid point at random
+    /// and next ones with the K-Means++ algorithm.
     /// </summary>
     /// <param name="volume">
     /// Vector volume.

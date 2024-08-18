@@ -38,7 +38,7 @@ public class KMeansProcessor(IKmInitializer clusterInitializer)
     }
 
     /// <summary>
-    /// Assign volume of the incoming array to the nodeCluster with the nearest centroid
+    /// Assign volume of the incoming array to the node clusters with the nearest centroid
     /// </summary>
     /// <param name="volume">
     /// Vector volume.
@@ -84,7 +84,7 @@ public class KMeansProcessor(IKmInitializer clusterInitializer)
             {
                 var point = volume[px];
 
-                // TODO? extract distance calculator into class
+                // TODO? extract distance calculator into a class
                 var minDistance =
                     Vector3.Distance(
                         localCentroids[0],
