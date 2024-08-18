@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 
-namespace LastWallpaper.Logic.Classifiers.KMeans;
+namespace LastWallpaper.Logic.KMeans;
 
 /// <summary>
 /// Vector cluster for the K-Means algorithm.

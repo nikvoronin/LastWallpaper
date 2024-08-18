@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace LastWallpaper.Logic.Classifiers.KMeans;
+namespace LastWallpaper.Logic.KMeans;
 
 /// <summary>
 /// KMeans++ cluster initializer.

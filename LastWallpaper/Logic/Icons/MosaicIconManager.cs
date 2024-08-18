@@ -1,5 +1,5 @@
 ﻿using Colourful;
-using LastWallpaper.Logic.Classifiers.KMeans;
+using LastWallpaper.Logic.KMeans;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -36,7 +36,7 @@ public class MosaicIconManager : IconManager
         }
 
         var clusters =
-            _classifier.Compute( points, SqrtNumTiles * SqrtNumTiles );
+            _clusterizer.Compute( points, SqrtNumTiles * SqrtNumTiles );
 
         using var result =
             new Bitmap(
@@ -64,7 +64,7 @@ public class MosaicIconManager : IconManager
         return Icon.FromHandle( result.GetHicon() );
     }
 
-    private readonly KMeansClassifier _classifier = new( new KppInitializer() );
+    private readonly KMeansProcessor _clusterizer = new( new KppInitializer() );
 
     private readonly IColorConverter<RGBColor, LabColor> _rgb2lab =
         new ConverterBuilder()
