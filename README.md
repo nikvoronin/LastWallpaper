@@ -111,6 +111,13 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
 
 ## Release Notes
 
+### 4.8.18
+
+- Add mosaic tray icon.
+- Add AstroBin - home of astrophotography.
+- Add configurable wallpaper fit parameter.
+- Add Elementy (science picture of the day).
+
 ### 4.6.24
 
 - Add application settings file.
