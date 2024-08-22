@@ -5,6 +5,7 @@ using LastWallpaper.Pods.Astrobin;
 using LastWallpaper.Pods.Bing;
 using LastWallpaper.Pods.Elementy;
 using LastWallpaper.Pods.Nasa;
+using LastWallpaper.Pods.Natgeotv;
 using LastWallpaper.Pods.Wikimedia;
 using System.Net.Http;
 
@@ -45,6 +46,11 @@ public static class PodsFactory
 
             PodType.Astrobin =>
                 new AstrobinPodLoader(
+                    client,
+                    resourceManager ),
+
+            PodType.Natgeotv =>
+                new NatgeotvPodLoader(
                     client,
                     resourceManager ),
 

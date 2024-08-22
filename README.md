@@ -18,7 +18,7 @@ __System requirements:__ Windows 10 x64, .NET Desktop Runtime 8.0.
 
 22 Aug 2024
 
-- Add NatGeoTV POD description.
+- Add NatGeoTV POD (with [pod description](/docs/natgeotv_aug-2024.md) available).
 
 Not so far
 
