@@ -1,7 +1,7 @@
 # The Last Wallpaper
 
 Picture Of The Day (POTD) on desktop.\
--- Bing, NASA, Wikipedia, Elementy, AstroBin
+-- Bing, NASA, Wikipedia, Elementy, AstroBin, NatGeoTV
 
 - [What's New](#whats-new)
 - [Documentation](#documentation)
@@ -16,24 +16,22 @@ __System requirements:__ Windows 10 x64, .NET Desktop Runtime 8.0.
 
 ## What's New
 
-12 Aug 2024
+22 Aug 2024
+
+- Add NatGeoTV POD description.
+
+Not so far
 
 - Add mosaic tray icon.
 - Add AstroBin - home of astrophotography.
 - Add configurable wallpaper fit parameter.
 - Add Elementy (science picture of the day).
 
-Not so far
-
-- Add application settings file.
-- Remember the last wallpaper and recall it after the app restarts.
-- Wikipedia POTD loader added.
-- NASA APOD loader added.
-
 See also [Release Notes](#release-notes) chapter.
 
 ## Documentation
 
+- [NatGeoTV Canada](/docs/natgeotv_aug-2024.md). Photo of the day - National Geographic Channel - Canada.
 - [AstroBin IOTD](/docs/astrobin_aug-2024.md) (Image Of The Day). Home of astrophotography.
 - [Elementy RSS Feed](/docs/elementy_aug-2024.md). Science picture of the day.
 - [Wikipedia POTD](/docs/wikipedia_jun-2024.md) (Picture Of The Day).
@@ -43,7 +41,6 @@ See also [Release Notes](#release-notes) chapter.
 - [NASA Open APIs Portal](https://api.nasa.gov/), free but limited with 50 requests per IP address per day.
 - [Windows 10 Toast Notifications](/docs/win10_toast_notifications.md)
 - [Windows Desktop Wallpaper](/docs/windows_desktop_wallpaper.md)
-- // TODO: https://www.natgeotv.com/ca/photo-of-the-day
 
 ## Application Settings
 
@@ -72,6 +69,7 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
   - __apod__ - NASA APOD
   - __elementy__ - Elementy (science picture of the day).
   - __astrobin__ - AstroBin IOTD.
+  - __natgeotv__ - NatGeoTV POD.
 - __bing__
     - __resolution__ - resolution of the picture:
         - __UltraHD__ or __UHD__ - 4K, 3840x2160 px
