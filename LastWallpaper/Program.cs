@@ -74,7 +74,8 @@ internal static class Program
 #else
             new PodType[] {
                 PodType.Bing, PodType.Apod, PodType.Wikipedia,
-                PodType.Elementy, PodType.Astrobin
+                PodType.Elementy, PodType.Astrobin,
+                PodType.Natgeotv
             }
 #endif
             .Select( podType =>
@@ -217,7 +218,7 @@ internal static class Program
         };
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.8.18";
+    public const string AppVersion = "4.8.22";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
     private const string CacheFolderName = "cache";
