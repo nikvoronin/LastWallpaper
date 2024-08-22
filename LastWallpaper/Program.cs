@@ -69,14 +69,10 @@ internal static class Program
                 appFolder, albumFolder, cacheFolder );
 
         var activePods =
-#if !DEBUG
-            settings.ActivePods.Distinct()
+#if DEBUG
+            Enum.GetValues<PodType>()
 #else
-            new PodType[] {
-                PodType.Bing, PodType.Apod, PodType.Wikipedia,
-                PodType.Elementy, PodType.Astrobin,
-                PodType.Natgeotv
-            }
+            settings.ActivePods.Distinct()
 #endif
             .Select( podType =>
                 PodsFactory.Create(

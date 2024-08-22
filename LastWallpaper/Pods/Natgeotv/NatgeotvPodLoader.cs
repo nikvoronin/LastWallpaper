@@ -26,18 +26,18 @@ public sealed class NatgeotvPodLoader(
         var doc = new HtmlDocument();
 
         await using var stream =
-            await _httpClient.GetStreamAsync( NatgeotvBaseUrl, ct );
+            await _httpClient.GetStreamAsync( NatgeotvCaPotdUrl, ct );
         doc.Load( stream );
 
-        var iotdResult = ExtractPotdInfo( doc.DocumentNode );
-        if (iotdResult.IsFailed) return Result.Fail( iotdResult.Errors );
+        var potdResult = ExtractPotdInfo( doc.DocumentNode );
+        if (potdResult.IsFailed) return Result.Fail( potdResult.Errors );
 
-        var iotdInfo = iotdResult.Value;
+        var potdInfo = potdResult.Value;
 
         return Result.Ok(
             new NatgeotvPodNews() {
-                PubDate = iotdInfo.PubDate,
-                PodDescription = iotdInfo
+                PubDate = potdInfo.PubDate,
+                PodDescription = potdInfo
             } );
     }
 
@@ -96,14 +96,14 @@ public sealed class NatgeotvPodLoader(
                 x.HasClass( "ItemPhotographer" ) )
             ?.InnerText ?? string.Empty;
 
-        var dateParts =
+        var rawDate =
             podItemNode
             .Descendants( "span" ).FirstOrDefault( x =>
                 x.HasClass( "ItemDate" ) )
             ?.InnerText;
 
         if (!DateTime.TryParseExact(
-                dateParts,
+                rawDate,
                 "dd MMMM yyyy",
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
@@ -121,5 +121,5 @@ public sealed class NatgeotvPodLoader(
         return Result.Ok( potdInfo );
     }
 
-    private const string NatgeotvBaseUrl = "https://www.natgeotv.com/ca/photo-of-the-day";
+    private const string NatgeotvCaPotdUrl = "https://www.natgeotv.com/ca/photo-of-the-day";
 }
