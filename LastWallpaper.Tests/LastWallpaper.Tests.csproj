@@ -39,6 +39,9 @@
     <None Update="samples\www.natgeotv.com_ca_photo-of-the-day.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="samples\www.copernicus.eu_en_media_image-day.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

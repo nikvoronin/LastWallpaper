@@ -31,6 +31,7 @@ See also [Release Notes](#release-notes) chapter.
 
 ## Documentation
 
+- [Copernicus](/docs/copernicus_aug-2024.md). The daily updated gallery containing the newest Copernicus Sentinel images.
 - [NatGeoTV Canada](/docs/natgeotv_aug-2024.md). Photo of the day - National Geographic Channel - Canada.
 - [AstroBin IOTD](/docs/astrobin_aug-2024.md) (Image Of The Day). Home of astrophotography.
 - [Elementy RSS Feed](/docs/elementy_aug-2024.md). Science picture of the day.
