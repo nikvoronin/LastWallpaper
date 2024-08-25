@@ -43,6 +43,8 @@ See also [Release Notes](#release-notes) chapter.
 - [NASA Open APIs Portal](https://api.nasa.gov/), free but limited with 50 requests per IP address per day.
 - [Windows 10 Toast Notifications](/docs/win10_toast_notifications.md)
 - [Windows Desktop Wallpaper](/docs/windows_desktop_wallpaper.md)
+- TODO: nasa.gov/image-of-the-day/
+- TODO? flickr.com/groups/imageoftheday/pool/
 
 ## Application Settings
 
