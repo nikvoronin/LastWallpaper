@@ -3,6 +3,7 @@ using LastWallpaper.Models;
 using LastWallpaper.Models.Rss;
 using LastWallpaper.Pods.Astrobin;
 using LastWallpaper.Pods.Bing;
+using LastWallpaper.Pods.Copernicus;
 using LastWallpaper.Pods.Elementy;
 using LastWallpaper.Pods.Nasa;
 using LastWallpaper.Pods.Natgeotv;
@@ -51,6 +52,11 @@ public static class PodsFactory
 
             PodType.Natgeotv =>
                 new NatgeotvPodLoader(
+                    client,
+                    resourceManager ),
+
+            PodType.Copernicus =>
+                new CopernicusPodLoader(
                     client,
                     resourceManager ),
 

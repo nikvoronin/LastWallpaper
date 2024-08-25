@@ -2,7 +2,6 @@
 using HtmlAgilityPack;
 using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
-using LastWallpaper.Pods.Astrobin.Models;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -14,46 +13,25 @@ using System.Threading.Tasks;
 
 namespace LastWallpaper.Pods.Astrobin;
 
-public sealed class AstrobinPodLoader(
+public class AstrobinPodLoader(
     HttpClient httpClient,
     IResourceManager resourceManager )
-    : HttpPodLoader<AbinPodNews>( httpClient, resourceManager )
+    : HtmlPodLoader<HtmlPodNews>(
+        httpClient,
+        new( AstrobinIotdArchiveUrl ),
+        resourceManager )
 {
     public override string Name => nameof( PodType.Astrobin ).ToLower();
 
-    protected async override Task<Result<AbinPodNews>> FetchNewsInternalAsync(
-        CancellationToken ct )
-    {
-        var doc = new HtmlDocument();
-
-        await using var stream =
-            await _httpClient.GetStreamAsync( AstrobinIotdArchiveUrl, ct );
-        doc.Load( stream );
-
-        var iotdResult = ExtractIotdInfo( doc.DocumentNode );
-        if (iotdResult.IsFailed) return Result.Fail( iotdResult.Errors );
-
-        var iotdInfo = iotdResult.Value;
-
-        return Result.Ok(
-            new AbinPodNews() {
-                PubDate = iotdInfo.PubDate,
-                Document = doc,
-                IotdDescription = iotdInfo
-            } );
-    }
-
     protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
-        AbinPodNews news, CancellationToken ct )
+        HtmlPodNews news, CancellationToken ct )
     {
-        var doc = news.Document;
-        var iotdInfo = news.IotdDescription;
-
         await using var streamHd =
-            await _httpClient.GetStreamAsync( iotdInfo.HdPageUrl, ct );
-        doc.Load( streamHd );
+            await _httpClient.GetStreamAsync( news.Url, ct );
+        _doc.Load( streamHd );
 
-        var hdImageResult = ExtractHdImageUrl( doc.DocumentNode );
+
+        var hdImageResult = ExtractHdImageUrl( _doc.DocumentNode );
         if (hdImageResult.IsFailed) return Result.Fail( hdImageResult.Errors );
 
         var hdImageUrl = hdImageResult.Value;
@@ -61,22 +39,23 @@ public sealed class AstrobinPodLoader(
         var cachedFilenameResult =
             await DownloadFileAsync( hdImageUrl, ct );
 
-        if (cachedFilenameResult.IsFailed)
+        if (cachedFilenameResult.IsFailed) {
             return Result.Fail(
                 $"Can not download media from {hdImageUrl}." );
+        }
 
         var result = new PodUpdateResult() {
             PodName = Name,
             Filename = cachedFilenameResult.Value,
-            Created = iotdInfo.PubDate,
-            Title = iotdInfo.Title,
-            Copyright = $"© {iotdInfo.Author}",
+            Created = news.PubDate,
+            Title = news.Title,
+            Copyright = $"© {news.Author}",
         };
 
         return Result.Ok( result );
     }
 
-    public static Result<string> ExtractHdImageUrl( HtmlNode documentNode )
+    protected static Result<string> ExtractHdImageUrl( HtmlNode documentNode )
     {
         var hdImageUrl =
             documentNode
@@ -90,7 +69,7 @@ public sealed class AstrobinPodLoader(
             : Result.Ok( hdImageUrl );
     }
 
-    public static Result<AbinIotdDescription> ExtractIotdInfo( HtmlNode documentNode )
+    protected override Result<HtmlPodNews> ExtractHtmlDescription( HtmlNode documentNode )
     {
         var hdPageKeySegment =
             documentNode
@@ -154,19 +133,17 @@ public sealed class AstrobinPodLoader(
                 ? HdImagePageUrlFormat
                 : HdImagePageUrlFormatZero;
 
-        var iotdInfo =
-            new AbinIotdDescription() {
-                Author = WebUtility.HtmlDecode( author ),
-                Title = WebUtility.HtmlDecode( title ),
+        return Result.Ok(
+            new HtmlPodNews() {
                 PubDate = pubDate,
-
-                HdPageUrl = string.Format(
+                Title = WebUtility.HtmlDecode( title ),
+                Author = WebUtility.HtmlDecode( author ),
+                Url = string.Format(
                     CultureInfo.InvariantCulture,
                     hdPageUrlFormat,
                     hdPageKeySegment )
-            };
+            } );
 
-        return Result.Ok( iotdInfo );
     }
 
     private static readonly CompositeFormat HdImagePageUrlFormatZero =

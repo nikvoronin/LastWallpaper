@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace LastWallpaper.Pods.Natgeotv.Models;
+namespace LastWallpaper.Pods.Copernicus.Models;
 
-public class NatgeotvPotdDescription
+public class CopernicusPodDescription
 {
     public required string Url { get; init; }
     public required string Author { get; init; }

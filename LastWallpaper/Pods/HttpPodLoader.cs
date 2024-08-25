@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace LastWallpaper.Pods;
 
-public abstract class HttpPodLoader<TPodLatestUpdate>(
+public abstract class HttpPodLoader<TPodNews>(
     HttpClient httpClient,
     IResourceManager resourceManager )
-    : PodLoader<TPodLatestUpdate>( resourceManager )
-    where TPodLatestUpdate : PodNews
+    : PodLoader<TPodNews>( resourceManager )
+    where TPodNews : PodNews
 {
     /// <summary>
     /// Download remote resource to local temporary file.

@@ -2,6 +2,7 @@
 using HtmlAgilityPack;
 using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
+using LastWallpaper.Pods.Copernicus.Models;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -10,22 +11,22 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LastWallpaper.Pods.Natgeotv;
+namespace LastWallpaper.Pods.Copernicus;
 
-public sealed class NatgeotvPodLoader(
+public sealed class CopernicusPodLoader(
     HttpClient httpClient,
     IResourceManager resourceManager )
-    : HttpPodLoader<HtmlPodNews>( httpClient, resourceManager )
+    : HttpPodLoader<CopernicusPodNews>( httpClient, resourceManager )
 {
-    public override string Name => nameof( PodType.Natgeotv ).ToLower();
+    public override string Name => nameof( PodType.Copernicus ).ToLower();
 
-    protected async override Task<Result<HtmlPodNews>> FetchNewsInternalAsync(
+    protected async override Task<Result<CopernicusPodNews>> FetchNewsInternalAsync(
         CancellationToken ct )
     {
         var doc = new HtmlDocument();
 
         await using var stream =
-            await _httpClient.GetStreamAsync( NatgeotvCaPotdUrl, ct );
+            await _httpClient.GetStreamAsync( CopernicusImageDayUrl, ct );
         doc.Load( stream );
 
         var potdResult = ExtractPotdInfo( doc.DocumentNode );
@@ -33,13 +34,17 @@ public sealed class NatgeotvPodLoader(
 
         var potdInfo = potdResult.Value;
 
-        return potdResult;
+        return Result.Ok(
+            new CopernicusPodNews() {
+                PubDate = potdInfo.PubDate,
+                PodDescription = potdInfo
+            } );
     }
 
     protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
-        HtmlPodNews news, CancellationToken ct )
+        CopernicusPodNews news, CancellationToken ct )
     {
-        var imageUrl = news.Url;
+        var imageUrl = news.PodDescription.Url;
 
         var cachedFilenameResult =
             await DownloadFileAsync( imageUrl, ct );
@@ -53,14 +58,14 @@ public sealed class NatgeotvPodLoader(
             PodName = Name,
             Filename = cachedFilenameResult.Value,
             Created = news.PubDate,
-            Title = news.Title,
-            Copyright = $"© {news.Author}",
+            Title = news.PodDescription.Title,
+            Copyright = $"© {news.PodDescription.Author}",
         };
 
         return Result.Ok( result );
     }
 
-    public static Result<HtmlPodNews> ExtractPotdInfo( HtmlNode documentNode )
+    public static Result<CopernicusPodDescription> ExtractPotdInfo( HtmlNode documentNode )
     {
         var podItemNode =
             documentNode
@@ -106,7 +111,7 @@ public sealed class NatgeotvPodLoader(
             pubDate = DateTime.Now;
 
         var potdInfo =
-            new HtmlPodNews() {
+            new CopernicusPodDescription() {
                 Author = WebUtility.HtmlDecode( author ),
                 Title = WebUtility.HtmlDecode( title ),
                 PubDate = pubDate,
@@ -116,5 +121,5 @@ public sealed class NatgeotvPodLoader(
         return Result.Ok( potdInfo );
     }
 
-    private const string NatgeotvCaPotdUrl = "https://www.natgeotv.com/ca/photo-of-the-day";
+    private const string CopernicusImageDayUrl = "https://www.copernicus.eu/en/media/image-day";
 }

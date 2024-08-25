@@ -1,7 +1,7 @@
 using FluentAssertions;
 using HtmlAgilityPack;
+using LastWallpaper.Models;
 using LastWallpaper.Pods.Natgeotv;
-using LastWallpaper.Pods.Natgeotv.Models;
 
 namespace LastWallpaper.Tests.Pods.Natgeotv;
 
@@ -12,7 +12,7 @@ public class NatgeotvPodLoaderTests
     {
         // Arrange
         var expected =
-            new NatgeotvPotdDescription() {
+            new HtmlPodNews() {
                 Author = "Blink Films UK",
                 Title = "Aerospace engineer Sophie Harker looks at Apollo CGI. This is from Disaster Autopsy.",
                 PubDate = new DateTime( 2024, 8, 22 ),
