@@ -2,7 +2,6 @@
 using HtmlAgilityPack;
 using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
-using LastWallpaper.Pods.Copernicus.Models;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -16,35 +15,18 @@ namespace LastWallpaper.Pods.Copernicus;
 public sealed class CopernicusPodLoader(
     HttpClient httpClient,
     IResourceManager resourceManager )
-    : HttpPodLoader<CopernicusPodNews>( httpClient, resourceManager )
+    : HtmlPodLoader<HtmlPodNews>(
+        httpClient,
+        new( CopernicusImageDayUrl ),
+        resourceManager )
 {
     public override string Name => nameof( PodType.Copernicus ).ToLower();
 
-    protected async override Task<Result<CopernicusPodNews>> FetchNewsInternalAsync(
+    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
+        HtmlPodNews news,
         CancellationToken ct )
     {
-        var doc = new HtmlDocument();
-
-        await using var stream =
-            await _httpClient.GetStreamAsync( CopernicusImageDayUrl, ct );
-        doc.Load( stream );
-
-        var potdResult = ExtractPotdInfo( doc.DocumentNode );
-        if (potdResult.IsFailed) return Result.Fail( potdResult.Errors );
-
-        var potdInfo = potdResult.Value;
-
-        return Result.Ok(
-            new CopernicusPodNews() {
-                PubDate = potdInfo.PubDate,
-                PodDescription = potdInfo
-            } );
-    }
-
-    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
-        CopernicusPodNews news, CancellationToken ct )
-    {
-        var imageUrl = news.PodDescription.Url;
+        var imageUrl = news.Url;
 
         var cachedFilenameResult =
             await DownloadFileAsync( imageUrl, ct );
@@ -58,68 +40,88 @@ public sealed class CopernicusPodLoader(
             PodName = Name,
             Filename = cachedFilenameResult.Value,
             Created = news.PubDate,
-            Title = news.PodDescription.Title,
-            Copyright = $"© {news.PodDescription.Author}",
+            Title = news.Title,
+            Copyright = $"© {news.Author}",
         };
 
         return Result.Ok( result );
     }
 
-    public static Result<CopernicusPodDescription> ExtractPotdInfo( HtmlNode documentNode )
+    protected override Result<HtmlPodNews> ExtractHtmlDescription( HtmlNode rootNode )
     {
-        var podItemNode =
-            documentNode
-            .Descendants( "li" ).FirstOrDefault( x =>
-                x.HasClass( "PODItem" ) );
+        var articleNode =
+            rootNode
+            .Descendants( "article" ).FirstOrDefault();
 
-        if (podItemNode is null)
-            return Result.Fail( "Can not find pod item node." );
+        if (articleNode is null) return Result.Fail( "Can not find pod item node." );
 
-        var imageUrl =
-            podItemNode
-            .Descendants( "img" ).FirstOrDefault()
+        var imageNode =
+            articleNode
+            .Descendants( "img" ).FirstOrDefault();
+
+        var imageUrlPartsRaw =
+            imageNode
             ?.Attributes["src"]
             ?.Value;
 
-        if (string.IsNullOrWhiteSpace( imageUrl ))
-            return Result.Fail( "Can not find url of the last image." );
+        if (imageUrlPartsRaw is null) return Result.Fail( "Can not find url of the last image." );
+
+        var urlParts = new Uri( CopernicusBaseUrl + imageUrlPartsRaw );
+
+        var imageUrl =
+            CopernicusSystemFilesUrl + "/"
+            + string.Concat( urlParts.Segments[^3..] );
+
+        var tags =
+            string.Join( " ∙ ",
+                articleNode
+                .Descendants( "div" )
+                .Where( x =>
+                    x.HasClass( "search-tag-btn" )
+                    && !string.IsNullOrWhiteSpace( x.InnerText ) )
+                .Select( n =>
+                    n.InnerText
+                    .Trim()
+                    .ReplaceLineEndings() )
+                .ToList()
+            );
+
+        tags =
+            string.IsNullOrWhiteSpace( tags ) ? string.Empty
+            : Environment.NewLine + tags;
 
         var title =
-            podItemNode
-            .Descendants( "div" ).FirstOrDefault( x =>
-                x.HasClass( "ItemDescription" ) )
-            ?.InnerText ?? string.Empty; // TODO? should we try to get title from img.alt
+            (
+                imageNode
+                ?.Attributes["alt"]
+                ?.Value
+                ?? string.Empty // TODO? should we try to get title from H4 element
+            ) + tags;
 
-        var author =
-            podItemNode
-            .Descendants( "div" ).FirstOrDefault( x =>
-                x.HasClass( "ItemPhotographer" ) )
-            ?.InnerText ?? string.Empty;
+        var dateTimeRaw =
+            articleNode
+            .Descendants( "time" ).FirstOrDefault()
+            ?.Attributes["datetime"]
+            ?.Value;
 
-        var rawDate =
-            podItemNode
-            .Descendants( "span" ).FirstOrDefault( x =>
-                x.HasClass( "ItemDate" ) )
-            ?.InnerText;
-
-        if (!DateTime.TryParseExact(
-                rawDate,
-                "dd MMMM yyyy",
+        if (!DateTime.TryParse(
+                dateTimeRaw,
                 CultureInfo.InvariantCulture,
-                DateTimeStyles.None,
                 out var pubDate ))
             pubDate = DateTime.Now;
 
-        var potdInfo =
-            new CopernicusPodDescription() {
-                Author = WebUtility.HtmlDecode( author ),
+        var podNews =
+            new HtmlPodNews() {
+                Author = "www.copernicus.eu",
                 Title = WebUtility.HtmlDecode( title ),
                 PubDate = pubDate,
                 Url = imageUrl
             };
 
-        return Result.Ok( potdInfo );
+        return Result.Ok( podNews );
     }
 
-    private const string CopernicusImageDayUrl = "https://www.copernicus.eu/en/media/image-day";
+    private const string CopernicusBaseUrl = "https://www.copernicus.eu";
+    private const string CopernicusImageDayUrl = CopernicusBaseUrl + "/en/media/image-day";
+    private const string CopernicusSystemFilesUrl = CopernicusBaseUrl + "/system/files";
 }
