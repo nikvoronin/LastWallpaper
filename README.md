@@ -1,7 +1,7 @@
 # The Last Wallpaper
 
 Picture Of The Day (POTD) on desktop.\
--- Bing, NASA, Wikipedia, Elementy, AstroBin, NatGeoTV
+-- Bing, NASA, Wikipedia, Elementy, AstroBin, NatGeoTV, Copernicus
 
 - [What's New](#whats-new)
 - [Documentation](#documentation)
