@@ -12,29 +12,15 @@ using System.Threading.Tasks;
 
 namespace LastWallpaper.Pods.Natgeotv;
 
-public sealed class NatgeotvPodLoader(
+public class NatgeotvPodLoader(
     HttpClient httpClient,
     IResourceManager resourceManager )
-    : HttpPodLoader<HtmlPodNews>( httpClient, resourceManager )
+    : HtmlPodLoader<HtmlPodNews>(
+        httpClient,
+        new( NatgeotvCaPotdUrl ),
+        resourceManager )
 {
     public override string Name => nameof( PodType.Natgeotv ).ToLower();
-
-    protected async override Task<Result<HtmlPodNews>> FetchNewsInternalAsync(
-        CancellationToken ct )
-    {
-        var doc = new HtmlDocument();
-
-        await using var stream =
-            await _httpClient.GetStreamAsync( NatgeotvCaPotdUrl, ct );
-        doc.Load( stream );
-
-        var potdResult = ExtractPotdInfo( doc.DocumentNode );
-        if (potdResult.IsFailed) return Result.Fail( potdResult.Errors );
-
-        var potdInfo = potdResult.Value;
-
-        return potdResult;
-    }
 
     protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
         HtmlPodNews news, CancellationToken ct )
@@ -60,10 +46,10 @@ public sealed class NatgeotvPodLoader(
         return Result.Ok( result );
     }
 
-    public static Result<HtmlPodNews> ExtractPotdInfo( HtmlNode documentNode )
+    protected override Result<HtmlPodNews> ExtractHtmlDescription( HtmlNode rootNode )
     {
         var podItemNode =
-            documentNode
+            rootNode
             .Descendants( "li" ).FirstOrDefault( x =>
                 x.HasClass( "PODItem" ) );
 

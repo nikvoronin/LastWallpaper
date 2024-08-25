@@ -1,7 +1,10 @@
 using FluentAssertions;
+using FluentResults;
 using HtmlAgilityPack;
+using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using LastWallpaper.Pods.Natgeotv;
+using Moq;
 
 namespace LastWallpaper.Tests.Pods.Natgeotv;
 
@@ -24,8 +27,13 @@ public class NatgeotvPodLoaderTests
         doc.Load( stream );
         var docNode = doc.DocumentNode;
 
+        var pod =
+            new TestNatgeotvPodLoader(
+                Mock.Of<HttpClient>(),
+                Mock.Of<IResourceManager>() );
+
         // Act
-        var actual = NatgeotvPodLoader.ExtractPotdInfo( docNode );
+        var actual = pod.TestExtractHtmlDescription( docNode );
 
         // Assert
         actual.Should().NotBeNull();
@@ -38,4 +46,15 @@ public class NatgeotvPodLoaderTests
 
     public const string _htmlPodPageFileName =
         "./samples/www.natgeotv.com_ca_photo-of-the-day.html";
+}
+
+public class TestNatgeotvPodLoader(
+    HttpClient httpClient,
+    IResourceManager resourceManager )
+    : NatgeotvPodLoader(
+        httpClient,
+        resourceManager )
+{
+    public Result<HtmlPodNews> TestExtractHtmlDescription( HtmlNode documentNode ) =>
+        ExtractHtmlDescription( documentNode );
 }

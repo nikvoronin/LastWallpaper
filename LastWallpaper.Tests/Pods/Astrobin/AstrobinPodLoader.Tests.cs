@@ -79,13 +79,13 @@ public class AstrobinPodLoaderTests
         "./samples/www.astrobin.com-full-FIGURE_HREF-0.html";
 }
 
-public class TestAstrobinPodLoader : AstrobinPodLoader
+public class TestAstrobinPodLoader(
+    HttpClient httpClient,
+    IResourceManager resourceManager )
+    : AstrobinPodLoader(
+        httpClient,
+        resourceManager )
 {
-    public TestAstrobinPodLoader( HttpClient httpClient,
-        IResourceManager resourceManager )
-        : base( httpClient, resourceManager )
-    { }
-
     public Result<HtmlPodNews> TestExtractHtmlDescription( HtmlNode documentNode ) =>
         ExtractHtmlDescription( documentNode );
 
