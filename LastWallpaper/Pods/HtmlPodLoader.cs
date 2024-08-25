@@ -33,6 +33,7 @@ public abstract class HtmlPodLoader<TPodNews>(
         return Result.Ok( podNewsResult.Value );
     }
 
-    protected readonly HtmlDocument _doc = new();
     protected readonly Uri _podNewsPage = podNewsPage;
+
+    private readonly HtmlDocument _doc = new();
 }

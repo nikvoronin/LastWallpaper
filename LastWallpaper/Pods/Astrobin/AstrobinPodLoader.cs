@@ -26,12 +26,12 @@ public class AstrobinPodLoader(
     protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
         HtmlPodNews news, CancellationToken ct )
     {
+        var doc = new HtmlDocument();
         await using var streamHd =
             await _httpClient.GetStreamAsync( news.Url, ct );
-        _doc.Load( streamHd );
+        doc.Load( streamHd );
 
-
-        var hdImageResult = ExtractHdImageUrl( _doc.DocumentNode );
+        var hdImageResult = ExtractHdImageUrl( doc.DocumentNode );
         if (hdImageResult.IsFailed) return Result.Fail( hdImageResult.Errors );
 
         var hdImageUrl = hdImageResult.Value;
@@ -55,7 +55,7 @@ public class AstrobinPodLoader(
         return Result.Ok( result );
     }
 
-    protected static Result<string> ExtractHdImageUrl( HtmlNode documentNode )
+    protected Result<string> ExtractHdImageUrl( HtmlNode documentNode )
     {
         var hdImageUrl =
             documentNode
