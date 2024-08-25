@@ -5,6 +5,7 @@ using LastWallpaper.Logic.Icons;
 using LastWallpaper.Models;
 using LastWallpaper.Pods;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -214,7 +215,7 @@ internal static class Program
         };
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.8.22";
+    public const string AppVersion = "4.8.25";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
     private const string CacheFolderName = "cache";

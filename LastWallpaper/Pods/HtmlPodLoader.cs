@@ -28,8 +28,6 @@ public abstract class HtmlPodLoader<TPodNews>(
         var podNewsResult = ExtractHtmlDescription( _doc.DocumentNode );
         if (podNewsResult.IsFailed) return Result.Fail( podNewsResult.Errors );
 
-        var iotdInfo = podNewsResult.Value;
-
         return Result.Ok( podNewsResult.Value );
     }
 
