@@ -74,6 +74,20 @@ Is the same as in `img : alt`. See [URL and Title of The Image](#url-and-title-o
     </h4>
 ```
 
+### Image Tags
+
+In additional to the image title, it is possible to get several image tags that describe image a little bit better.
+
+Every tag is contained inside `div` element with `search-tag-btn` class as an innerText.
+
+```html
+<div class="search-tag-btn">
+					Water
+				</div>								<div class="search-tag-btn">
+					Biodiversity</div><div class="search-tag-btn">Lakes</div><div class="search-tag-btn">Water Resources
+				</div>			</div>
+```
+
 ### Author
 
 Is always the `www.copernicus.eu`.

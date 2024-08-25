@@ -16,9 +16,10 @@ __System requirements:__ Windows 10 x64, .NET Desktop Runtime 8.0.
 
 ## What's New
 
-22 Aug 2024
+25 Aug 2024
 
-- Add NatGeoTV POD (with [pod description](/docs/natgeotv_aug-2024.md) available).
+- Add Copernicus POD, a gallery containing the newest Copernicus Sentinel images.
+- Add NatGeoTV POD.
 
 Not so far
 
@@ -71,6 +72,7 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
   - __elementy__ - Elementy (science picture of the day).
   - __astrobin__ - AstroBin IOTD.
   - __natgeotv__ - NatGeoTV POD.
+  - __copernicus__ - Copernicus IOTD.
 - __bing__
     - __resolution__ - resolution of the picture:
         - __UltraHD__ or __UHD__ - 4K, 3840x2160 px
