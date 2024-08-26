@@ -34,17 +34,18 @@ See also [Release Notes](#release-notes) chapter.
 
 - [Copernicus](/docs/copernicus_aug-2024.md). The daily updated gallery containing the newest Copernicus Sentinel images.
 - [NatGeoTV Canada](/docs/natgeotv_aug-2024.md). Photo of the day - National Geographic Channel - Canada.
-- [AstroBin IOTD](/docs/astrobin_aug-2024.md) (Image Of The Day). Home of astrophotography.
+- [AstroBin](/docs/astrobin_aug-2024.md). Home of astrophotography.
 - [Elementy RSS Feed](/docs/elementy_aug-2024.md). Science picture of the day.
-- [Wikipedia POTD](/docs/wikipedia_jun-2024.md) (Picture Of The Day).
-- Bing image of the day. API:
+- [Wikipedia](/docs/wikipedia_jun-2024.md). Picture Of The Day.
+- Bing image of the day API
     - [May 2024](/docs/bing_may-2024.md)
     - [Nov 2022](/docs/bing_nov-2022.md)
-- [NASA Open APIs Portal](https://api.nasa.gov/), free but limited with 50 requests per IP address per day.
+- NASA
+  - [NASA.gov](/docs/nasagov_aug-2024.md). Nasa.gov - Image of the Day.
+  - [NASA Open APIs Portal](https://api.nasa.gov/), free but limited with 50 requests per IP address per day.
 - [Windows 10 Toast Notifications](/docs/win10_toast_notifications.md)
 - [Windows Desktop Wallpaper](/docs/windows_desktop_wallpaper.md)
-- TODO: nasa.gov/image-of-the-day/
-- TODO? flickr.com/groups/imageoftheday/pool/
+- TODO? flickr.com/groups/imageoftheday/pool/ - a group with daily image posting.
 
 ## Application Settings
 
@@ -69,8 +70,8 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
   - __fill__ - stretch the image to fill the screen, cropping the image as necessary to avoid letterbox bars. This one is used as "default".
 - __active_pods__ - active pods list. Will updated in appear order. The first one with positive result become a wallpaper.
   - __bing__ - bing.com
-  - __wikipedia__ - Wikipedia POTD
-  - __apod__ - NASA APOD
+  - __wikipedia__ - Wikipedia POTD.
+  - __apod__ - NASA APOD.
   - __elementy__ - Elementy (science picture of the day).
   - __astrobin__ - AstroBin IOTD.
   - __natgeotv__ - NatGeoTV POD.
