@@ -41,8 +41,8 @@ See also [Release Notes](#release-notes) chapter.
     - [May 2024](/docs/bing_may-2024.md)
     - [Nov 2022](/docs/bing_nov-2022.md)
 - NASA
-  - [NASA.gov](/docs/nasagov_aug-2024.md). Nasa.gov - Image of the Day.
-  - [NASA Open APIs Portal](https://api.nasa.gov/), free but limited with 50 requests per IP address per day.
+  - [Image of the Day](/docs/nasagov_aug-2024.md).
+  - [Open APIs Portal](https://api.nasa.gov/), free but limited with 50 requests per IP address per day.
 - [Windows 10 Toast Notifications](/docs/win10_toast_notifications.md)
 - [Windows Desktop Wallpaper](/docs/windows_desktop_wallpaper.md)
 - TODO? flickr.com/groups/imageoftheday/pool/ - a group with daily image posting.
