@@ -32,17 +32,17 @@ See also [Release Notes](#release-notes) chapter.
 
 ## Documentation
 
-- [Copernicus](/docs/copernicus_aug-2024.md). The daily updated gallery containing the newest Copernicus Sentinel images.
-- [NatGeoTV Canada](/docs/natgeotv_aug-2024.md). Photo of the day - National Geographic Channel - Canada.
-- [AstroBin](/docs/astrobin_aug-2024.md). Home of astrophotography.
-- [Elementy RSS Feed](/docs/elementy_aug-2024.md). Science picture of the day.
-- [Wikipedia](/docs/wikipedia_jun-2024.md). Picture Of The Day.
+- [Copernicus](/docs/copernicus_aug-2024.md) - The daily updated gallery containing the newest Copernicus Sentinel images.
+- [NatGeoTV Canada](/docs/natgeotv_aug-2024.md) - Photo of the day - National Geographic Channel - Canada.
+- [AstroBin](/docs/astrobin_aug-2024.md) - Home of astrophotography.
+- [Elementy RSS Feed](/docs/elementy_aug-2024.md) - Science picture of the day.
+- [Wikipedia](/docs/wikipedia_jun-2024.md) - Picture Of The Day.
 - Bing image of the day API
     - [May 2024](/docs/bing_may-2024.md)
     - [Nov 2022](/docs/bing_nov-2022.md)
 - NASA
-  - [Image of the Day](/docs/nasagov_aug-2024.md).
-  - [Open APIs Portal](https://api.nasa.gov/), free but limited with 50 requests per IP address per day.
+  - [Image of the Day](/docs/nasagov_aug-2024.md)
+  - [Open APIs Portal](https://api.nasa.gov/) - free but limited with 50 requests per IP address per day.
 - [Windows 10 Toast Notifications](/docs/win10_toast_notifications.md)
 - [Windows Desktop Wallpaper](/docs/windows_desktop_wallpaper.md)
 - TODO? flickr.com/groups/imageoftheday/pool/ - a group with daily image posting.
