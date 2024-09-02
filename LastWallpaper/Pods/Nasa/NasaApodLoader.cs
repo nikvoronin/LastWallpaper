@@ -71,34 +71,26 @@ public sealed class NasaApodLoader(
             } );
     }
 
-    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
-        NasaApodNews news, CancellationToken ct )
+    protected override Task<Result<PotdDescription>> GetDescriptionAsync(
+        NasaApodNews news,
+        CancellationToken ct )
     {
         var imageInfo = news.Description;
-
-        var cachedFilenameResult =
-            await DownloadFileAsync( imageInfo.HdImageUrl!, ct );
-
-        if (cachedFilenameResult.IsFailed)
-            return Result.Fail(
-                $"Can not download media from {imageInfo.HdImageUrl}." );
 
         var owner =
             imageInfo.Copyright
                 ?.Trim().Replace( "\n", "" )
                 ?? "(cc) Public domain";
 
-        var result = new PodUpdateResult() {
-            PodName = Name,
-            Filename = cachedFilenameResult.Value,
-            Created = news.PubDate,
-            Title = imageInfo.Title,
-            Copyright = owner,
-        };
-
         _lastUpdateDate = DateTime.UtcNow;
 
-        return Result.Ok( result );
+        return Task.FromResult( Result.Ok(
+            new PotdDescription() {
+                Url = new Uri( imageInfo.HdImageUrl ),
+                PubDate = news.PubDate,
+                Title = imageInfo.Title,
+                Copyright = owner,
+            } ) );
     }
 
     private DateTime _lastUpdateDate = DateTime.MinValue;

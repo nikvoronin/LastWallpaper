@@ -23,8 +23,8 @@ public class AstrobinPodLoader(
 {
     public override string Name => nameof( PodType.Astrobin ).ToLower();
 
-    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
-        HtmlPodNews news, CancellationToken ct )
+    protected async override Task<Result<PotdDescription>> GetDescriptionAsync(
+        HtmlPodNews news, CancellationToken ct)
     {
         var doc = new HtmlDocument();
         await using var streamHd =
@@ -36,23 +36,13 @@ public class AstrobinPodLoader(
 
         var hdImageUrl = hdImageResult.Value;
 
-        var cachedFilenameResult =
-            await DownloadFileAsync( hdImageUrl, ct );
-
-        if (cachedFilenameResult.IsFailed) {
-            return Result.Fail(
-                $"Can not download media from {hdImageUrl}." );
-        }
-
-        var result = new PodUpdateResult() {
-            PodName = Name,
-            Filename = cachedFilenameResult.Value,
-            Created = news.PubDate,
-            Title = news.Title,
-            Copyright = $"© {news.Author}",
-        };
-
-        return Result.Ok( result );
+        return Result.Ok(
+            new PotdDescription() {
+                Url = new(hdImageUrl),
+                PubDate = news.PubDate,
+                Title = news.Title,
+                Copyright = $"© {news.Author}",
+            } );
     }
 
     protected Result<string> ExtractHdImageUrl( HtmlNode documentNode )
@@ -69,7 +59,7 @@ public class AstrobinPodLoader(
             : Result.Ok( hdImageUrl );
     }
 
-    protected override Result<HtmlPodNews> ExtractHtmlDescription( HtmlNode documentNode )
+    protected override Result<HtmlPodNews> FindNews( HtmlNode documentNode )
     {
         var hdPageKeySegment =
             documentNode

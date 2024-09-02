@@ -16,7 +16,7 @@ public abstract class HtmlPodLoader<TPodNews>(
     : HttpPodLoader<TPodNews>( httpClient, resourceManager )
     where TPodNews : PodNews
 {
-    protected abstract Result<TPodNews> ExtractHtmlDescription( HtmlNode rootNode );
+    protected abstract Result<TPodNews> FindNews( HtmlNode rootNode );
 
     protected async override Task<Result<TPodNews>> FetchNewsInternalAsync(
         CancellationToken ct )
@@ -25,7 +25,7 @@ public abstract class HtmlPodLoader<TPodNews>(
             await _httpClient.GetStreamAsync( _podNewsPage, ct );
         _doc.Load( stream );
 
-        var podNewsResult = ExtractHtmlDescription( _doc.DocumentNode );
+        var podNewsResult = FindNews( _doc.DocumentNode );
         if (podNewsResult.IsFailed) return Result.Fail( podNewsResult.Errors );
 
         return Result.Ok( podNewsResult.Value );

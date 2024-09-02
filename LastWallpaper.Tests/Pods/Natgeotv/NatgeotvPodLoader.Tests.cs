@@ -56,5 +56,5 @@ public class TestNatgeotvPodLoader(
         resourceManager )
 {
     public Result<HtmlPodNews> TestExtractHtmlDescription( HtmlNode documentNode ) =>
-        ExtractHtmlDescription( documentNode );
+        FindNews( documentNode );
 }

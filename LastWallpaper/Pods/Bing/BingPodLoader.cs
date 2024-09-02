@@ -2,7 +2,6 @@
 using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using LastWallpaper.Pods.Bing.Models;
-using LastWallpaper.Pods.Elementy.Models;
 using System;
 using System.Globalization;
 using System.Net.Http;
@@ -79,26 +78,15 @@ public sealed class BingPodLoader(
         }
     }
 
-    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
+    protected override Task<Result<PotdDescription>> GetDescriptionAsync(
         BingPodNews news, CancellationToken ct )
-    {
-        var cachedFilenameResult =
-            await DownloadFileAsync( news.LastImageUrl, ct );
-
-        if (cachedFilenameResult.IsFailed)
-            return Result.Fail(
-                $"Can not download media from {news.LastImageUrl}." );
-
-        var result = new PodUpdateResult() {
-            PodName = Name,
-            Filename = cachedFilenameResult.Value,
-            Created = news.PubDate,
-            Title = news.Title,
-            Copyright = news.Copyright,
-        };
-
-        return Result.Ok( result );
-    }
+        => Task.FromResult( Result.Ok(
+            new PotdDescription() {
+                Url = new( news.LastImageUrl ),
+                PubDate = news.PubDate,
+                Title = news.Title,
+                Copyright = news.Copyright
+            } ) );
 
     private static readonly CompositeFormat DownloadPictureUrlFormat =
         CompositeFormat.Parse( "https://www.bing.com{0}_{1}.jpg" );

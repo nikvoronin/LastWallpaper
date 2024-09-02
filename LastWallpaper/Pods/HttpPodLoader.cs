@@ -13,17 +13,21 @@ public abstract class HttpPodLoader<TPodNews>(
     : PodLoader<TPodNews>( resourceManager )
     where TPodNews : PodNews
 {
-    /// <summary>
-    /// Download remote resource to local temporary file.
-    /// </summary>
-    /// <param name="url">Source url to download from.</param>
-    /// <param name="ct">Token to cancel the operation.</param>
-    /// <returns>Filename of a temporary file.</returns>
-    public async Task<Result<string>> DownloadFileAsync(
-        string url, CancellationToken ct )
+    protected abstract Task<Result<PotdDescription>> GetDescriptionAsync(
+        TPodNews news, CancellationToken ct );
+
+    protected async override Task<Result<PodUpdateResult>> UpdateInternalAsync(
+        TPodNews news,
+        CancellationToken ct )
     {
+        var potdResults = await GetDescriptionAsync( news, ct );
+
+        if (potdResults.IsFailed) return Result.Fail( potdResults.Errors );
+
+        var potd = potdResults.Value;
+
         await using var imageStream =
-            await _httpClient.GetStreamAsync( url, ct );
+            await _httpClient.GetStreamAsync( potd.Url, ct );
 
         await using var fileStream =
             _resourceManager.CreateTemporaryFileStream();
@@ -31,7 +35,15 @@ public abstract class HttpPodLoader<TPodNews>(
 
         await imageStream.CopyToAsync( fileStream, ct );
 
-        return Result.Ok( cachedImageFilename );
+        var result = new PodUpdateResult() {
+            PodName = Name,
+            Filename = cachedImageFilename,
+            Created = news.PubDate,
+            Title = potd.Title,
+            Copyright = potd.Copyright,
+        };
+
+        return Result.Ok( result );
     }
 
     protected readonly HttpClient _httpClient = httpClient;

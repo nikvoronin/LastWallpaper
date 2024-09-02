@@ -44,8 +44,9 @@ public sealed class WikipediaPodLoader(
 
     }
 
-    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
-        WikipediaPodNews news, CancellationToken ct )
+    protected async override Task<Result<PotdDescription>> GetDescriptionAsync(
+        WikipediaPodNews news,
+        CancellationToken ct )
     {
         var potdFilename = news.Response.Query.Pages[0].Images?[0].Value;
 
@@ -61,13 +62,6 @@ public sealed class WikipediaPodLoader(
 
         if (potdImageDownloadLink is null)
             return Result.Fail( "No image url were found." );
-
-        var cachedFilenameResult =
-            await DownloadFileAsync( potdImageDownloadLink, ct );
-
-        if (cachedFilenameResult.IsFailed)
-            return Result.Fail(
-                $"Can not download media from {potdImageDownloadLink}." );
 
         var jsonPotdCredits =
             await _httpClient.GetFromJsonAsync<WmResponse>(
@@ -100,16 +94,14 @@ public sealed class WikipediaPodLoader(
             artist.Length + credit.Length > 100 ? artist
             : $"{artist}/{credit}";
 
-        var result = new PodUpdateResult() {
-            PodName = Name,
-            Filename = cachedFilenameResult.Value,
-            Created = DateTime.Now,
-            Title = title,
-            Copyright = copyrights,
-            Description = fullDescription
-        };
-
-        return Result.Ok( result );
+        return Result.Ok(
+            new PotdDescription() {
+                Url = new Uri( potdImageDownloadLink ),
+                PubDate = DateTime.Now,
+                Title = title,
+                Copyright = copyrights,
+                Description = fullDescription
+            } );
     }
 
     private static readonly CompositeFormat WmQueryPotdFilenameFormat =

@@ -87,7 +87,7 @@ public class TestAstrobinPodLoader(
         resourceManager )
 {
     public Result<HtmlPodNews> TestExtractHtmlDescription( HtmlNode documentNode ) =>
-        ExtractHtmlDescription( documentNode );
+        FindNews( documentNode );
 
     public Result<string> TestExtractHdImageUrl( HtmlNode documentNode ) =>
         ExtractHdImageUrl( documentNode );

@@ -10,13 +10,14 @@ public class ElementyPodLoaderTests
     {
         // Arrange
         const string sourceUrl = "gopher://site.org/images/science/potd_diodon_2_703.jpeg";
-        const string expected = "gopher://site.org/images/science/potd_diodon_2.jpeg";
+        const string expectedUrl = "gopher://site.org/images/science/potd_diodon_2.jpeg";
+        var expected = new Uri(expectedUrl);
 
         // Act
-        var actual = ElementyPodLoader.ConvertToHdFileUrl( sourceUrl );
+        var actual = ElementyPodLoader.ToHdImageUrl( sourceUrl );
 
         // Assert
-        actual.Should().NotBeNullOrWhiteSpace()
+        actual.Should().NotBeNull()
             .And.Be( expected );
     }
 }

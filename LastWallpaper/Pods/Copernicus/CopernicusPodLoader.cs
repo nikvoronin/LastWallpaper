@@ -22,32 +22,7 @@ public sealed class CopernicusPodLoader(
 {
     public override string Name => nameof( PodType.Copernicus ).ToLower();
 
-    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
-        HtmlPodNews news,
-        CancellationToken ct )
-    {
-        var imageUrl = news.Url;
-
-        var cachedFilenameResult =
-            await DownloadFileAsync( imageUrl, ct );
-
-        if (cachedFilenameResult.IsFailed) {
-            return Result.Fail(
-                $"Can not download media from {imageUrl}." );
-        }
-
-        var result = new PodUpdateResult() {
-            PodName = Name,
-            Filename = cachedFilenameResult.Value,
-            Created = news.PubDate,
-            Title = news.Title,
-            Copyright = $"© {news.Author}",
-        };
-
-        return Result.Ok( result );
-    }
-
-    protected override Result<HtmlPodNews> ExtractHtmlDescription( HtmlNode rootNode )
+    protected override Result<HtmlPodNews> FindNews( HtmlNode rootNode )
     {
         var articleNode =
             rootNode
@@ -112,7 +87,7 @@ public sealed class CopernicusPodLoader(
 
         var podNews =
             new HtmlPodNews() {
-                Author = "www.copernicus.eu",
+                Author = "© www.copernicus.eu",
                 Title = WebUtility.HtmlDecode( title ),
                 PubDate = pubDate,
                 Url = imageUrl
@@ -120,6 +95,16 @@ public sealed class CopernicusPodLoader(
 
         return Result.Ok( podNews );
     }
+
+    protected override Task<Result<PotdDescription>> GetDescriptionAsync(
+        HtmlPodNews news, CancellationToken ct )
+        => Task.FromResult( Result.Ok(
+            new PotdDescription() {
+                Url = new( news.Url ),
+                PubDate = news.PubDate,
+                Title = news.Title,
+                Copyright = news.Author,
+            } ) );
 
     private const string CopernicusBaseUrl = "https://www.copernicus.eu";
     private const string CopernicusImageDayUrl = CopernicusBaseUrl + "/en/media/image-day";

@@ -22,31 +22,18 @@ public class NatgeotvPodLoader(
 {
     public override string Name => nameof( PodType.Natgeotv ).ToLower();
 
-    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
-        HtmlPodNews news, CancellationToken ct )
-    {
-        var imageUrl = news.Url;
+    protected override Task<Result<PotdDescription>> GetDescriptionAsync(
+        HtmlPodNews news,
+        CancellationToken ct )
+        => Task.FromResult( Result.Ok(
+            new PotdDescription() {
+                Url = new( news.Url ),
+                PubDate = news.PubDate,
+                Title = news.Title,
+                Copyright = $"© {news.Author}",
+            } ) );
 
-        var cachedFilenameResult =
-            await DownloadFileAsync( imageUrl, ct );
-
-        if (cachedFilenameResult.IsFailed) {
-            return Result.Fail(
-                $"Can not download media from {imageUrl}." );
-        }
-
-        var result = new PodUpdateResult() {
-            PodName = Name,
-            Filename = cachedFilenameResult.Value,
-            Created = news.PubDate,
-            Title = news.Title,
-            Copyright = $"© {news.Author}",
-        };
-
-        return Result.Ok( result );
-    }
-
-    protected override Result<HtmlPodNews> ExtractHtmlDescription( HtmlNode rootNode )
+    protected override Result<HtmlPodNews> FindNews( HtmlNode rootNode )
     {
         var podItemNode =
             rootNode

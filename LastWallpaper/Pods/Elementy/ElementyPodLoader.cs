@@ -41,32 +41,7 @@ public sealed class ElementyPodLoader(
             } );
     }
 
-    protected override async Task<Result<PodUpdateResult>> UpdateInternalAsync(
-        ElementyPodNews news, CancellationToken ct )
-    {
-        var lastItem = news.Item;
-
-        var hdUrl = ConvertToHdFileUrl( lastItem.Enclosure.Url );
-
-        var cachedFilenameResult =
-            await DownloadFileAsync( hdUrl, ct );
-
-        if (cachedFilenameResult.IsFailed)
-            return Result.Fail(
-                $"Can not download media from {hdUrl}." );
-
-        var result = new PodUpdateResult() {
-            PodName = Name,
-            Filename = cachedFilenameResult.Value,
-            Created = lastItem.PubDate.Date,
-            Title = $"{lastItem.Title}. {lastItem.Category}.",
-            Copyright = lastItem.Description,
-        };
-
-        return Result.Ok( result );
-    }
-
-    public static string ConvertToHdFileUrl( string url )
+    public static Uri ToHdImageUrl( string url )
     {
         var uri = new Uri( url );
         var filename = uri.Segments[^1];
@@ -74,8 +49,21 @@ public sealed class ElementyPodLoader(
             filename[..filename.LastIndexOf( '_' )]
             + new FileInfo( filename ).Extension;
 
-        return $"{uri.Scheme}://{uri.Host}{string.Concat( uri.Segments[..^1] )}{hdFilename}";
+        return
+            new Uri(
+                $"{uri.Scheme}://{uri.Host}{string.Concat( uri.Segments[..^1] )}{hdFilename}" );
     }
+
+    protected override Task<Result<PotdDescription>> GetDescriptionAsync(
+        ElementyPodNews news,
+        CancellationToken ct )
+        => Task.FromResult( Result.Ok(
+            new PotdDescription() {
+                Url = ToHdImageUrl( news.Item.Enclosure.Url ),
+                PubDate = news.Item.PubDate.Date,
+                Title = $"{news.Item.Title}. {news.Item.Category}.",
+                Copyright = news.Item.Description,
+            } ) );
 
     private readonly IFeedReader<RssFeed> _feedReader = feedReader;
 

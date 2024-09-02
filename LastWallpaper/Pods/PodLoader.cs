@@ -26,8 +26,8 @@ public abstract class PodLoader<TPodNews>(
             if (newsResult.IsFailed) return Result.Fail( newsResult.Errors );
 
             if (_resourceManager.PotdExists(
-                Name,
-                newsResult.Value.PubDate ))
+                    Name,
+                    newsResult.Value.PubDate ))
                 return Result.Fail( "Picture already known." );
 
             result = await UpdateInternalAsync( newsResult.Value, ct );
