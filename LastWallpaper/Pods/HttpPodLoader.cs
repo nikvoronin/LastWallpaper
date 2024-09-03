@@ -40,6 +40,7 @@ public abstract class HttpPodLoader<TPodNews>(
             Filename = cachedImageFilename,
             Created = news.PubDate,
             Title = potd.Title,
+            Description = potd.Description,
             Copyright = potd.Copyright,
         };
 
