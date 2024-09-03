@@ -8,5 +8,6 @@ public enum PodType
     Elementy,
     Astrobin,
     Natgeotv,
-    Copernicus
+    Copernicus,
+    Nasa
 }

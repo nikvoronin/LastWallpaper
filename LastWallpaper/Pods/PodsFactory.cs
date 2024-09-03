@@ -60,6 +60,11 @@ public static class PodsFactory
                     client,
                     resourceManager ),
 
+            PodType.Nasa =>
+                new NasaPodLoader(
+                    client,
+                    resourceManager ),
+
             _ => null
         };
 }
