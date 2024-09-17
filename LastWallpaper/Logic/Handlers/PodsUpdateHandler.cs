@@ -47,7 +47,7 @@ public sealed class PodsUpdateHandler(
                 .RestoreLastWallpaper()
                 .ValueOrDefault
             // or use system desktop wallpaper
-            ?? CreateDefaultLocalUpdateResult( DateTime.Now );
+            ?? CreateDefaultLocalUpdateResult();
 
         if (hasNews) {
             Task.Run( () => {
@@ -57,19 +57,15 @@ public sealed class PodsUpdateHandler(
                     _settings.WallpaperFit );
 #endif
                 _resourceManager.RememberLastWallpaper( updateResult );
-                _sysWallpaperLastWriteTime = DateTime.UtcNow;
             }, ct );
         }
         else { // test if wallpaper was changed from external source
-            var lastWriteTimeUtc =
-                new FileInfo( _resourceManager.SystemDesktopWallpaperFilename )
-                .LastWriteTimeUtc;
+            var deltaTime =
+                (SystemDesktopWallpaperLastWriteTime - updateResult.Created)
+                .TotalSeconds;
 
-            var deltaTime = lastWriteTimeUtc - _sysWallpaperLastWriteTime;
-            if (deltaTime > SysWallpaperLastWriteTimeDeviation) {
-                updateResult = CreateDefaultLocalUpdateResult( lastWriteTimeUtc );
-                _sysWallpaperLastWriteTime = lastWriteTimeUtc;
-            }
+            if (deltaTime >= 0.0)
+                updateResult = CreateDefaultLocalUpdateResult();
         }
 
         _frontUpdateHandler?.HandleUpdate(
@@ -81,10 +77,14 @@ public sealed class PodsUpdateHandler(
         return Task.CompletedTask;
     }
 
-    private PodUpdateResult CreateDefaultLocalUpdateResult( DateTime pubDate ) =>
+    private DateTime SystemDesktopWallpaperLastWriteTime =>
+        new FileInfo( _resourceManager.SystemDesktopWallpaperFilename )
+        .LastWriteTimeUtc;
+
+    private PodUpdateResult CreateDefaultLocalUpdateResult() =>
         new() {
             PodName = "local", // TODO: add local pod
-            Created = pubDate,
+            Created = SystemDesktopWallpaperLastWriteTime,
             Filename = _resourceManager.SystemDesktopWallpaperFilename
         };
 
@@ -120,9 +120,6 @@ public sealed class PodsUpdateHandler(
 
         return imago;
     }
-
-    private DateTime _sysWallpaperLastWriteTime = DateTime.UtcNow;
-    private readonly TimeSpan SysWallpaperLastWriteTimeDeviation = TimeSpan.FromSeconds( 10 );
 
     private readonly IReadOnlyCollection<IPotdLoader> _pods = pods;
     private readonly IParameterizedUpdateHandler<FrontUpdateParameters> _frontUpdateHandler = frontUpdateHandler;
