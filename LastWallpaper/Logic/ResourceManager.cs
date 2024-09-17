@@ -63,6 +63,12 @@ public class ResourceManager(
         return Result.Fail( "The last wallpaper was not found." );
     }
 
+    public string SystemDesktopWallpaperFilename =>
+        Path.Combine(
+            Environment.GetFolderPath(
+                Environment.SpecialFolder.ApplicationData ),
+            "Microsoft/Windows/Themes/TranscodedWallpaper" );
+
     private static readonly JsonSerializerOptions _intendedJsonSerializerOptions =
         new() { WriteIndented = true };
 

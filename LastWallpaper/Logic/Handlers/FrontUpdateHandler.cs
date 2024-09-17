@@ -24,9 +24,7 @@ public sealed class FrontUpdateHandler(
         CancellationToken ct )
     {
         var targets = updateParameters.UpdateTargets;
-
-        if (targets.HasFlag( UiUpdateTargets.None ))
-            return;
+        if (targets == UiUpdateTargets.None) return;
 
         var updateResult = updateParameters.UpdateResult;
 

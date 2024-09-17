@@ -47,21 +47,16 @@ public sealed class PodsUpdateHandler(
                 .RestoreLastWallpaper()
                 .ValueOrDefault
             // or use system desktop wallpaper
-            ?? new() {
-                PodName = "local", // TODO: add local pod
-                Created = DateTime.Now,
-                Filename = _resourceManager.SystemDesktopWallpaperFilename
-            };
+            ?? CreateDefaultLocalUpdateResult( DateTime.Now );
 
-#if DEBUG
         if (hasNews) {
             Task.Run( () => {
+#if !DEBUG
                 WindowsRegistry.SetWallpaper(
                     updateResult.Filename,
                     _settings.WallpaperFit );
-
+#endif
                 _resourceManager.RememberLastWallpaper( updateResult );
-
                 _sysWallpaperLastWriteTime = DateTime.UtcNow;
             }, ct );
         }
@@ -72,15 +67,11 @@ public sealed class PodsUpdateHandler(
 
             var deltaTime = lastWriteTimeUtc - _sysWallpaperLastWriteTime;
             if (deltaTime > SysWallpaperLastWriteTimeDeviation) {
-                updateResult =
-                    updateResult with {
-                        Filename = _resourceManager.SystemDesktopWallpaperFilename
-                    };
-
+                updateResult = CreateDefaultLocalUpdateResult( lastWriteTimeUtc );
                 _sysWallpaperLastWriteTime = lastWriteTimeUtc;
             }
         }
-#endif
+
         _frontUpdateHandler?.HandleUpdate(
             new FrontUpdateParameters(
                 uiTargets,
@@ -89,6 +80,13 @@ public sealed class PodsUpdateHandler(
 
         return Task.CompletedTask;
     }
+
+    private PodUpdateResult CreateDefaultLocalUpdateResult( DateTime pubDate ) =>
+        new() {
+            PodName = "local", // TODO: add local pod
+            Created = pubDate,
+            Filename = _resourceManager.SystemDesktopWallpaperFilename
+        };
 
     private PodUpdateResult MapCachedFile(
         PodUpdateResult imago,
@@ -123,7 +121,7 @@ public sealed class PodsUpdateHandler(
         return imago;
     }
 
-    private DateTime _sysWallpaperLastWriteTime;
+    private DateTime _sysWallpaperLastWriteTime = DateTime.UtcNow;
     private readonly TimeSpan SysWallpaperLastWriteTimeDeviation = TimeSpan.FromSeconds( 10 );
 
     private readonly IReadOnlyCollection<IPotdLoader> _pods = pods;

@@ -52,4 +52,9 @@ public interface IResourceManager
     /// Wallpaper description.
     /// </param>
     public void RememberLastWallpaper( PodUpdateResult imago );
+
+    /// <summary>
+    /// Full filename (with full path) of the current system desktop wallpaper.
+    /// </summary>
+    public string SystemDesktopWallpaperFilename { get; }
 }
