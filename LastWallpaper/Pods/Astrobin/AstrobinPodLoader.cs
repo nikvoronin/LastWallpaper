@@ -4,6 +4,7 @@ using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -34,11 +35,16 @@ public class AstrobinPodLoader(
         var hdImageResult = ExtractHdImageUrl( doc.DocumentNode );
         if (hdImageResult.IsFailed) return Result.Fail( hdImageResult.Errors );
 
-        var hdImageUrl = hdImageResult.Value;
+        var hdImageUrl = new Uri(hdImageResult.Value);
+        var fileExtension = new FileInfo( hdImageUrl.Segments[^1] ).Extension;
+        if (fileExtension != ".jpeg" && fileExtension != ".jpg") {
+            return Result.Fail(
+                $"Wrong media format '{fileExtension}' of the image file." );
+        }
 
         return Result.Ok(
             new PotdDescription() {
-                Url = new(hdImageUrl),
+                Url = hdImageUrl,
                 PubDate = news.PubDate,
                 Title = news.Title,
                 Copyright = $"© {news.Author}",
