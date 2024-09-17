@@ -14,4 +14,5 @@ public record PodUpdateResult
     public string? Copyright { get; init; }
     public string? Title { get; init; }
     public string? Description { get; init; }
+    public ulong PerceptualHash { get; init; }
 }

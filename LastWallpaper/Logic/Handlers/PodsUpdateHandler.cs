@@ -12,7 +12,8 @@ namespace LastWallpaper.Logic.Handlers;
 public sealed class PodsUpdateHandler(
     IReadOnlyCollection<IPotdLoader> pods,
     IParameterizedUpdateHandler<FrontUpdateParameters> frontUpdateHandler,
-    IResourceManager resourceManager )
+    IResourceManager resourceManager,
+    AppSettings settings )
     : IAsyncUpdateHandler
 {
     public Task HandleUpdateAsync( CancellationToken ct )
@@ -24,7 +25,7 @@ public sealed class PodsUpdateHandler(
 
         Task.WaitAll( podUpdateTasks, ct );
 
-        var imagos =
+        var updateResults =
             podUpdateTasks
             .Where( t => t.Result.IsSuccess )
             .Select( t => MapCachedFile( t.Result.Value, ct ) )
@@ -32,24 +33,59 @@ public sealed class PodsUpdateHandler(
             // because we should map all cached files.
             .ToList();
 
-        // TODO: share imagos with Selector to select the best one
+        var hasNews = updateResults.Count > 0;
+        var uiTargets =
+            hasNews ? UiUpdateTargets.All
+            : UiUpdateTargets.NotifyIcon; // change icon from time to time
+
+        // TODO: share imagos with Selector-Processor to select the best one
         // TODO: use only images with resolution of display or appsettings defined only
-        var imago =
-            imagos.FirstOrDefault()
+        var updateResult =
+            updateResults.FirstOrDefault()
+            // then try to restore the last known wallpaper
             ?? _resourceManager
                 .RestoreLastWallpaper()
-                .ValueOrDefault;
+                .ValueOrDefault
+            // or use system desktop wallpaper
+            ?? new() {
+                PodName = "local", // TODO: add local pod
+                Created = DateTime.Now,
+                Filename = _resourceManager.SystemDesktopWallpaperFilename
+            };
 
-        var hasNews = imagos.Count > 0;
+#if DEBUG
+        if (hasNews) {
+            Task.Run( () => {
+                WindowsRegistry.SetWallpaper(
+                    updateResult.Filename,
+                    _settings.WallpaperFit );
 
+                _resourceManager.RememberLastWallpaper( updateResult );
+
+                _sysWallpaperLastWriteTime = DateTime.UtcNow;
+            }, ct );
+        }
+        else { // test if wallpaper was changed from external source
+            var lastWriteTimeUtc =
+                new FileInfo( _resourceManager.SystemDesktopWallpaperFilename )
+                .LastWriteTimeUtc;
+
+            var deltaTime = lastWriteTimeUtc - _sysWallpaperLastWriteTime;
+            if (deltaTime > SysWallpaperLastWriteTimeDeviation) {
+                updateResult =
+                    updateResult with {
+                        Filename = _resourceManager.SystemDesktopWallpaperFilename
+                    };
+
+                _sysWallpaperLastWriteTime = lastWriteTimeUtc;
+            }
+        }
+#endif
         _frontUpdateHandler?.HandleUpdate(
             new FrontUpdateParameters(
-                updateWallpaper: hasNews,
-                imago ),
+                uiTargets,
+                updateResult ),
             ct );
-
-        if (hasNews)
-            _resourceManager.RememberLastWallpaper( imago );
 
         return Task.CompletedTask;
     }
@@ -87,7 +123,11 @@ public sealed class PodsUpdateHandler(
         return imago;
     }
 
+    private DateTime _sysWallpaperLastWriteTime;
+    private readonly TimeSpan SysWallpaperLastWriteTimeDeviation = TimeSpan.FromSeconds( 10 );
+
     private readonly IReadOnlyCollection<IPotdLoader> _pods = pods;
     private readonly IParameterizedUpdateHandler<FrontUpdateParameters> _frontUpdateHandler = frontUpdateHandler;
     private readonly IResourceManager _resourceManager = resourceManager;
+    private readonly AppSettings _settings = settings;
 }

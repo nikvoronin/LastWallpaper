@@ -1,9 +1,12 @@
-﻿namespace LastWallpaper.Models;
+﻿using System;
+
+namespace LastWallpaper.Models;
 
 public class FrontUpdateParameters(
-    bool updateWallpaper,
+    UiUpdateTargets updateTargets,
     PodUpdateResult podUpdateResult )
 {
-    public readonly bool ShouldUpdateWallpaper = updateWallpaper;
-    public readonly PodUpdateResult UpdateResult = podUpdateResult;
+    public readonly UiUpdateTargets UpdateTargets = updateTargets;
+    public readonly PodUpdateResult UpdateResult =
+        podUpdateResult ?? throw new ArgumentNullException( nameof( podUpdateResult ) );
 }

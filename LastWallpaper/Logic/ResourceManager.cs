@@ -5,7 +5,7 @@ using System;
 using System.IO;
 using System.Text.Json;
 
-namespace LastWallpaper;
+namespace LastWallpaper.Logic;
 
 public class ResourceManager(
     string appFolder,

@@ -23,34 +23,33 @@ public sealed class FrontUpdateHandler(
         FrontUpdateParameters updateParameters,
         CancellationToken ct )
     {
-        var imago = updateParameters.UpdateResult;
-        if (imago is null) return;
+        var targets = updateParameters.UpdateTargets;
 
-        if (_currentIcon is not null)
-            _iconManager.DestroyIcon( _currentIcon );
+        if (targets.HasFlag( UiUpdateTargets.None ))
+            return;
 
-        try {
-            _notifyIconCtrl.Icon = _iconManager.CreateIcon( imago.Filename );
-            _currentIcon = _notifyIconCtrl.Icon;
+        var updateResult = updateParameters.UpdateResult;
+
+        if (targets.HasFlag( UiUpdateTargets.NotifyIcon )) {
+            if (_currentIcon is not null)
+                _iconManager.DestroyIcon( _currentIcon );
+
+            try {
+                _notifyIconCtrl.Icon = _iconManager.CreateIcon( updateResult.Filename );
+                _currentIcon = _notifyIconCtrl.Icon;
+            }
+            catch (FileNotFoundException) { }
+
+            _notifyIconCtrl.Text =
+                $"{Program.AppName} #{updateResult.PodName}\n{updateResult.Created:D} {updateResult.Created:t}";
         }
-        catch (FileNotFoundException) { }
 
-        _notifyIconCtrl.Text =
-            $"{Program.AppName} #{imago.PodName}\n{imago.Created:D} {imago.Created:t}";
-
-        if (updateParameters.ShouldUpdateWallpaper) {
-#if !DEBUG
-            Task.Run( () =>
-                WindowsRegistry.SetWallpaper(
-                    imago.Filename,
-                    _settings.WallpaperFit ),
-                    ct );
-#endif
+        if (targets.HasFlag( UiUpdateTargets.Toast )) {
             _uiContext?.Post( _ =>
                 ToastNotifications.ShowToast(
-                    imago.Filename,
-                    imago.Title,
-                    imago.Copyright,
+                    updateResult.Filename,
+                    updateResult.Title,
+                    updateResult.Copyright,
                     _settings.ToastExpireIn ),
                 null );
         }
