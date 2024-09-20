@@ -98,8 +98,9 @@ internal static class Program
             new PodsUpdateHandler(
                 activePods,
                 frontUpdateHandler,
-                resourceManager,
-                settings );
+                new ResultsProcessor(
+                    resourceManager,
+                    settings ) );
 
         Debug.Assert( SynchronizationContext.Current is not null );
         var scheduler =
@@ -215,7 +216,7 @@ internal static class Program
         };
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.9.20";
+    public const string AppVersion = "4.9.21";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
     private const string CacheFolderName = "cache";
