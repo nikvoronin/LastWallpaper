@@ -65,8 +65,7 @@ public class ResourceManager(
 
     public string SystemDesktopWallpaperFilename =>
         Path.Combine(
-            Environment.GetFolderPath(
-                Environment.SpecialFolder.ApplicationData ),
+            Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ),
             "Microsoft/Windows/Themes/TranscodedWallpaper" );
 
     private static readonly JsonSerializerOptions _intendedJsonSerializerOptions =

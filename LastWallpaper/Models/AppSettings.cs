@@ -1,6 +1,5 @@
 ﻿using LastWallpaper.Pods.Bing.Models;
 using LastWallpaper.Pods.Nasa.Models;
-using LastWallpaper.Pods.Wikimedia.Models;
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -14,9 +13,9 @@ public class AppSettings
 
     [JsonPropertyName( "update_every" )]
     public TimeSpan UpdateEvery { get; init; } = TimeSpan.FromMinutes( 57 );
-    
+
     [JsonPropertyName( "update_timeout" )]
-    public TimeSpan SchedulerUpdateTimeout { get; init; } = TimeSpan.FromMinutes( 5 );
+    public TimeSpan PodsUpdateTimeout { get; init; } = TimeSpan.FromMinutes( 5 );
 
     [JsonPropertyName( "tray_icon" )]
     public TrayIconType TrayIconStyle { get; init; } = TrayIconType.Replica;

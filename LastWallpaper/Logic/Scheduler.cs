@@ -15,8 +15,8 @@ public sealed class Scheduler : IDisposable
     {
         Debug.Assert( updateHandler is not null );
 
-        _checkImageUpdateAfterPeriod = settings.UpdateEvery;
-        _podsUpdateTimeout = settings.SchedulerUpdateTimeout;
+        _updatePodsPeriod = settings.UpdateEvery;
+        _podsUpdateTimeout = settings.PodsUpdateTimeout;
 
         _updateHandler = updateHandler;
         _cts = new CancellationTokenSource();
@@ -32,7 +32,7 @@ public sealed class Scheduler : IDisposable
             _ => UpdateInternal(),
             null,
             StartImmediately,
-            (long)_checkImageUpdateAfterPeriod.TotalMilliseconds );
+            (long)_updatePodsPeriod.TotalMilliseconds );
     }
 
     public void Update() => Task.Run( UpdateInternal );
@@ -70,7 +70,7 @@ public sealed class Scheduler : IDisposable
     private int _interlocked;
     private readonly CancellationTokenSource _cts;
     private readonly IAsyncUpdateHandler _updateHandler;
-    private readonly TimeSpan _checkImageUpdateAfterPeriod;
+    private readonly TimeSpan _updatePodsPeriod;
     private readonly TimeSpan _podsUpdateTimeout;
 
     private const int StartImmediately = 0;
