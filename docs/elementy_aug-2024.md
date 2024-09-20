@@ -56,3 +56,5 @@ item : enclosure : url
 https://elementy.ru/images/kartinka_dnya/potd_diodon_1_703.jpeg
 https://elementy.ru/images/kartinka_dnya/potd_diodon_1.jpeg
 ```
+
+⚠ Sometimes there is no full size image, so the image file has wrong size about 1x1 px.
