@@ -2,6 +2,7 @@
 using LastWallpaper.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -38,55 +39,55 @@ public sealed class PodsUpdateHandler(
             hasNews ? UiUpdateTargets.All
             : UiUpdateTargets.NotifyIcon; // change icon from time to time
 
-        // TODO: share imagos with Selector-Processor to select the best one
-        // TODO: use only images with resolution of display or appsettings defined only
-        var updateResult =
-            updateResults.FirstOrDefault()
-            // then try to restore the last known wallpaper
+        PodUpdateResult result =
+            updateResults
+            .FirstOrDefault()
             ?? _resourceManager
                 .RestoreLastWallpaper()
-                .ValueOrDefault
-            // or use system desktop wallpaper
-            ?? CreateDefaultLocalUpdateResult();
+                .ValueOrDefault;
 
         if (hasNews) {
             Task.Run( () => {
 #if !DEBUG
                 WindowsRegistry.SetWallpaper(
-                    updateResult.Filename,
+                    result.Filename,
                     _settings.WallpaperFit );
 #endif
-                _resourceManager.RememberLastWallpaper( updateResult );
+                _resourceManager.RememberLastWallpaper( result );
             }, ct );
         }
         else { // test if wallpaper was changed from external source
-            var deltaTime =
-                (SystemDesktopWallpaperLastWriteTime - updateResult.Created)
-                .TotalSeconds;
+            var systemDesktopWallpaperLastWriteTime =
+                new FileInfo( _resourceManager.SystemDesktopWallpaperFilename )
+                .LastWriteTimeUtc;
 
-            if (deltaTime >= 0.0)
-                updateResult = CreateDefaultLocalUpdateResult();
+            var useSystemDesktopWallpaper =
+                result is null
+                || (systemDesktopWallpaperLastWriteTime - result.Created)
+                    .TotalSeconds > 1;
+
+            if (useSystemDesktopWallpaper) {
+                result =
+                    new() {
+                        PodName = "local", // TODO? add local pod
+                        Created = systemDesktopWallpaperLastWriteTime,
+                        Filename = _resourceManager.SystemDesktopWallpaperFilename
+                    };
+
+                _resourceManager.RememberLastWallpaper( result );
+            }
         }
+
+        Debug.Assert( result is not null );
 
         _frontUpdateHandler?.HandleUpdate(
             new FrontUpdateParameters(
                 uiTargets,
-                updateResult ),
+                result ),
             ct );
 
         return Task.CompletedTask;
     }
-
-    private DateTime SystemDesktopWallpaperLastWriteTime =>
-        new FileInfo( _resourceManager.SystemDesktopWallpaperFilename )
-        .LastWriteTimeUtc;
-
-    private PodUpdateResult CreateDefaultLocalUpdateResult() =>
-        new() {
-            PodName = "local", // TODO: add local pod
-            Created = SystemDesktopWallpaperLastWriteTime,
-            Filename = _resourceManager.SystemDesktopWallpaperFilename
-        };
 
     private PodUpdateResult MapCachedFile(
         PodUpdateResult imago,

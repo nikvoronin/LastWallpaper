@@ -48,10 +48,10 @@ public interface IResourceManager
     /// <summary>
     /// Store description about given wallpaper.
     /// </summary>
-    /// <param name="imago">
+    /// <param name="podUpdateResult">
     /// Wallpaper description.
     /// </param>
-    public void RememberLastWallpaper( PodUpdateResult imago );
+    public void RememberLastWallpaper( PodUpdateResult podUpdateResult );
 
     /// <summary>
     /// Full filename (with full path) of the current system desktop wallpaper.
