@@ -120,6 +120,7 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
 
 ### 4.9.21
 
+- Control manual change of system wallpaper.
 - Add NASA.gov POD loader, general image-of-the-day page.
 - Add Copernicus POD, a gallery containing the newest Copernicus Sentinel images.
 - Add NatGeoTV POD.
