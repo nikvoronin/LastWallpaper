@@ -16,12 +16,13 @@ __System requirements:__ Windows 10 x64, .NET Desktop Runtime 8.0.
 
 ## What's New
 
-3 Sep 2024
+21 Sep 2024
 
-- Add NASA.gov POD loader, general image-of-the-day page.
+- Control manual change of system wallpaper.
 
 Not so far
 
+- Add NASA.gov POD loader, general image-of-the-day page.
 - Add Copernicus POD, a gallery containing the newest Copernicus Sentinel images.
 - Add NatGeoTV POD.
 
@@ -116,6 +117,12 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
 ```
 
 ## Release Notes
+
+### 4.9.21
+
+- Add NASA.gov POD loader, general image-of-the-day page.
+- Add Copernicus POD, a gallery containing the newest Copernicus Sentinel images.
+- Add NatGeoTV POD.
 
 ### 4.8.18
 
