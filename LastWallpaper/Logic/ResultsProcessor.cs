@@ -46,7 +46,7 @@ public class ResultsProcessor(
         else { // test if wallpaper was changed from external source
             var systemDesktopWallpaperLastWriteTime =
                 new FileInfo( _resourceManager.SystemDesktopWallpaperFilename )
-                .LastWriteTimeUtc;
+                .LastWriteTime;
 
             var useSystemDesktopWallpaper =
                 result is null
