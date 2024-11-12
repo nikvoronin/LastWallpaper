@@ -3,7 +3,10 @@ using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using LastWallpaper.Pods.Wikimedia.Models;
 using System;
+using System.Collections.Frozen;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -32,7 +35,14 @@ public sealed class WikipediaPodLoader(
                     nowDate.ToString( "yyyy-MM-dd" ) ),
                 ct );
 
+        var supportedImageType =
+            jsonPotdFilename?.Query.Pages[0].Images?[0].Value
+            is string fileTitle
+            && _supportedMediaTypesExtensions.Any(
+                extension => fileTitle.EndsWith( extension, true, CultureInfo.InvariantCulture ) );
+
         if (jsonPotdFilename is null
+            || !supportedImageType
             || (jsonPotdFilename.Query.Pages[0].Missing ?? false))
             return Result.Fail( $"No updates for {nowDate}" );
 
@@ -118,4 +128,9 @@ public sealed class WikipediaPodLoader(
 
     private const string WikiMediaQueryBase =
         "https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2";
+
+    private static readonly FrozenSet<string> _supportedMediaTypesExtensions =
+        new HashSet<string> {
+            ".jpg", ".jpeg", ".jpe", ".jif", ".jfif", ".jfi"
+        }.ToFrozenSet();
 }
