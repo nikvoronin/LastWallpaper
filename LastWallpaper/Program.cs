@@ -108,17 +108,15 @@ internal static class Program
                 podsUpdateHandler,
                 settings );
 
-        var imagoResult = resourceManager.RestoreLastWallpaper();
-        if (imagoResult.IsSuccess) {
-            frontUpdateHandler.HandleUpdate(
-                new FrontUpdateParameters(
-                    UiUpdateTargets.NotifyIcon,
-                    imagoResult.Value ),
-                CancellationToken.None );
-        }
+        UpdateTrayIconOnly();
 
         notifyIconCtrl.ContextMenuStrip =
             CreateContextMenu( scheduler, albumFolder );
+        EventHandler onClickDelegate = ( _, _ ) => {
+            if (settings.TrayIconStyle == TrayIconType.Mosaic)
+                UpdateTrayIconOnly();
+        };
+        notifyIconCtrl.Click += onClickDelegate;
         notifyIconCtrl.Visible = true;
 
         scheduler.Start();
@@ -127,9 +125,22 @@ internal static class Program
         scheduler.Dispose();
 
         notifyIconCtrl.Visible = false;
+        notifyIconCtrl.Click -= onClickDelegate;
         notifyIconCtrl.Dispose();
 
         return (int)ErrorLevel.ExitOk;
+
+        void UpdateTrayIconOnly()
+        {
+            var imagoResult = resourceManager.RestoreLastWallpaper();
+            if (imagoResult.IsSuccess) {
+                frontUpdateHandler.HandleUpdate(
+                    new FrontUpdateParameters(
+                        UiUpdateTargets.NotifyIcon,
+                        imagoResult.Value ),
+                    CancellationToken.None );
+            }
+        }
     }
 
     private static ContextMenuStrip CreateContextMenu(
@@ -216,7 +227,7 @@ internal static class Program
         };
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.9.30";
+    public const string AppVersion = "4.11.12";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
     private const string CacheFolderName = "cache";
