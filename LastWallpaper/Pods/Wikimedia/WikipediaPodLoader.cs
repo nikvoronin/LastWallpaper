@@ -42,8 +42,8 @@ public sealed class WikipediaPodLoader(
                 extension => fileTitle.EndsWith( extension, true, CultureInfo.InvariantCulture ) );
 
         if (jsonPotdFilename is null
-            || !supportedImageType
-            || (jsonPotdFilename.Query.Pages[0].Missing ?? false))
+            || (jsonPotdFilename.Query.Pages[0].Missing ?? false)
+            || !supportedImageType)
             return Result.Fail( $"No updates for {nowDate}" );
 
         return Result.Ok(
