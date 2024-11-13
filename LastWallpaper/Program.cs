@@ -112,11 +112,7 @@ internal static class Program
 
         notifyIconCtrl.ContextMenuStrip =
             CreateContextMenu( scheduler, albumFolder );
-        EventHandler onClickDelegate = ( _, _ ) => {
-            if (settings.TrayIconStyle == TrayIconType.Mosaic)
-                UpdateTrayIconOnly();
-        };
-        notifyIconCtrl.Click += onClickDelegate;
+        notifyIconCtrl.MouseClick += OnMouseLeftButtonClick;
         notifyIconCtrl.Visible = true;
 
         scheduler.Start();
@@ -125,10 +121,17 @@ internal static class Program
         scheduler.Dispose();
 
         notifyIconCtrl.Visible = false;
-        notifyIconCtrl.Click -= onClickDelegate;
+        notifyIconCtrl.MouseClick -= OnMouseLeftButtonClick;
         notifyIconCtrl.Dispose();
 
         return (int)ErrorLevel.ExitOk;
+
+        void OnMouseLeftButtonClick( object? _, MouseEventArgs e )
+        {
+            if (e.Button == MouseButtons.Left
+                && settings.TrayIconStyle == TrayIconType.Mosaic)
+                UpdateTrayIconOnly();
+        }
 
         void UpdateTrayIconOnly()
         {
@@ -227,7 +230,7 @@ internal static class Program
         };
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.11.12";
+    public const string AppVersion = "4.11.13";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
     private const string CacheFolderName = "cache";
