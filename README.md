@@ -16,16 +16,14 @@ __System requirements:__ Windows 10 x64, .NET Desktop Runtime 8.0.
 
 ## What's New
 
-30 Sep 2024
+12 Nov 2024
 
-- Fix using of universal datetime, local one used instead.
+- Improve validating of wikipedia media types.
+- Rebuild mosaic in tray icon on user click (see [tray_icon:mosaic](#application-settings) option).
 
 Not so far
 
-- Control manual changing of system wallpaper.
-- Add NASA.gov POD loader, general image-of-the-day page.
-- Add Copernicus POD, a gallery containing the newest Copernicus Sentinel images.
-- Add NatGeoTV POD.
+- Fix using of universal datetime, local one used instead.
 
 See also [Release Notes](#release-notes) chapter.
 
@@ -118,6 +116,11 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
 ```
 
 ## Release Notes
+
+### 4.11.12
+
+- Improve validating of wikipedia media types.
+- Rebuild mosaic in tray icon on user click (see [tray_icon:mosaic](#application-settings) option).
 
 ### 4.9.30 --fix
 
