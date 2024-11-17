@@ -3,12 +3,14 @@
 Picture Of The Day (POTD) on desktop.\
 -- Bing, NASA, Wikipedia, Elementy, AstroBin, NatGeoTV, Copernicus
 
+![20240603_212225](https://github.com/nikvoronin/LastWallpaper/assets/11328666/921585aa-f489-43e6-b084-7f5db9006428)
+
 - [What's New](#whats-new)
 - [Documentation](#documentation)
+  - [Media sources +8](#media-sources-8)
+  - [TODO? Сustom POD loader](#todo-сustom-pod-loader)
 - [Application Settings](#application-settings)
 - [Release Notes](#release-notes)
-
-![20240603_212225](https://github.com/nikvoronin/LastWallpaper/assets/11328666/921585aa-f489-43e6-b084-7f5db9006428)
 
 __System requirements:__ Windows 10 x64, .NET Desktop Runtime 8.0.
 
@@ -32,7 +34,7 @@ See also [Release Notes](#release-notes) chapter.
 
 ## Documentation
 
-### Sources
+### Media sources +8
 
 - [Copernicus](/docs/copernicus_aug-2024.md) - The daily updated gallery containing the newest Copernicus Sentinel images.
 - [NatGeoTV Canada](/docs/natgeotv_aug-2024.md) - Photo of the day - National Geographic Channel - Canada.
@@ -53,7 +55,7 @@ See also [Release Notes](#release-notes) chapter.
   - https://www.the-scientist.com/type/image-of-the-day
   - https://bpod.org.uk/
 
-### TODO? Сustom POD Loader
+### TODO? Сustom POD loader
 
 - PodsFactory
 - PodLoader
