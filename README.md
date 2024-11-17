@@ -32,8 +32,6 @@ See also [Release Notes](#release-notes) chapter.
 
 ## Documentation
 
-TODO? how to create a custom POD loader.
-
 ### Sources
 
 - [Copernicus](/docs/copernicus_aug-2024.md) - The daily updated gallery containing the newest Copernicus Sentinel images.
@@ -49,7 +47,23 @@ TODO? how to create a custom POD loader.
   - [Open APIs Portal](https://api.nasa.gov/) - free but limited with 50 requests per IP address per day.
 - [Windows 10 Toast Notifications](/docs/win10_toast_notifications.md)
 - [Windows Desktop Wallpaper](/docs/windows_desktop_wallpaper.md)
-- TODO? flickr.com/groups/imageoftheday/pool/ - a group with daily image posting.
+- TODO?
+  - flickr.com/groups/imageoftheday/pool/ - a group with daily image posting.
+  - https://epod.usra.edu/blog/
+  - https://www.the-scientist.com/type/image-of-the-day
+  - https://bpod.org.uk/
+
+### TODO? Сustom POD Loader
+
+- PodsFactory
+- PodLoader
+- Scheduler
+- HttpPodLoader
+- HtmlPodLoader
+- ResultsProcessor
+- ToastNotifications
+- WindowsRegistry
+- RssReader
 
 ## Application Settings
 
