@@ -8,12 +8,9 @@ namespace LastWallpaper.Logic.KMeans;
 /// </summary>
 public class KmCluster
 {
-    public Vector3 Centroid
-    {
-        get
-        {
-            if (_numPoints != _points.Count)
-            {
+    public Vector3 Centroid {
+        get {
+            if (_numPoints != _points.Count) {
                 _numPoints = _points.Count;
                 _centroid = _accumulator / _numPoints;
             }
@@ -38,7 +35,7 @@ public class KmCluster
     /// <param name="centroid">
     /// Centroid vector of the cluster.
     /// </param>
-    public KmCluster(Vector3 centroid)
+    public KmCluster( Vector3 centroid )
     {
         _points = [centroid];
         _accumulator = centroid;
@@ -50,10 +47,10 @@ public class KmCluster
     /// <param name="point">
     /// New vector to append to the cluster.
     /// </param>
-    public void AddPoint(Vector3 point)
+    public void AddPoint( Vector3 point )
     {
         _accumulator += point;
-        _points.Add(point);
+        _points.Add( point );
     }
 
     private Vector3 _accumulator = Vector3.Zero;

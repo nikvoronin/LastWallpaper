@@ -25,7 +25,7 @@ public class AstrobinPodLoader(
     public override string Name => nameof( PodType.Astrobin ).ToLower();
 
     protected async override Task<Result<PotdDescription>> GetDescriptionAsync(
-        HtmlPodNews news, CancellationToken ct)
+        HtmlPodNews news, CancellationToken ct )
     {
         var doc = new HtmlDocument();
         await using var streamHd =
@@ -35,7 +35,7 @@ public class AstrobinPodLoader(
         var hdImageResult = ExtractHdImageUrl( doc.DocumentNode );
         if (hdImageResult.IsFailed) return Result.Fail( hdImageResult.Errors );
 
-        var hdImageUrl = new Uri(hdImageResult.Value);
+        var hdImageUrl = new Uri( hdImageResult.Value );
         var fileExtension = new FileInfo( hdImageUrl.Segments[^1] ).Extension;
         if (fileExtension != ".jpeg" && fileExtension != ".jpg") {
             return Result.Fail(

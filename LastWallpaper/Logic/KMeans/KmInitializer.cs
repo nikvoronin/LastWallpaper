@@ -13,7 +13,7 @@ public class KmInitializer : IKmInitializer
     /// within the given array of volume.
     /// </summary>
     /// <param name="volume">
-    /// Vector volume.
+    /// Vector volume.s
     /// </param>
     /// <param name="random">
     /// Randomizer.
@@ -23,13 +23,13 @@ public class KmInitializer : IKmInitializer
     /// </returns>
     public KmCluster[] Initialize(
         Vector3[] volume, int numClusters,
-        Random? random = null)
+        Random? random = null )
     {
         random ??= Random.Shared;
 
         KmCluster[] clusters = new KmCluster[numClusters];
         for (int i = 0; i < numClusters; i++)
-            clusters[i] = new KmCluster(volume[random.Next(volume.Length)]);
+            clusters[i] = new KmCluster( volume[random.Next( volume.Length )] );
 
         return clusters;
     }
