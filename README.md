@@ -6,9 +6,10 @@ Picture Of The Day (POTD) on desktop.\
 ![20240603_212225](https://github.com/nikvoronin/LastWallpaper/assets/11328666/921585aa-f489-43e6-b084-7f5db9006428)
 
 - [What's New](#whats-new)
+- [User Interface](#user-interface)
 - [Documentation](#documentation)
   - [Media sources +8](#media-sources-8)
-  - [TODO? Сustom POD loader](#todo-сustom-pod-loader)
+  - [TODO? Custom POD loader](#todo-custom-pod-loader)
 - [Application Settings](#application-settings)
 - [Release Notes](#release-notes)
 
@@ -31,6 +32,34 @@ Not so far
 - Add NatGeoTV POD.
 
 See also [Release Notes](#release-notes) chapter.
+
+## User Interface
+
+🐫 There are two types of tray icons (actually, three):
+
+- Replica - a tiny replica of desktop wallpaper image.
+- Mosaic - nine tiles with main accent colors of desktop image (tiles shuffled from time to time).
+
+When the application can't update or retrieve the wallpaper image, it shows you the third one - a default system icon.
+
+🐭 Hover your mouse over the tray icon. The appeared hint consist of several parts:
+
+```plain
+[The Last Wallpaper] [#podname]
+[3 June 2024] [16:43]
+```
+
+- `The Last Wallpaper` - reminds you that you don't need other wallpaper apps.
+- `#podname` - the name of the source of the picture-of-the-day.
+- `3 June 2024` - the date of the picture-of-the-day (not only today).
+- `16:43` - when the POD- image was successfully downloaded.
+
+🎯 Do right mouse click over the tray icon:
+
+- Update Now! - check and update wallpaper immediatelly.
+- Open Picture Gallery - open the Explorer with application image folder inside your system Picture Gallery.
+- About The Last Wallpaper /current.version.number/ - open this web-page in default web browser.
+- Quit - close and unload the application.
 
 ## Documentation
 
@@ -55,7 +84,7 @@ See also [Release Notes](#release-notes) chapter.
   - https://www.the-scientist.com/type/image-of-the-day
   - https://bpod.org.uk/
 
-### TODO? Сustom POD loader
+### TODO? Custom POD loader
 
 - PodsFactory
 - PodLoader
