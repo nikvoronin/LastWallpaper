@@ -13,11 +13,29 @@ public class ResourceManager(
     string cacheFolder )
     : IResourceManager
 {
+    public string AlbumFolder {
+        get {
+            var separateByYear = true; // TODO: STUB extract to settings
+
+            var albumFolder =
+                separateByYear
+                    ? Path.Combine(
+                        _albumFolderBase,
+                        DateTime.Now.Year.ToString() )
+                    : _albumFolderBase;
+
+            if (!Directory.Exists( albumFolder ))
+                Directory.CreateDirectory( albumFolder );
+
+            return albumFolder;
+        }
+    }
+
     public string CreateAlbumFilename(
         string podName,
         DateTimeOffset potdCreationTime )
         => Path.Combine(
-            _albumFolder,
+            AlbumFolder,
             $"{podName}{potdCreationTime:yyyyMMdd}.jpeg" );
 
     public FileStream CreateTemporaryFileStream() =>
@@ -72,6 +90,6 @@ public class ResourceManager(
         new() { WriteIndented = true };
 
     private readonly string _appFolder = appFolder;
-    private readonly string _albumFolder = albumFolder;
+    private readonly string _albumFolderBase = albumFolder;
     private readonly string _cacheFolder = cacheFolder;
 }

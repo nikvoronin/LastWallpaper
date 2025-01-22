@@ -26,21 +26,20 @@ internal static class Program
         var appFolder =
             Path.GetDirectoryName( Application.ExecutablePath )!;
 
-        var albumFolder =
-            Path.Combine(
-                Environment.GetFolderPath(
-                    Environment.SpecialFolder.MyPictures ),
-                AppName,
-                DateTime.Now.Year.ToString() );
-
         var cacheFolder =
             Path.Combine( appFolder, CacheFolderName );
 
         if (!Directory.Exists( cacheFolder ))
             Directory.CreateDirectory( cacheFolder );
 
-        if (!Directory.Exists( albumFolder ))
-            Directory.CreateDirectory( albumFolder );
+        var resourceManager =
+            new ResourceManager(
+                appFolder,
+                Path.Combine(
+                    Environment.GetFolderPath(
+                        Environment.SpecialFolder.MyPictures ),
+                    AppName ),
+                cacheFolder );
         #endregion
 
         AppSettings settings =
@@ -60,13 +59,10 @@ internal static class Program
             new NotifyIcon() {
                 Text = AppName,
                 Visible = false,
-                Icon = SystemIcons.GetStockIcon(
-                    StockIconId.ImageFiles )
+                Icon =
+                    SystemIcons.GetStockIcon(
+                        StockIconId.ImageFiles )
             };
-
-        var resourceManager =
-            new ResourceManager(
-                appFolder, albumFolder, cacheFolder );
 
         var activePods =
 #if DEBUG
@@ -111,7 +107,9 @@ internal static class Program
         UpdateTrayIconOnly();
 
         notifyIconCtrl.ContextMenuStrip =
-            CreateContextMenu( scheduler, albumFolder );
+            CreateContextMenu(
+                scheduler,
+                resourceManager );
         notifyIconCtrl.MouseClick += OnMouseLeftButtonClick;
         notifyIconCtrl.Visible = true;
 
@@ -147,7 +145,8 @@ internal static class Program
     }
 
     private static ContextMenuStrip CreateContextMenu(
-        Scheduler scheduler, string albumFolder )
+        Scheduler scheduler,
+        ResourceManager resourceManager )
     {
         ContextMenuStrip contextMenu = new();
         contextMenu.Items.AddRange(
@@ -165,7 +164,7 @@ internal static class Program
                     null, (_,_) => {
                         try {
                             ExecShellProcess(
-                                "explorer", albumFolder);
+                                "explorer", resourceManager.AlbumFolder);
                         } catch {}
                     } )
                 {
@@ -230,7 +229,7 @@ internal static class Program
         };
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "4.11.13";
+    public const string AppVersion = "5.1.7";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
     private const string CacheFolderName = "cache";
