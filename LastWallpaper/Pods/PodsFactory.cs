@@ -1,13 +1,14 @@
 ﻿using LastWallpaper.Abstractions;
 using LastWallpaper.Models;
 using LastWallpaper.Models.Rss;
-using LastWallpaper.Pods.Astrobin;
 using LastWallpaper.Pods.Bing;
-using LastWallpaper.Pods.Copernicus;
-using LastWallpaper.Pods.Elementy;
-using LastWallpaper.Pods.Nasa;
-using LastWallpaper.Pods.Natgeotv;
-using LastWallpaper.Pods.Wikimedia;
+// TODO: return after refactoring
+//using LastWallpaper.Pods.Astrobin;
+//using LastWallpaper.Pods.Copernicus;
+//using LastWallpaper.Pods.Elementy;
+//using LastWallpaper.Pods.Nasa;
+//using LastWallpaper.Pods.Natgeotv;
+//using LastWallpaper.Pods.Wikimedia;
 using System.Net.Http;
 
 namespace LastWallpaper.Pods;
@@ -28,42 +29,43 @@ public static class PodsFactory
                     resourceManager,
                     settings.BingOptions ),
 
-            PodType.Apod =>
-                new NasaApodLoader(
-                    client,
-                    resourceManager,
-                    settings.ApodOptions ),
+            // TODO: return after refactoring
+            //PodType.Apod =>
+            //    new NasaApodLoader(
+            //        client,
+            //        resourceManager,
+            //        settings.ApodOptions ),
 
-            PodType.Wikipedia =>
-                new WikipediaPodLoader(
-                    client,
-                    resourceManager ),
+            //PodType.Wikipedia =>
+            //    new WikipediaPodLoader(
+            //        client,
+            //        resourceManager ),
 
-            PodType.Elementy =>
-                new ElementyPodLoader(
-                    client,
-                    resourceManager,
-                    rssReader ),
+            //PodType.Elementy =>
+            //    new ElementyPodLoader(
+            //        client,
+            //        resourceManager,
+            //        rssReader ),
 
-            PodType.Astrobin =>
-                new AstrobinPodLoader(
-                    client,
-                    resourceManager ),
+            //PodType.Astrobin =>
+            //    new AstrobinPodLoader(
+            //        client,
+            //        resourceManager ),
 
-            PodType.Natgeotv =>
-                new NatgeotvPodLoader(
-                    client,
-                    resourceManager ),
+            //PodType.Natgeotv =>
+            //    new NatgeotvPodLoader(
+            //        client,
+            //        resourceManager ),
 
-            PodType.Copernicus =>
-                new CopernicusPodLoader(
-                    client,
-                    resourceManager ),
+            //PodType.Copernicus =>
+            //    new CopernicusPodLoader(
+            //        client,
+            //        resourceManager ),
 
-            PodType.Nasa =>
-                new NasaPodLoader(
-                    client,
-                    resourceManager ),
+            //PodType.Nasa =>
+            //    new NasaPodLoader(
+            //        client,
+            //        resourceManager ),
 
             _ => null
         };

@@ -1,5 +1,5 @@
 ﻿using LastWallpaper.Pods.Bing.Models;
-using LastWallpaper.Pods.Nasa.Models;
+//using LastWallpaper.Pods.Nasa.Models; // TODO: return after refactoring
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -33,6 +33,7 @@ public class AppSettings
     [JsonPropertyName( "bing" )]
     public BingSettings BingOptions { get; init; } = new();
 
-    [JsonPropertyName( "apod" )]
-    public ApodSettings ApodOptions { get; init; } = new();
+    // TODO: return after refactoring
+    //[JsonPropertyName( "apod" )]
+    //public ApodSettings ApodOptions { get; init; } = new();
 }

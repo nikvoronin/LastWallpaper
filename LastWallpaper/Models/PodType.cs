@@ -3,11 +3,11 @@
 public enum PodType
 {
     Bing,
-    Apod,
-    Wikipedia,
-    Elementy,
-    Astrobin,
-    Natgeotv,
-    Copernicus,
-    Nasa
+    //Apod,
+    //Wikipedia,
+    //Elementy,
+    //Astrobin,
+    //Natgeotv,
+    //Copernicus,
+    //Nasa
 }
