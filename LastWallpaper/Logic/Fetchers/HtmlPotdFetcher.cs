@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace LastWallpaper.Logic.Fetchers;
 
-public class HtmlPodLoader<TPotdNews> : INewsFetcher<TPotdNews>
+public class HtmlPotdFetcher<TPotdNews> : INewsFetcher<TPotdNews>
     where TPotdNews : IPotdNews
 {
-    public HtmlPodLoader(
+    public HtmlPotdFetcher(
         HttpClient httpClient,
         Uri podNewsPage,
         INewsExtractor<TPotdNews> newsExtractor )
