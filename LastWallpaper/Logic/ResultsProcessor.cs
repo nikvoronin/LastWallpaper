@@ -56,7 +56,7 @@ public class ResultsProcessor(
             if (useSystemDesktopWallpaper) {
                 result =
                     new() {
-                        PodName = "local", // TODO? add local pod
+                        PodType = PodType.Local, // TODO? add local pod
                         Created = systemDesktopWallpaperLastWriteTime,
                         Filename = _resourceManager.SystemDesktopWallpaperFilename
                     };
@@ -77,7 +77,7 @@ public class ResultsProcessor(
         try {
             var albumImageFilename =
                 _resourceManager.CreateAlbumFilename(
-                    podResult.PodName, podResult.Created );
+                    podResult.PodType, podResult.Created );
 
             var copyToAlbum =
                 podResult.CopyToAlbum

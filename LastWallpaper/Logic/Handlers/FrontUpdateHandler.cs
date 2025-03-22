@@ -1,4 +1,5 @@
 ﻿using LastWallpaper.Abstractions;
+using LastWallpaper.Abstractions.Handlers;
 using LastWallpaper.Models;
 using System;
 using System.Drawing;
@@ -39,7 +40,7 @@ public sealed class FrontUpdateHandler(
             catch (FileNotFoundException) { }
 
             _notifyIconCtrl.Text =
-                $"{Program.AppName} #{updateResult.PodName}\n{updateResult.Created:D} {updateResult.Created:t}";
+                $"{Program.AppName} #{updateResult.PodType.ToPodName()}\n{updateResult.Created:D} {updateResult.Created:t}";
         }
 
         if (targets.HasFlag( UiUpdateTargets.Toast )) {

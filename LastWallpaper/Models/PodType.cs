@@ -2,6 +2,7 @@
 
 public enum PodType
 {
+    Local,
     Bing,
     //Apod,
     //Wikipedia,
