@@ -13,10 +13,10 @@ public sealed class WikipediaPodLoader(
     IResourceManager resourceManager )
     : PodLoader<WikipediaPodNews>(
         PodType.Wikipedia,
+        new WikipediaNewsFetcher( httpClient ),
         new HttpPotdFetcher<WikipediaPodNews>(
             httpClient,
             new WikipediaDescriptionFetcher( httpClient ),
             resourceManager ),
-        new WikipediaNewsFetcher( httpClient ),
         resourceManager )
 { }

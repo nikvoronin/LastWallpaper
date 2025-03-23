@@ -16,8 +16,8 @@ public class PodLoader<TPotdNews> : IPotdLoader
 
     public PodLoader(
         PodType podType,
-        IPotdFetcher<TPotdNews> potdFetcher,
         INewsFetcher<TPotdNews> newsFetcher,
+        IPotdFetcher<TPotdNews> potdFetcher,
         IResourceManager resourceManager )
     {
         if (!Enum.IsDefined( podType )) {
@@ -27,13 +27,13 @@ public class PodLoader<TPotdNews> : IPotdLoader
                 typeof( PodType ) );
         }
 
-        ArgumentNullException.ThrowIfNull( potdFetcher );
         ArgumentNullException.ThrowIfNull( newsFetcher );
+        ArgumentNullException.ThrowIfNull( potdFetcher );
         ArgumentNullException.ThrowIfNull( resourceManager );
 
         PodType = podType;
-        _potdFetcher = potdFetcher;
         _newsFetcher = newsFetcher;
+        _potdFetcher = potdFetcher;
         _resourceManager = resourceManager;
     }
 
@@ -71,9 +71,9 @@ public class PodLoader<TPotdNews> : IPotdLoader
         return result;
     }
 
-    private readonly IResourceManager _resourceManager;
-    private readonly IPotdFetcher<TPotdNews> _potdFetcher;
     private readonly INewsFetcher<TPotdNews> _newsFetcher;
+    private readonly IPotdFetcher<TPotdNews> _potdFetcher;
+    private readonly IResourceManager _resourceManager;
 
     private int _interlocked;
 }

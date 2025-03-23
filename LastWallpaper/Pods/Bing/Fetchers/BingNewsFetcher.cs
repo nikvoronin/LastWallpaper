@@ -1,5 +1,4 @@
 ﻿using FluentResults;
-using LastWallpaper.Abstractions;
 using LastWallpaper.Abstractions.Fetchers;
 using LastWallpaper.Models;
 using LastWallpaper.Pods.Bing.Models;

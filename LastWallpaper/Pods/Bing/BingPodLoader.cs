@@ -14,12 +14,12 @@ public sealed class BingPodLoader(
     BingSettings settings )
     : PodLoader<BingPodNews>(
         PodType.Bing,
+        new BingNewsFetcher(
+            httpClient,
+            settings ),
         new HttpPotdFetcher<BingPodNews>(
             httpClient,
             new BingDescriptionFetcher(),
             resourceManager ),
-        new BingNewsFetcher(
-            httpClient,
-            settings ),
         resourceManager )
 { }
