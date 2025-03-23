@@ -11,11 +11,10 @@ public class RssReaderTests
     public const string _xmlFileName = "./samples/elementy.xml";
 
     [Fact]
-    public async void CanDownloadAndParseFeed()
+    public async Task CanDownloadAndParseFeed()
     {
         // Arrange
-        const string url = "url://abc.com";
-
+        var uri = new Uri("url://abc.com");
         var httpMessageHandler = new Mock<HttpMessageHandler>( MockBehavior.Strict );
 
         httpMessageHandler
@@ -24,7 +23,7 @@ public class RssReaderTests
                 "SendAsync",
                 ItExpr.Is<HttpRequestMessage>( x =>
                     x.Method == HttpMethod.Get
-                    && x.RequestUri!.ToString().Contains( url ) ),
+                    && uri.Equals( x.RequestUri ) ),
                 ItExpr.IsAny<CancellationToken>() )
             .ReturnsAsync(
                 new HttpResponseMessage {
@@ -38,7 +37,7 @@ public class RssReaderTests
         // Act
         var actual =
             await rssReader.ParseFeedAsync(
-                url, httpClient, CancellationToken.None );
+                uri, httpClient, CancellationToken.None );
 
         // Assert
         actual.Should().NotBeNull();
