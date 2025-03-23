@@ -17,7 +17,6 @@ public static class PodsFactory
 {
     public static IPotdLoader? Create(
         PodType podType,
-        HttpClient client,
         IResourceManager resourceManager,
         IFeedReader<RssFeed> rssReader,
         AppSettings settings )
@@ -25,7 +24,7 @@ public static class PodsFactory
 
             PodType.Bing =>
                 new BingPodLoader(
-                    client,
+                    new HttpClient(),
                     resourceManager,
                     settings.BingOptions ),
 
@@ -38,7 +37,11 @@ public static class PodsFactory
 
             PodType.Wikipedia =>
                 new WikipediaPodLoader(
-                    client,
+                    new HttpClient() {
+                        DefaultRequestHeaders = {
+                            { "User-Agent", settings.UserAgent }
+                        }
+                    },
                     resourceManager ),
 
             //PodType.Elementy =>
@@ -54,7 +57,7 @@ public static class PodsFactory
 
             PodType.Natgeotv =>
                 new NatgeotvPodLoader(
-                    client,
+                    new HttpClient(),
                     resourceManager ),
 
             //PodType.Copernicus =>

@@ -51,10 +51,6 @@ internal static class Program
         SynchronizationContext.SetSynchronizationContext(
             new WindowsFormsSynchronizationContext() );
 
-        var httpClient = new HttpClient();
-        httpClient.DefaultRequestHeaders.Add(
-            "User-Agent", settings.UserAgent );
-
         var notifyIconCtrl =
             new NotifyIcon() {
                 Text = AppName,
@@ -73,7 +69,6 @@ internal static class Program
             .Select( podType =>
                 PodsFactory.Create(
                     podType,
-                    httpClient,
                     resourceManager,
                     new RssReader(),
                     settings ) )

@@ -1,6 +1,7 @@
 ﻿using FluentResults;
 using LastWallpaper.Abstractions;
 using LastWallpaper.Models.Rss;
+using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,11 +12,11 @@ namespace LastWallpaper.Logic;
 public class RssReader : IFeedReader<RssFeed>
 {
     public async Task<Result<RssFeed>> ParseFeedAsync(
-        string url,
+        Uri uri,
         HttpClient httpClient,
         CancellationToken ct )
     {
-        await using var stream = await httpClient.GetStreamAsync( url, ct );
+        await using var stream = await httpClient.GetStreamAsync( uri, ct );
         var serializer = new XmlSerializer( typeof( RssFeed ) );
         var feed = serializer.Deserialize( stream ) as RssFeed;
 
