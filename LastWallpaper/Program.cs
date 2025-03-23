@@ -70,7 +70,6 @@ internal static class Program
                 PodsFactory.Create(
                     podType,
                     resourceManager,
-                    new RssReader(),
                     settings ) )
             .OfType<IPotdLoader>()
             .ToList();

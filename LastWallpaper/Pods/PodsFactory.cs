@@ -18,7 +18,6 @@ public static class PodsFactory
     public static IPotdLoader? Create(
         PodType podType,
         IResourceManager resourceManager,
-        IFeedReader<RssFeed> rssReader,
         AppSettings settings )
         => podType switch {
 
@@ -48,7 +47,7 @@ public static class PodsFactory
             //    new ElementyPodLoader(
             //        client,
             //        resourceManager,
-            //        rssReader ),
+            //        new RssReader() ),
 
             //PodType.Astrobin =>
             //    new AstrobinPodLoader(
