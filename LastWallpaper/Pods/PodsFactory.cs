@@ -7,7 +7,7 @@ using LastWallpaper.Pods.Bing;
 //using LastWallpaper.Pods.Copernicus;
 //using LastWallpaper.Pods.Elementy;
 //using LastWallpaper.Pods.Nasa;
-//using LastWallpaper.Pods.Natgeotv;
+using LastWallpaper.Pods.Natgeotv;
 using LastWallpaper.Pods.Wikimedia;
 using System.Net.Http;
 
@@ -52,10 +52,10 @@ public static class PodsFactory
             //        client,
             //        resourceManager ),
 
-            //PodType.Natgeotv =>
-            //    new NatgeotvPodLoader(
-            //        client,
-            //        resourceManager ),
+            PodType.Natgeotv =>
+                new NatgeotvPodLoader(
+                    client,
+                    resourceManager ),
 
             //PodType.Copernicus =>
             //    new CopernicusPodLoader(

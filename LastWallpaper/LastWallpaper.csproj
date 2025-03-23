@@ -14,19 +14,16 @@
     <Compile Remove="Pods\Copernicus\**" />
     <Compile Remove="Pods\Elementy\**" />
     <Compile Remove="Pods\Nasa\**" />
-    <Compile Remove="Pods\Natgeotv\**" />
     <Compile Remove="publish\**" />
     <EmbeddedResource Remove="Pods\Astrobin\**" />
     <EmbeddedResource Remove="Pods\Copernicus\**" />
     <EmbeddedResource Remove="Pods\Elementy\**" />
     <EmbeddedResource Remove="Pods\Nasa\**" />
-    <EmbeddedResource Remove="Pods\Natgeotv\**" />
     <EmbeddedResource Remove="publish\**" />
     <None Remove="Pods\Astrobin\**" />
     <None Remove="Pods\Copernicus\**" />
     <None Remove="Pods\Elementy\**" />
     <None Remove="Pods\Nasa\**" />
-    <None Remove="Pods\Natgeotv\**" />
     <None Remove="publish\**" />
   </ItemGroup>
 

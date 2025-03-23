@@ -9,7 +9,7 @@ public enum PodType
     Wikipedia,
     //Elementy,
     //Astrobin,
-    //Natgeotv,
+    Natgeotv,
     //Copernicus,
     //Nasa
 }
