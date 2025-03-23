@@ -4,8 +4,9 @@ public enum PodType
 {
     Local,
     Bing,
+    // TODO: return after refactoring
     //Apod,
-    //Wikipedia,
+    Wikipedia,
     //Elementy,
     //Astrobin,
     //Natgeotv,

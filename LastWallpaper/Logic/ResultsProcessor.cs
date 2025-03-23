@@ -56,7 +56,7 @@ public class ResultsProcessor(
             if (useSystemDesktopWallpaper) {
                 result =
                     new() {
-                        PodType = PodType.Local, // TODO? add local pod
+                        PodType = PodType.Local,
                         Created = systemDesktopWallpaperLastWriteTime,
                         Filename = _resourceManager.SystemDesktopWallpaperFilename
                     };

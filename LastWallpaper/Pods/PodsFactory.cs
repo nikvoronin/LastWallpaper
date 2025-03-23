@@ -8,7 +8,7 @@ using LastWallpaper.Pods.Bing;
 //using LastWallpaper.Pods.Elementy;
 //using LastWallpaper.Pods.Nasa;
 //using LastWallpaper.Pods.Natgeotv;
-//using LastWallpaper.Pods.Wikimedia;
+using LastWallpaper.Pods.Wikimedia;
 using System.Net.Http;
 
 namespace LastWallpaper.Pods;
@@ -36,10 +36,10 @@ public static class PodsFactory
             //        resourceManager,
             //        settings.ApodOptions ),
 
-            //PodType.Wikipedia =>
-            //    new WikipediaPodLoader(
-            //        client,
-            //        resourceManager ),
+            PodType.Wikipedia =>
+                new WikipediaPodLoader(
+                    client,
+                    resourceManager ),
 
             //PodType.Elementy =>
             //    new ElementyPodLoader(
