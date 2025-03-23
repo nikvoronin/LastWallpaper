@@ -8,7 +8,8 @@ Picture Of The Day (POTD) on desktop.\
 - [What's New](#whats-new)
 - [User Interface](#user-interface)
 - [Documentation](#documentation)
-  - [Media sources +8](#media-sources-8)
+  - [Media sources APIs +8](#media-sources-apis-8)
+  - [Development specific](#development-specific)
   - [TODO? Custom POD loader](#todo-custom-pod-loader)
 - [Application Settings](#application-settings)
 - [Release Notes](#release-notes)
@@ -63,7 +64,7 @@ When the application can't update or retrieve the wallpaper image, it shows you 
 
 ## Documentation
 
-### Media sources +8
+### Media sources APIs +8
 
 - [Copernicus](/docs/copernicus_aug-2024.md) - The daily updated gallery containing the newest Copernicus Sentinel images.
 - [NatGeoTV Canada](/docs/natgeotv_aug-2024.md) - Photo of the day - National Geographic Channel - Canada.
@@ -76,21 +77,25 @@ When the application can't update or retrieve the wallpaper image, it shows you 
 - NASA
   - [Image of the Day](/docs/nasagov_aug-2024.md)
   - [Open APIs Portal](https://api.nasa.gov/) - free but limited with 50 requests per IP address per day.
-- [Windows 10 Toast Notifications](/docs/win10_toast_notifications.md)
-- [Windows Desktop Wallpaper](/docs/windows_desktop_wallpaper.md)
 - TODO?
   - flickr.com/groups/imageoftheday/pool/ - a group with daily image posting.
   - https://epod.usra.edu/blog/
   - https://www.the-scientist.com/type/image-of-the-day
   - https://bpod.org.uk/
 
+### Development specific
+
+- [Windows 10 Toast Notifications](/docs/win10_toast_notifications.md)
+- [Windows Desktop Wallpaper](/docs/windows_desktop_wallpaper.md)
+
 ### TODO? Custom POD loader
 
 - PodsFactory
 - PodLoader
 - Scheduler
-- HttpPodLoader
-- HtmlPodLoader
+- Fetchers
+  - NewsFetcher
+  - PotdFetcher
 - ResultsProcessor
 - ToastNotifications
 - WindowsRegistry
