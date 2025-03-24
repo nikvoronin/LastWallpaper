@@ -7,7 +7,7 @@ using System.Net.Http;
 
 namespace LastWallpaper.Pods.Natgeotv;
 
-public class NatgeotvPodLoader(
+public sealed class NatgeotvPodLoader(
     HttpClient httpClient,
     IResourceManager resourceManager )
     : PodLoader<HtmlPodNews>(
@@ -19,6 +19,6 @@ public class NatgeotvPodLoader(
         new HttpPotdFetcher<HtmlPodNews>(
             httpClient,
             new NatgeotvDescriptionFetcher(),
-            resourceManager),
+            resourceManager ),
         resourceManager )
 { }
