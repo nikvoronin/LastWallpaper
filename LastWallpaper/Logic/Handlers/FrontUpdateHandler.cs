@@ -40,7 +40,7 @@ public sealed class FrontUpdateHandler(
             catch (FileNotFoundException) { }
 
             _notifyIconCtrl.Text =
-                $"{Program.AppName} #{updateResult.PodType.ToPodName()}\n{updateResult.Created:D} {updateResult.Created:t}";
+                $"{Program.AppName} ⭐{updateResult.PodType.ToPodName()}\n{updateResult.Created:D} {updateResult.Created:t}";
         }
 
         if (targets.HasFlag( UiUpdateTargets.Toast )) {
