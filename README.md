@@ -46,12 +46,12 @@ When the application can't update or retrieve the wallpaper image, it shows you 
 🐭 Hover your mouse over the tray icon. The appeared hint consist of several parts:
 
 ```plain
-[The Last Wallpaper] [#podname]
+[The Last Wallpaper] [⭐podname]
 [3 June 2024] [16:43]
 ```
 
 - `The Last Wallpaper` - reminds you that you don't need other wallpaper apps.
-- `#podname` - the name of the source of the picture-of-the-day.
+- `⭐podname` - the name of the source of the picture-of-the-day.
 - `3 June 2024` - the date of the picture-of-the-day (not only today).
 - `16:43` - when the POD- image was successfully downloaded.
 
