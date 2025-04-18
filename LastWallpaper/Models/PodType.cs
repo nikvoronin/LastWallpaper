@@ -2,7 +2,7 @@
 
 public enum PodType
 {
-    Local,
+    System,
     Bing,
     // TODO: return after refactoring
     //Apod,
