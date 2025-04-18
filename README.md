@@ -82,7 +82,6 @@ When the application can't update or retrieve the wallpaper image, it shows you 
   - https://epod.usra.edu/blog/
   - https://www.the-scientist.com/type/image-of-the-day
   - https://bpod.org.uk/
-  - https://indicator.ru/
   - https://neuronovosti.ru/tag/kartinka-dnya/
 
 ### Development specific
