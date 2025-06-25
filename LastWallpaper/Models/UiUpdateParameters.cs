@@ -2,7 +2,7 @@
 
 namespace LastWallpaper.Models;
 
-public class FrontUpdateParameters(
+public class UiUpdateParameters(
     UiUpdateTargets updateTargets,
     PodUpdateResult podUpdateResult )
 {

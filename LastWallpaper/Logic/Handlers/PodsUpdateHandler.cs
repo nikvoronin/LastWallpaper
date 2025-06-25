@@ -10,8 +10,8 @@ namespace LastWallpaper.Logic.Handlers;
 
 public sealed class PodsUpdateHandler(
     IReadOnlyCollection<IPotdLoader> pods,
-    IParameterizedUpdateHandler<FrontUpdateParameters> frontUpdateHandler,
-    IResultsProcessor<IReadOnlyCollection<PodUpdateResult>, FrontUpdateParameters> resultsProcessor )
+    IParameterizedUpdateHandler<UiUpdateParameters> uiUpdateHandler,
+    IResultsProcessor<IReadOnlyCollection<PodUpdateResult>, UiUpdateParameters> resultsProcessor )
     : IAsyncUpdateHandler
 {
     public async Task HandleUpdateAsync( CancellationToken ct )
@@ -29,13 +29,13 @@ public sealed class PodsUpdateHandler(
             .Select( t => t.Result.Value )
             .ToArray();
 
-        var frontParameters =
+        var uiParameters =
             await _resultsProcessor.ProcessResultsAsync( updateResults, ct );
 
-        _frontUpdateHandler?.HandleUpdate( frontParameters, ct );
+        _uiUpdateHandler?.HandleUpdate( uiParameters, ct );
     }
 
     private readonly IReadOnlyCollection<IPotdLoader> _pods = pods;
-    private readonly IParameterizedUpdateHandler<FrontUpdateParameters> _frontUpdateHandler = frontUpdateHandler;
-    private readonly IResultsProcessor<IReadOnlyCollection<PodUpdateResult>, FrontUpdateParameters> _resultsProcessor = resultsProcessor;
+    private readonly IParameterizedUpdateHandler<UiUpdateParameters> _uiUpdateHandler = uiUpdateHandler;
+    private readonly IResultsProcessor<IReadOnlyCollection<PodUpdateResult>, UiUpdateParameters> _resultsProcessor = resultsProcessor;
 }
