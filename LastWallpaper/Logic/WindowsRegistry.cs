@@ -10,34 +10,38 @@ public static class WindowsRegistry
 {
     public static void SetWallpaper(
         string imagePath,
-        WallpaperStyle wallpaperStyle = WallpaperStyle.Default)
+        WallpaperStyle wallpaperStyle = WallpaperStyle.Default )
     {
-        var windows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+        var windows = RuntimeInformation.IsOSPlatform( OSPlatform.Windows );
         if (!windows) return;
 
-        if (!_wallpaperStyles.ContainsKey(wallpaperStyle))
+        if (!_wallpaperStyles.ContainsKey( wallpaperStyle ))
             wallpaperStyle = WallpaperStyle.Default;
 
         using var key =
             Registry.CurrentUser
-            .OpenSubKey(@"Control Panel\Desktop", true);
+            .OpenSubKey( @"Control Panel\Desktop", true );
 
-        key?.SetValue(
-            "WallpaperStyle",
-            _wallpaperStyles[wallpaperStyle]);
+        if (key is not null) {
+            key.SetValue(
+                "WallpaperStyle",
+                _wallpaperStyles[wallpaperStyle] );
 
-        key?.SetValue(
-            "TileWallpaper",
-            wallpaperStyle == WallpaperStyle.Tile ? "1" : "0");
+            key.SetValue(
+                "TileWallpaper",
+                wallpaperStyle == WallpaperStyle.Tile ? Tiled : Single );
+        }
 
-        _ = SystemParametersInfo(
-            SPI_SETDESKWALLPAPER,
-            0,
-            imagePath,
-            SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE);
+        if (!string.IsNullOrWhiteSpace( imagePath )) {
+            _ = SystemParametersInfo(
+                SPI_SETDESKWALLPAPER,
+                0,
+                imagePath,
+                SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE );
+        }
     }
 
-    static readonly FrozenDictionary<WallpaperStyle, string> _wallpaperStyles =
+    private static readonly FrozenDictionary<WallpaperStyle, string> _wallpaperStyles =
         new Dictionary<WallpaperStyle, string>() {
             { WallpaperStyle.Default, "10" }, // default is Fill
             { WallpaperStyle.Fill, "10" },
@@ -48,10 +52,13 @@ public static class WindowsRegistry
             { WallpaperStyle.Fit, "6" },
         }.ToFrozenDictionary();
 
-    const int SPI_SETDESKWALLPAPER = 20;
-    const int SPIF_UPDATEINIFILE = 0x01;
-    const int SPIF_SENDWININICHANGE = 0x02;
+    private const int SPI_SETDESKWALLPAPER = 20;
+    private const int SPIF_UPDATEINIFILE = 0x01;
+    private const int SPIF_SENDWININICHANGE = 0x02;
 
-    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-    static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni);
+    private const string Tiled = "1";
+    private const string Single = "0";
+
+    [DllImport( "user32.dll", CharSet = CharSet.Unicode )]
+    static extern int SystemParametersInfo( int uAction, int uParam, string lpvParam, int fuWinIni );
 }
