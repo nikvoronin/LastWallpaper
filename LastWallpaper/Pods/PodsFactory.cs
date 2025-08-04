@@ -1,11 +1,11 @@
 ﻿using LastWallpaper.Abstractions;
+using LastWallpaper.Logic;
 using LastWallpaper.Models;
-using LastWallpaper.Models.Rss;
 using LastWallpaper.Pods.Astrobin;
 using LastWallpaper.Pods.Bing;
+using LastWallpaper.Pods.Elementy;
 // TODO: return after refactoring
 //using LastWallpaper.Pods.Copernicus;
-//using LastWallpaper.Pods.Elementy;
 //using LastWallpaper.Pods.Nasa;
 using LastWallpaper.Pods.Natgeotv;
 using LastWallpaper.Pods.Wikimedia;
@@ -43,11 +43,11 @@ public static class PodsFactory
                     },
                     resourceManager ),
 
-            //PodType.Elementy =>
-            //    new ElementyPodLoader(
-            //        client,
-            //        resourceManager,
-            //        new RssReader() ),
+            PodType.Elementy =>
+                new ElementyPodLoader(
+                    new HttpClient(),
+                    resourceManager,
+                    new RssReader() ),
 
             PodType.Astrobin =>
                 new AstrobinPodLoader(

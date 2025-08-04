@@ -7,7 +7,7 @@ public enum PodType
     // TODO: return after refactoring
     //Apod,
     Wikipedia,
-    //Elementy,
+    Elementy,
     Astrobin,
     Natgeotv,
     //Copernicus,
