@@ -18,12 +18,10 @@ public sealed class ElementyPodLoader(
         new ElementyNewsFetcher(
             httpClient,
             feedReader,
-            new( RssFeedUrl ) ),
+            new( "https://elementy.ru/rss/kartinka_dnya" ) ),
         new HttpPotdFetcher<ElementyPodNews>(
             httpClient,
             new ElementyDescriptionFetcher(),
             resourceManager ),
         resourceManager )
-{
-    private const string RssFeedUrl = "https://elementy.ru/rss/kartinka_dnya";
-}
+{ }
