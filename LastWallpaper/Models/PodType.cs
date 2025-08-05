@@ -7,7 +7,6 @@ public enum PodType
     Apod,
     Wikipedia,
     Elementy,
-    Astrobin,
     Natgeotv,
     Copernicus,
     Nasa,

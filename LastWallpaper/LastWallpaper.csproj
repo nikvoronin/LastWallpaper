@@ -9,8 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pods\Astrobin\**" />
     <Compile Remove="publish\**" />
+    <EmbeddedResource Remove="Pods\Astrobin\**" />
     <EmbeddedResource Remove="publish\**" />
+    <None Remove="Pods\Astrobin\**" />
     <None Remove="publish\**" />
   </ItemGroup>
 
