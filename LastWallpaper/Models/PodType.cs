@@ -11,5 +11,5 @@ public enum PodType
     Natgeotv,
     // TODO: return after refactoring
     //Copernicus,
-    //Nasa
+    Nasa,
 }

@@ -11,13 +11,10 @@
   <ItemGroup>
     <!-- TODO: return after refactoring -->
     <Compile Remove="Pods\Copernicus\**" />
-    <Compile Remove="Pods\Nasa\**" />
     <Compile Remove="publish\**" />
     <EmbeddedResource Remove="Pods\Copernicus\**" />
-    <EmbeddedResource Remove="Pods\Nasa\**" />
     <EmbeddedResource Remove="publish\**" />
     <None Remove="Pods\Copernicus\**" />
-    <None Remove="Pods\Nasa\**" />
     <None Remove="publish\**" />
   </ItemGroup>
 

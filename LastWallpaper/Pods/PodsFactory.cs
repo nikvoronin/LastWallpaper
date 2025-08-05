@@ -5,6 +5,8 @@ using LastWallpaper.Pods.Apod;
 using LastWallpaper.Pods.Astrobin;
 using LastWallpaper.Pods.Bing;
 using LastWallpaper.Pods.Elementy;
+using LastWallpaper.Pods.Nasa;
+
 // TODO: return after refactoring
 //using LastWallpaper.Pods.Copernicus;
 using LastWallpaper.Pods.Natgeotv;
@@ -64,10 +66,10 @@ public static class PodsFactory
             //        client,
             //        resourceManager ),
 
-            //PodType.Nasa =>
-            //    new NasaPodLoader(
-            //        client,
-            //        resourceManager ),
+            PodType.Nasa =>
+                new NasaPodLoader(
+                    new HttpClient(),
+                    resourceManager ),
 
             _ => null
         };
