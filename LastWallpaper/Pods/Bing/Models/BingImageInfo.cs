@@ -2,7 +2,7 @@
 
 namespace LastWallpaper.Pods.Bing.Models;
 
-public class ImageInfo
+public class BingImageInfo
 {
     [JsonPropertyName("startdate")]
     public required string StartDate { get; init; }

@@ -6,5 +6,5 @@ namespace LastWallpaper.Pods.Bing.Models;
 public class BingHpImages
 {
     [JsonPropertyName( "images" )]
-    public IReadOnlyList<ImageInfo>? Images { get; set; }
+    public IReadOnlyList<BingImageInfo>? Images { get; set; }
 }
