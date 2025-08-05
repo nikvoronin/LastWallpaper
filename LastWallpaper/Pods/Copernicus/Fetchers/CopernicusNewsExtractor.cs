@@ -35,7 +35,7 @@ public class CopernicusNewsExtractor(
         var urlParts = new Uri( _copernicusSystemFilesUri, imageUrlPartsRaw );
 
         var imageUrl =
-            _copernicusSystemFilesUri.ToString()
+            _copernicusSystemFilesUri
             + "/" + string.Concat( urlParts.Segments[^3..] );
 
         var tags =
