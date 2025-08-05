@@ -32,11 +32,11 @@ public class ResourceManager(
     }
 
     public string CreateAlbumFilename(
-        string podName,
+        PodType podType,
         DateTimeOffset potdCreationTime )
         => Path.Combine(
             AlbumFolder,
-            $"{podName}{potdCreationTime:yyyyMMdd}.jpeg" );
+            $"{podType.ToPodName()}{potdCreationTime:yyyyMMdd}.jpeg" );
 
     public FileStream CreateTemporaryFileStream() =>
         new(
@@ -46,11 +46,11 @@ public class ResourceManager(
             FileMode.Create );
 
     public bool PotdExists(
-        string podName,
+        PodType podType,
         DateTimeOffset updateTime )
         => File.Exists(
             CreateAlbumFilename(
-                podName, updateTime ) );
+                podType, updateTime ) );
 
     public void RememberLastWallpaper( PodUpdateResult imago )
     {

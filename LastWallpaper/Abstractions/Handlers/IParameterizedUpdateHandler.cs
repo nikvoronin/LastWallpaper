@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace LastWallpaper.Abstractions;
+namespace LastWallpaper.Abstractions.Handlers;
 
 public interface IParameterizedUpdateHandler<T>
 {

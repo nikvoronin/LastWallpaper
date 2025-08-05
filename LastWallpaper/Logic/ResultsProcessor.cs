@@ -13,20 +13,20 @@ namespace LastWallpaper.Logic;
 public class ResultsProcessor(
     IResourceManager resourceManager,
     AppSettings settings )
-    : IResultsProcessor<IReadOnlyCollection<PodUpdateResult>, FrontUpdateParameters>
+    : IResultsProcessor<IReadOnlyCollection<PodUpdateResult>, UiUpdateParameters>
 {
-    public ValueTask<FrontUpdateParameters> ProcessResultsAsync(
+    public ValueTask<UiUpdateParameters> ProcessResultsAsync(
         IReadOnlyCollection<PodUpdateResult> results,
         CancellationToken ct )
     {
-        results = results.Select( MapCachedFile ).ToList();
+        results = [.. results.Select( MapCachedFile )];
 
         var hasNews = results.Count > 0;
         var uiTargets =
             hasNews ? UiUpdateTargets.All
             : UiUpdateTargets.NotifyIcon; // change icon from time to time
 
-        PodUpdateResult result =
+        var result =
             results
             .FirstOrDefault()
             ?? _resourceManager
@@ -56,7 +56,7 @@ public class ResultsProcessor(
             if (useSystemDesktopWallpaper) {
                 result =
                     new() {
-                        PodName = "local", // TODO? add local pod
+                        PodType = PodType.System,
                         Created = systemDesktopWallpaperLastWriteTime,
                         Filename = _resourceManager.SystemDesktopWallpaperFilename
                     };
@@ -69,7 +69,7 @@ public class ResultsProcessor(
 
         return
             ValueTask.FromResult(
-                new FrontUpdateParameters( uiTargets, result ) );
+                new UiUpdateParameters( uiTargets, result ) );
     }
 
     private PodUpdateResult MapCachedFile( PodUpdateResult podResult )
@@ -77,7 +77,8 @@ public class ResultsProcessor(
         try {
             var albumImageFilename =
                 _resourceManager.CreateAlbumFilename(
-                    podResult.PodName, podResult.Created );
+                    podResult.PodType,
+                    podResult.Created );
 
             var copyToAlbum =
                 podResult.CopyToAlbum

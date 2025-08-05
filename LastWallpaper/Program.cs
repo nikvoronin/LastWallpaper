@@ -9,7 +9,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -51,11 +50,7 @@ internal static class Program
         SynchronizationContext.SetSynchronizationContext(
             new WindowsFormsSynchronizationContext() );
 
-        var httpClient = new HttpClient();
-        httpClient.DefaultRequestHeaders.Add(
-            "User-Agent", settings.UserAgent );
-
-        var notifyIconCtrl =
+        using var notifyIconCtrl =
             new NotifyIcon() {
                 Text = AppName,
                 Visible = false,
@@ -63,28 +58,25 @@ internal static class Program
                     SystemIcons.GetStockIcon(
                         StockIconId.ImageFiles )
             };
-
         var activePods =
 #if DEBUG
-            Enum.GetValues<PodType>()
+        Enum.GetValues<PodType>()
 #else
             settings.ActivePods.Distinct()
 #endif
-            .Select( podType =>
-                PodsFactory.Create(
-                    podType,
-                    httpClient,
-                    resourceManager,
-                    new RssReader(),
-                    settings ) )
-            .OfType<IPotdLoader>()
-            .ToList();
+        .Select( podType =>
+            PodsFactory.Create(
+                podType,
+                resourceManager,
+                settings ) )
+        .OfType<IPotdLoader>()
+        .ToList();
 
         if (activePods.Count == 0) // TODO: add logger
             return (int)ErrorLevel.NoPodsDefined;
 
-        var frontUpdateHandler =
-            new FrontUpdateHandler(
+        var uiUpdateHandler =
+            new UiUpdateHandler(
                 SynchronizationContext.Current!,
                 notifyIconCtrl,
                 IconManagerFactory.Create( settings.TrayIconStyle ),
@@ -93,34 +85,31 @@ internal static class Program
         var podsUpdateHandler =
             new PodsUpdateHandler(
                 activePods,
-                frontUpdateHandler,
+                uiUpdateHandler,
                 new ResultsProcessor(
                     resourceManager,
                     settings ) );
 
         Debug.Assert( SynchronizationContext.Current is not null );
-        var scheduler =
-            new Scheduler(
-                podsUpdateHandler,
-                settings );
+        using (var scheduler =
+                new Scheduler(
+                    podsUpdateHandler,
+                    settings )) {
+            UpdateTrayIconOnly();
 
-        UpdateTrayIconOnly();
+            notifyIconCtrl.ContextMenuStrip =
+                CreateContextMenu(
+                    scheduler,
+                    resourceManager );
+            notifyIconCtrl.MouseClick += OnMouseLeftButtonClick;
+            notifyIconCtrl.Visible = true;
 
-        notifyIconCtrl.ContextMenuStrip =
-            CreateContextMenu(
-                scheduler,
-                resourceManager );
-        notifyIconCtrl.MouseClick += OnMouseLeftButtonClick;
-        notifyIconCtrl.Visible = true;
-
-        scheduler.Start();
-        Application.Run();
-
-        scheduler.Dispose();
+            scheduler.Start();
+            Application.Run();
+        }
 
         notifyIconCtrl.Visible = false;
         notifyIconCtrl.MouseClick -= OnMouseLeftButtonClick;
-        notifyIconCtrl.Dispose();
 
         return (int)ErrorLevel.ExitOk;
 
@@ -135,8 +124,8 @@ internal static class Program
         {
             var imagoResult = resourceManager.RestoreLastWallpaper();
             if (imagoResult.IsSuccess) {
-                frontUpdateHandler.HandleUpdate(
-                    new FrontUpdateParameters(
+                uiUpdateHandler.HandleUpdate(
+                    new UiUpdateParameters(
                         UiUpdateTargets.NotifyIcon,
                         imagoResult.Value ),
                     CancellationToken.None );
@@ -229,7 +218,7 @@ internal static class Program
         };
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "5.1.7";
+    public const string AppVersion = "5.8.5-develop";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
     private const string CacheFolderName = "cache";

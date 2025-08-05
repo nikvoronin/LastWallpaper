@@ -10,7 +10,7 @@ public interface IPotdLoader
     /// <summary>
     /// Name or prefix of the POD loader.
     /// </summary>
-    string Name { get; }
+    PodType PodType { get; }
 
     /// <summary>
     /// Updates and downloads pictures of the day.

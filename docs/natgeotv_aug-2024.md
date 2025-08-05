@@ -10,7 +10,7 @@ It is also has [RSS](https://feeds.feedburner.com/natgeotv/ca/featured/POD) chan
 
 > https://www.natgeotv.com/ca/photo-of-the-day
 
-Contains several `li` elements, about 30 by the number of days in a week, which contains url to the image and some description about it. See next example:
+Contains several `li` elements, about 30 by the number of days in a month, which contains url to the image and some description about it. See next example:
 
 ```html
 <li class="PODItem">

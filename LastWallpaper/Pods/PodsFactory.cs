@@ -1,7 +1,7 @@
 ﻿using LastWallpaper.Abstractions;
+using LastWallpaper.Logic;
 using LastWallpaper.Models;
-using LastWallpaper.Models.Rss;
-using LastWallpaper.Pods.Astrobin;
+using LastWallpaper.Pods.Apod;
 using LastWallpaper.Pods.Bing;
 using LastWallpaper.Pods.Copernicus;
 using LastWallpaper.Pods.Elementy;
@@ -16,53 +16,50 @@ public static class PodsFactory
 {
     public static IPotdLoader? Create(
         PodType podType,
-        HttpClient client,
         IResourceManager resourceManager,
-        IFeedReader<RssFeed> rssReader,
         AppSettings settings )
         => podType switch {
 
             PodType.Bing =>
                 new BingPodLoader(
-                    client,
+                    new HttpClient(),
                     resourceManager,
                     settings.BingOptions ),
 
             PodType.Apod =>
-                new NasaApodLoader(
-                    client,
+                new ApodLoader(
+                    new HttpClient(),
                     resourceManager,
                     settings.ApodOptions ),
 
             PodType.Wikipedia =>
                 new WikipediaPodLoader(
-                    client,
+                    new HttpClient() {
+                        DefaultRequestHeaders = {
+                            { "User-Agent", settings.UserAgent }
+                        }
+                    },
                     resourceManager ),
 
             PodType.Elementy =>
                 new ElementyPodLoader(
-                    client,
+                    new HttpClient(),
                     resourceManager,
-                    rssReader ),
-
-            PodType.Astrobin =>
-                new AstrobinPodLoader(
-                    client,
-                    resourceManager ),
+                    new RssReader() ),
 
             PodType.Natgeotv =>
                 new NatgeotvPodLoader(
-                    client,
+                    new HttpClient(),
                     resourceManager ),
 
             PodType.Copernicus =>
                 new CopernicusPodLoader(
-                    client,
+                    new HttpClient(),
                     resourceManager ),
 
             PodType.Nasa =>
                 new NasaPodLoader(
-                    client,
+                    new HttpClient(),
                     resourceManager ),
 
             _ => null

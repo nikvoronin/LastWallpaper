@@ -1,14 +1,15 @@
 # The Last Wallpaper
 
 Picture Of The Day (POTD) on desktop.\
--- Bing, NASA, Wikipedia, Elementy, AstroBin, NatGeoTV, Copernicus
+-- Bing, NASA, Wikipedia, Elementy, NatGeoTV, Copernicus
 
 ![20240603_212225](https://github.com/nikvoronin/LastWallpaper/assets/11328666/921585aa-f489-43e6-b084-7f5db9006428)
 
 - [What's New](#whats-new)
 - [User Interface](#user-interface)
 - [Documentation](#documentation)
-  - [Media sources +8](#media-sources-8)
+  - [Media sources APIs +7](#media-sources-apis-7)
+  - [Development specific](#development-specific)
   - [TODO? Custom POD loader](#todo-custom-pod-loader)
 - [Application Settings](#application-settings)
 - [Release Notes](#release-notes)
@@ -19,17 +20,15 @@ __System requirements:__ Windows 10 x64, .NET Desktop Runtime 8.0.
 
 ## What's New
 
-13 Nov 2024
+5 Aug 2025
 
-- Improve validating of wikipedia media types.
-- Rebuild mosaic in tray icon on user click (see [tray_icon:mosaic](#application-settings) option).
+- AstroBin (Home of astrophotography) pod was discontinued due to the API being no longer available.
+- Complex refactoring of the inner code base.
 
 Not so far
 
-- Control manual change of system wallpaper.
-- Add NASA.gov POD loader, general image-of-the-day page.
-- Add Copernicus POD, a gallery containing the newest Copernicus Sentinel images.
-- Add NatGeoTV POD.
+- Improve validating of wikipedia media types.
+- Rebuild mosaic in tray icon on user click (see [tray_icon:mosaic](#application-settings) option).
 
 See also [Release Notes](#release-notes) chapter.
 
@@ -45,12 +44,12 @@ When the application can't update or retrieve the wallpaper image, it shows you 
 🐭 Hover your mouse over the tray icon. The appeared hint consist of several parts:
 
 ```plain
-[The Last Wallpaper] [#podname]
+[The Last Wallpaper] [⭐podname]
 [3 June 2024] [16:43]
 ```
 
 - `The Last Wallpaper` - reminds you that you don't need other wallpaper apps.
-- `#podname` - the name of the source of the picture-of-the-day.
+- `⭐podname` - the name of the source of the picture-of-the-day.
 - `3 June 2024` - the date of the picture-of-the-day (not only today).
 - `16:43` - when the POD- image was successfully downloaded.
 
@@ -63,11 +62,10 @@ When the application can't update or retrieve the wallpaper image, it shows you 
 
 ## Documentation
 
-### Media sources +8
+### Media sources APIs +7
 
 - [Copernicus](/docs/copernicus_aug-2024.md) - The daily updated gallery containing the newest Copernicus Sentinel images.
 - [NatGeoTV Canada](/docs/natgeotv_aug-2024.md) - Photo of the day - National Geographic Channel - Canada.
-- [AstroBin](/docs/astrobin_aug-2024.md) - Home of astrophotography.
 - [Elementy RSS Feed](/docs/elementy_aug-2024.md) - Science picture of the day.
 - [Wikipedia](/docs/wikipedia_jun-2024.md) - Picture Of The Day.
 - Bing image of the day API
@@ -76,21 +74,27 @@ When the application can't update or retrieve the wallpaper image, it shows you 
 - NASA
   - [Image of the Day](/docs/nasagov_aug-2024.md)
   - [Open APIs Portal](https://api.nasa.gov/) - free but limited with 50 requests per IP address per day.
-- [Windows 10 Toast Notifications](/docs/win10_toast_notifications.md)
-- [Windows Desktop Wallpaper](/docs/windows_desktop_wallpaper.md)
+- ~~[AstroBin](/docs/astrobin_aug-2024.md) - Home of astrophotography.~~ The pod was discontinued due to the API being no longer available.
 - TODO?
   - flickr.com/groups/imageoftheday/pool/ - a group with daily image posting.
   - https://epod.usra.edu/blog/
   - https://www.the-scientist.com/type/image-of-the-day
   - https://bpod.org.uk/
+  - https://neuronovosti.ru/tag/kartinka-dnya/
+
+### Development specific
+
+- [Windows 10 Toast Notifications](/docs/win10_toast_notifications.md)
+- [Windows Desktop Wallpaper](/docs/windows_desktop_wallpaper.md)
 
 ### TODO? Custom POD loader
 
 - PodsFactory
 - PodLoader
 - Scheduler
-- HttpPodLoader
-- HtmlPodLoader
+- Fetchers
+  - NewsFetcher
+  - PotdFetcher
 - ResultsProcessor
 - ToastNotifications
 - WindowsRegistry
@@ -122,7 +126,6 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
   - __wikipedia__ - Wikipedia POTD.
   - __apod__ - NASA APOD.
   - __elementy__ - Elementy (science picture of the day).
-  - __astrobin__ - AstroBin IOTD.
   - __natgeotv__ - NatGeoTV POD.
   - __copernicus__ - Copernicus IOTD.
   - __nasa__ - NASA.gov POTD.

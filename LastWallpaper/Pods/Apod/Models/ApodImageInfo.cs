@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace LastWallpaper.Pods.Nasa.Models;
+namespace LastWallpaper.Pods.Apod.Models;
 
-public class ImageInfo
+public class ApodImageInfo
 {
     [JsonPropertyName("copyright")]
     public string? Copyright { get; init; }

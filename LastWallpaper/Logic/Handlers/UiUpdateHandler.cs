@@ -1,4 +1,5 @@
 ﻿using LastWallpaper.Abstractions;
+using LastWallpaper.Abstractions.Handlers;
 using LastWallpaper.Models;
 using System;
 using System.Drawing;
@@ -11,16 +12,16 @@ using System.Windows.Forms;
 
 namespace LastWallpaper.Logic.Handlers;
 
-public sealed class FrontUpdateHandler(
+public sealed class UiUpdateHandler(
     SynchronizationContext uiContext,
     NotifyIcon notifyIconCtrl,
     IIconManager iconManager,
     AppSettings settings )
-    : IParameterizedUpdateHandler<FrontUpdateParameters>
+    : IParameterizedUpdateHandler<UiUpdateParameters>
     , IDisposable
 {
     public void HandleUpdate(
-        FrontUpdateParameters updateParameters,
+        UiUpdateParameters updateParameters,
         CancellationToken ct )
     {
         var targets = updateParameters.UpdateTargets;
@@ -39,7 +40,7 @@ public sealed class FrontUpdateHandler(
             catch (FileNotFoundException) { }
 
             _notifyIconCtrl.Text =
-                $"{Program.AppName} #{updateResult.PodName}\n{updateResult.Created:D} {updateResult.Created:t}";
+                $"{Program.AppName} ⭐{updateResult.PodType.ToPodName()}\n{updateResult.Created:D} {updateResult.Created:t}";
         }
 
         if (targets.HasFlag( UiUpdateTargets.Toast )) {

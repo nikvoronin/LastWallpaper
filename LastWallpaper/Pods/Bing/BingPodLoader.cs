@@ -1,14 +1,10 @@
-﻿using FluentResults;
-using LastWallpaper.Abstractions;
+﻿using LastWallpaper.Abstractions;
+using LastWallpaper.Logic;
+using LastWallpaper.Logic.Fetchers;
 using LastWallpaper.Models;
+using LastWallpaper.Pods.Bing.Fetchers;
 using LastWallpaper.Pods.Bing.Models;
-using System;
-using System.Globalization;
 using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace LastWallpaper.Pods.Bing;
 
@@ -16,84 +12,14 @@ public sealed class BingPodLoader(
     HttpClient httpClient,
     IResourceManager resourceManager,
     BingSettings settings )
-    : HttpPodLoader<BingPodNews>( httpClient, resourceManager )
-{
-    public override string Name => nameof( PodType.Bing ).ToLower();
-
-    protected async override Task<Result<BingPodNews>> FetchNewsInternalAsync(
-        CancellationToken ct )
-    {
-        var json =
-            await _httpClient.GetFromJsonAsync<BingHpImages>(
-                RequestPicturesList, ct );
-
-        var noUpdates = (json?.Images?.Count ?? 0) == 0;
-        if (noUpdates) return Result.Fail( "Empty JSON. No updates were found." );
-
-        var lastImageInfo = json!.Images![0];
-        if (lastImageInfo is null) return Result.Fail( "Picture of the day was not found." );
-
-        (var title,
-            var copyrights) = SplitDescription( lastImageInfo.Copyright );
-
-        var urlBase = lastImageInfo.UrlBase;
-        if (urlBase is null) return Result.Fail( "Can not find urlbase of the picture." );
-
-        var lastImageUrl =
-            string.Format(
-                CultureInfo.InvariantCulture,
-                DownloadPictureUrlFormat,
-                urlBase,
-                ImageResolutions.GetValue( _settings.Resolution ) );
-
-        var startDateOk =
-            DateTime.TryParseExact(
-                lastImageInfo.StartDate,
-                "yyyyMMdd",
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.None,
-                out DateTime startDate );
-
-        if (!startDateOk) {
-            return Result.Fail(
-                $"Can not parse date-time of the picture: {lastImageInfo.StartDate}." );
-        }
-
-        return Result.Ok(
-            new BingPodNews() {
-                PubDate = startDate,
-                LastImageUrl = lastImageUrl,
-                Copyright = copyrights,
-                Title = title,
-            } );
-
-        static (string? title, string? copyrights) SplitDescription( string? description )
-        {
-            var descriptionParts = description?.Split( " (©" ) ?? [];
-            var hasParts = descriptionParts.Length == 2;
-
-            return
-                hasParts ? (descriptionParts[0], $"©{descriptionParts[1][..^1]}")
-                : (description, null);
-        }
-    }
-
-    protected override Task<Result<PotdDescription>> GetDescriptionAsync(
-        BingPodNews news, CancellationToken ct )
-        => Task.FromResult( Result.Ok(
-            new PotdDescription() {
-                Url = new( news.LastImageUrl ),
-                PubDate = news.PubDate,
-                Title = news.Title,
-                Copyright = news.Copyright
-            } ) );
-
-    private static readonly CompositeFormat DownloadPictureUrlFormat =
-        CompositeFormat.Parse( "https://www.bing.com{0}_{1}.jpg" );
-
-    private readonly BingSettings _settings = settings;
-
-    // Hardcoded json format, latest (today) zero-indexed one image.
-    private const string RequestPicturesList =
-        "https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1";
-}
+    : PodLoader<BingPodNews>(
+        PodType.Bing,
+        new BingNewsFetcher(
+            httpClient,
+            settings ),
+        new HttpPotdFetcher<BingPodNews>(
+            httpClient,
+            new BingDescriptionFetcher(),
+            resourceManager ),
+        resourceManager )
+{ }

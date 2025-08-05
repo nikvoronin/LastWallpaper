@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace LastWallpaper.Abstractions;
+namespace LastWallpaper.Abstractions.Handlers;
 
 public interface IAsyncUpdateHandler
 {

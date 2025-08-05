@@ -7,7 +7,7 @@ namespace LastWallpaper.Abstractions;
 
 public interface IResultsProcessor<TResults, TUpdateParameters>
     where TResults : IEnumerable<PodUpdateResult>
-    where TUpdateParameters : FrontUpdateParameters
+    where TUpdateParameters : UiUpdateParameters
 {
     ValueTask<TUpdateParameters> ProcessResultsAsync(
         TResults results,

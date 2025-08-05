@@ -1,5 +1,5 @@
-﻿using LastWallpaper.Pods.Bing.Models;
-using LastWallpaper.Pods.Nasa.Models;
+﻿using LastWallpaper.Pods.Apod.Models;
+using LastWallpaper.Pods.Bing.Models;
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -23,6 +23,7 @@ public class AppSettings
     [JsonPropertyName( "wallpaper_fit" )]
     public WallpaperStyle WallpaperFit { get; init; } = WallpaperStyle.Default;
 
+    // TODO: make it overridable in a level of each pod setting
     [JsonPropertyName( "user_agent" )]
     public string UserAgent { get; init; } =
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";

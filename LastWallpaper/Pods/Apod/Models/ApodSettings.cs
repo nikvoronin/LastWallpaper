@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace LastWallpaper.Pods.Nasa.Models;
+namespace LastWallpaper.Pods.Apod.Models;
 
 public class ApodSettings
 {
