@@ -9,7 +9,6 @@ public enum PodType
     Elementy,
     Astrobin,
     Natgeotv,
-    // TODO: return after refactoring
-    //Copernicus,
+    Copernicus,
     Nasa,
 }

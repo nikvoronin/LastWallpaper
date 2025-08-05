@@ -9,12 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- TODO: return after refactoring -->
-    <Compile Remove="Pods\Copernicus\**" />
     <Compile Remove="publish\**" />
-    <EmbeddedResource Remove="Pods\Copernicus\**" />
     <EmbeddedResource Remove="publish\**" />
-    <None Remove="Pods\Copernicus\**" />
     <None Remove="publish\**" />
   </ItemGroup>
 

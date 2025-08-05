@@ -4,11 +4,9 @@ using LastWallpaper.Models;
 using LastWallpaper.Pods.Apod;
 using LastWallpaper.Pods.Astrobin;
 using LastWallpaper.Pods.Bing;
+using LastWallpaper.Pods.Copernicus;
 using LastWallpaper.Pods.Elementy;
 using LastWallpaper.Pods.Nasa;
-
-// TODO: return after refactoring
-//using LastWallpaper.Pods.Copernicus;
 using LastWallpaper.Pods.Natgeotv;
 using LastWallpaper.Pods.Wikimedia;
 using System.Net.Http;
@@ -60,11 +58,10 @@ public static class PodsFactory
                     new HttpClient(),
                     resourceManager ),
 
-            // TODO: return after refactoring
-            //PodType.Copernicus =>
-            //    new CopernicusPodLoader(
-            //        client,
-            //        resourceManager ),
+            PodType.Copernicus =>
+                new CopernicusPodLoader(
+                    new HttpClient(),
+                    resourceManager ),
 
             PodType.Nasa =>
                 new NasaPodLoader(
