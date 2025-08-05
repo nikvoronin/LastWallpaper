@@ -1,12 +1,12 @@
 ﻿using LastWallpaper.Abstractions;
 using LastWallpaper.Logic;
 using LastWallpaper.Models;
+using LastWallpaper.Pods.Apod;
 using LastWallpaper.Pods.Astrobin;
 using LastWallpaper.Pods.Bing;
 using LastWallpaper.Pods.Elementy;
 // TODO: return after refactoring
 //using LastWallpaper.Pods.Copernicus;
-//using LastWallpaper.Pods.Nasa;
 using LastWallpaper.Pods.Natgeotv;
 using LastWallpaper.Pods.Wikimedia;
 using System.Net.Http;
@@ -27,12 +27,11 @@ public static class PodsFactory
                     resourceManager,
                     settings.BingOptions ),
 
-            // TODO: return after refactoring
-            //PodType.Apod =>
-            //    new NasaApodLoader(
-            //        client,
-            //        resourceManager,
-            //        settings.ApodOptions ),
+            PodType.Apod =>
+                new ApodLoader(
+                    new HttpClient(),
+                    resourceManager,
+                    settings.ApodOptions ),
 
             PodType.Wikipedia =>
                 new WikipediaPodLoader(
@@ -59,6 +58,7 @@ public static class PodsFactory
                     new HttpClient(),
                     resourceManager ),
 
+            // TODO: return after refactoring
             //PodType.Copernicus =>
             //    new CopernicusPodLoader(
             //        client,

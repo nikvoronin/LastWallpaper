@@ -4,12 +4,12 @@ public enum PodType
 {
     System,
     Bing,
-    // TODO: return after refactoring
-    //Apod,
+    Apod,
     Wikipedia,
     Elementy,
     Astrobin,
     Natgeotv,
+    // TODO: return after refactoring
     //Copernicus,
     //Nasa
 }

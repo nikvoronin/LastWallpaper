@@ -1,0 +1,15 @@
+﻿using System;
+using System.Text.Json.Serialization;
+
+namespace LastWallpaper.Pods.Apod.Models;
+
+public class ApodSettings
+{
+    [JsonPropertyName( "throttling_hours" )]
+    public TimeSpan ThrottlingHours { get; init; } = TimeSpan.FromHours( 23 );
+
+    [JsonPropertyName( "api_key" )]
+    public string ApiKey { get; init; } = DefaultApiKey;
+
+    public const string DefaultApiKey = "DEMO_KEY";
+}
