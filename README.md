@@ -1,7 +1,7 @@
 # The Last Wallpaper
 
 Picture Of The Day (POTD) on desktop.\
--- Bing, NASA, Wikipedia, Elementy, NatGeoTV, Copernicus
+⭐ Bing, NASA, Wikipedia, Elementy, NatGeoTV, Copernicus
 
 ![20240603_212225](https://github.com/nikvoronin/LastWallpaper/assets/11328666/921585aa-f489-43e6-b084-7f5db9006428)
 
@@ -22,6 +22,7 @@ __System requirements:__ Windows 10 x64, .NET Desktop Runtime 8.0.
 
 5 Aug 2025
 
+- Fixed saving to the directory with the old year in the new year.
 - AstroBin (Home of astrophotography) pod was discontinued due to the API being no longer available.
 - Complex refactoring of the inner code base.
 
@@ -74,13 +75,14 @@ When the application can't update or retrieve the wallpaper image, it shows you 
 - NASA
   - [Image of the Day](/docs/nasagov_aug-2024.md)
   - [Open APIs Portal](https://api.nasa.gov/) - free but limited with 50 requests per IP address per day.
-- ~~[AstroBin](/docs/astrobin_aug-2024.md) - Home of astrophotography.~~ The pod was discontinued due to the API being no longer available.
-- TODO?
-  - flickr.com/groups/imageoftheday/pool/ - a group with daily image posting.
-  - https://epod.usra.edu/blog/
-  - https://www.the-scientist.com/type/image-of-the-day
-  - https://bpod.org.uk/
-  - https://neuronovosti.ru/tag/kartinka-dnya/
+- ~~[AstroBin](/docs/astrobin_aug-2024.md)~~ The pod was discontinued due to the API being no longer available.
+
+#### ¿TODO?
+
+- flickr.com/groups/imageoftheday/pool/ - a group with daily image posting.
+- https://epod.usra.edu/blog/
+- https://www.the-scientist.com/type/image-of-the-day
+- https://bpod.org.uk/
 
 ### Development specific
 
@@ -168,7 +170,13 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
 
 ## Release Notes
 
-### 4.11.13 --fix
+### 5.8.5-rc1
+
+- Complex refactoring of the inner code base.
+- Fixed saving to the directory with the old year in the new year.
+- AstroBin (Home of astrophotography) pod was discontinued due to the API being no longer available.
+
+### 4.11.13 --fix 🐞
 
 - Fix tray icon mouse click.
 
@@ -177,7 +185,7 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
 - Improve validating of wikipedia media types.
 - Rebuild mosaic in tray icon on user click (see [tray_icon:mosaic](#application-settings) option).
 
-### 4.9.30 --fix
+### 4.9.30 --fix 🐞
 
 - Fix using of universal datetime, local one used instead.
 
