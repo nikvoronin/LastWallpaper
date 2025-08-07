@@ -74,7 +74,8 @@ When the application can't update or retrieve the wallpaper image, it shows you 
     - [Nov 2022](/docs/bing_nov-2022.md)
 - NASA
   - [Image of the Day](/docs/nasagov_aug-2024.md)
-  - [Open APIs Portal](https://api.nasa.gov/) - free but limited with 50 requests per IP address per day.
+  - [APOD](/docs/apodweb_aug-2025.md) - Astronomy Picture of the Day.
+  - [Open APIs Portal ![External link](https://en.wikipedia.org/w/skins/Vector/resources/skins.vector.styles/images/link-external-small-ltr-progressive.svg)](https://api.nasa.gov/) - free but limited with 50 requests per IP address per day. Restricted for some countries (403 Forbidden).
 - ~~[AstroBin](/docs/astrobin_aug-2024.md)~~ The pod was discontinued due to the API being no longer available.
 
 #### ¿TODO?
@@ -126,7 +127,8 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
 - __active_pods__ - active pods list. Will updated in appear order. The first one with positive result become a wallpaper.
   - __bing__ - bing.com
   - __wikipedia__ - Wikipedia POTD.
-  - __apod__ - NASA APOD.
+  - __apod__ - NASA APOD open API.
+  - __apodweb__ - NASA APOD web-page.
   - __elementy__ - Elementy (science picture of the day).
   - __natgeotv__ - NatGeoTV POD.
   - __copernicus__ - Copernicus IOTD.
