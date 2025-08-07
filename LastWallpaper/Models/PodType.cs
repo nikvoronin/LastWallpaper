@@ -10,4 +10,5 @@ public enum PodType
     Natgeotv,
     Copernicus,
     Nasa,
+    ApodWeb,
 }

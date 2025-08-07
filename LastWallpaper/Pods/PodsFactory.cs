@@ -26,11 +26,18 @@ public static class PodsFactory
                     resourceManager,
                     settings.BingOptions ),
 
+            // APOD open API
             PodType.Apod =>
                 new ApodLoader(
                     new HttpClient(),
                     resourceManager,
                     settings.ApodOptions ),
+
+            // APOD web-page parser
+            PodType.ApodWeb =>
+                new ApodWebLoader(
+                    new HttpClient(),
+                    resourceManager ),
 
             PodType.Wikipedia =>
                 new WikipediaPodLoader(
