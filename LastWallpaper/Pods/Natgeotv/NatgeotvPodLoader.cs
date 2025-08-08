@@ -18,7 +18,7 @@ public sealed class NatgeotvPodLoader(
             new NatgeotvNewsExtractor() ),
         new HttpPotdFetcher<HtmlPodNews>(
             httpClient,
-            new NatgeotvDescriptionFetcher(),
+            new HtmlDescriptionFetcher(),
             resourceManager ),
         resourceManager )
 { }
