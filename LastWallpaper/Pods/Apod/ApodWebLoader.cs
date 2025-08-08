@@ -19,7 +19,8 @@ public sealed class ApodWebLoader(
                 new( ApodBaseUrl ) ) ),
         new HttpPotdFetcher<HtmlPodNews>(
             httpClient,
-            new HtmlDescriptionFetcher(),
+            new HtmlDescriptionFetcher(
+                new() { UseCopyrightSign = true } ),
             resourceManager ),
         resourceManager )
 {
