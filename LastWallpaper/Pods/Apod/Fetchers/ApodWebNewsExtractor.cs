@@ -3,6 +3,7 @@ using HtmlAgilityPack;
 using LastWallpaper.Abstractions.Fetchers;
 using LastWallpaper.Models;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 
@@ -14,15 +15,19 @@ public class ApodWebNewsExtractor(
 {
     public Result<HtmlPodNews> ExtractNews( HtmlNode root )
     {
-        var centerRootNode =
-            root.Descendants( "center" ).FirstOrDefault();
+        var centerNodes =
+            root.Descendants( "center" )
+            .ToList();
 
-        if (centerRootNode is null)
-            return Result.Fail( "Can not find root container 'center'." );
+        if (centerNodes.Count < 2) {
+            return Result.Fail(
+                $"The number {centerNodes.Count} of 'center' containers does not match. " );
+        }
 
+        #region Apod Image URL
         var apodImageUrl =
-            centerRootNode
-            .Descendants( "a" ).FirstOrDefault( x =>
+            centerNodes[0]
+            ?.Descendants( "a" ).FirstOrDefault( x =>
                 x.GetAttributes( "href" ).Any( IsApodImageHref ) )
             ?.Attributes["href"]
             ?.Value;
@@ -30,8 +35,32 @@ public class ApodWebNewsExtractor(
         if (apodImageUrl is null)
             return Result.Fail( "Can not find url of the apod image." );
 
-        // TODO: extract publication date
-        // TODO: extract title
+        var dateTimeRaw =
+            centerNodes.FirstOrDefault()
+            ?.Descendants( "p" ).Skip( 1 ).FirstOrDefault()
+            ?.FirstChild
+            ?.InnerText
+            ?.Trim();
+        #endregion
+
+        #region Publication date
+        if (!DateTimeOffset.TryParseExact(
+                dateTimeRaw,
+                "yyyy MMMM d",
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out DateTimeOffset publicationDate ))
+            publicationDate = DateTimeOffset.Now;
+        #endregion
+
+        #region Title and/or description
+        var title =
+            centerNodes[1]
+            ?.Descendants( "b" ).FirstOrDefault()
+            ?.InnerText
+            ?.Trim();
+        #endregion
+
         // TODO: extract credits (author)
 
         var potdInfo =
@@ -39,7 +68,7 @@ public class ApodWebNewsExtractor(
                 PodType = PodType.ApodWeb,
                 Author = WebUtility.HtmlDecode( "author" ),
                 Title = WebUtility.HtmlDecode( "title" ),
-                PubDate = DateTimeOffset.UtcNow,
+                PubDate = publicationDate,
                 Url = $"{_baseUri}/{apodImageUrl}"
             };
 
