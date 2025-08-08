@@ -10,7 +10,7 @@ Picture Of The Day (POTD) on desktop.\
 - [Documentation](#documentation)
   - [Media sources APIs +7](#media-sources-apis-7)
   - [Development specific](#development-specific)
-  - [TODO? Custom POD loader](#todo-custom-pod-loader)
+  - [Custom POD Loader Component Guide](#custom-pod-loader-component-guide)
 - [Application Settings](#application-settings)
 - [Release Notes](#release-notes)
 
@@ -63,7 +63,7 @@ When the application can't update or retrieve the wallpaper image, it shows you 
 
 ## Documentation
 
-### Media sources APIs +7
+### Media Sources APIs +7
 
 - [Copernicus](/docs/copernicus_aug-2024.md) - The daily updated gallery containing the newest Copernicus Sentinel images.
 - [NatGeoTV Canada](/docs/natgeotv_aug-2024.md) - Photo of the day - National Geographic Channel - Canada.
@@ -85,23 +85,31 @@ When the application can't update or retrieve the wallpaper image, it shows you 
 - https://www.the-scientist.com/type/image-of-the-day
 - https://bpod.org.uk/
 
-### Development specific
+### Development Specific
 
 - [Windows 10 Toast Notifications](/docs/win10_toast_notifications.md)
 - [Windows Desktop Wallpaper](/docs/windows_desktop_wallpaper.md)
 
-### TODO? Custom POD loader
+### Custom POD Loader Component Guide
 
-- PodsFactory
-- PodLoader
-- Scheduler
-- Fetchers
-  - NewsFetcher
-  - PotdFetcher
-- ResultsProcessor
-- ToastNotifications
-- WindowsRegistry
-- RssReader
+#### Core Components
+
+- PodsFactory - Handles registration and instantiation of new POD instances.
+- PodLoader - Base class for POD processing functionality.
+- Scheduler - Manages periodic updates of the Picture of the Day (POTD).
+
+#### Fetch Modules
+
+- NewsFetcher - Verifies POD readiness for new content retrieval.
+- PotdFetcher - Handles POTD download operations.
+- DescriptionFetcher - Retrieves detailed image descriptions and/or additional metadata.
+
+#### Processing & Output
+
+- ResultsProcessor - Implements selection logic for choice of the best POTD.
+- ToastNotifications - Manages Windows toast notification displays.
+- WindowsRegistry - Facilitates wallpaper updates via Windows Registry.
+- RssReader - Specialized module for PODs sourced via RSS feeds.
 
 ## Application Settings
 
