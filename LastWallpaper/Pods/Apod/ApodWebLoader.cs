@@ -15,7 +15,7 @@ public sealed class ApodWebLoader(
         new HtmlNewsFetcher<HtmlPodNews>(
             httpClient,
             new( ApodPixUrl ),
-            new ApodWebNewsExtractor( 
+            new ApodWebNewsExtractor(
                 new( ApodBaseUrl ) ) ),
         new HttpPotdFetcher<HtmlPodNews>(
             httpClient,

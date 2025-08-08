@@ -18,7 +18,8 @@ public sealed class NatgeotvPodLoader(
             new NatgeotvNewsExtractor() ),
         new HttpPotdFetcher<HtmlPodNews>(
             httpClient,
-            new HtmlDescriptionFetcher(),
+            new HtmlDescriptionFetcher(
+                new() { UseCopyrightSign = true } ),
             resourceManager ),
         resourceManager )
 { }

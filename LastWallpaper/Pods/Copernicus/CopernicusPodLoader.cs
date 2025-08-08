@@ -19,7 +19,7 @@ public sealed class CopernicusPodLoader(
                 new( CopernicusSystemFilesUrl ) ) ),
         new HttpPotdFetcher<HtmlPodNews>(
             httpClient,
-            new CopernicusDescriptionFetcher(),
+            new HtmlDescriptionFetcher(),
             resourceManager ),
         resourceManager )
 {
