@@ -20,16 +20,16 @@ __System requirements:__ Windows 10 x64, .NET Desktop Runtime 8.0.
 
 ## What's New
 
-5 Aug 2025
+8 Aug 2025
 
-- Fixed saving to the directory with the old year in the new year.
-- AstroBin (Home of astrophotography) pod was discontinued due to the API being no longer available.
-- Complex refactoring of the inner code base.
+- The APOD-web pod now supports fetching pictures directly from web pages.
 
 Not so far
 
-- Improve validating of wikipedia media types.
-- Rebuild mosaic in tray icon on user click (see [tray_icon:mosaic](#application-settings) option).
+- [Release Candidate v5.8.5-rc1](https://github.com/nikvoronin/LastWallpaper/releases/tag/v5.8.5-rc1) is now available for download in the Releases section.
+- Fixed saving to the directory with the old year in the new year.
+- AstroBin (Home of astrophotography) pod was discontinued due to the API being no longer available.
+- Complex refactoring of the inner code base.
 
 See also [Release Notes](#release-notes) chapter.
 
