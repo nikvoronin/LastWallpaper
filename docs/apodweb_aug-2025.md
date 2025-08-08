@@ -34,7 +34,18 @@ Contains two `center` elements and picture explanation. See example below:
 
 ### Publication date
 
-TODO?
+Second paragraph `p` contains publication date in the format of `yyyy MMMM d`. See following HTML example
+
+```html
+<center>
+...
+<p>
+...
+<p>
+
+2025 July 26
+<br> 
+```
 
 ### URL of the large image
 
@@ -49,11 +60,11 @@ Breakdown:
 
 - Starts with: `image/`
 - Followed by `year+month` in `YYMM` format (e.g., August 2025 → 2508). Month must be two digits (e.g., 08 for August)
-- Ends with a valid .jpg filename. Only `.jpg` extensions are supported.
+- Ends with a valid .jpg|.png|.jpeg filename extension.
 
 ### Image title
 
-Second `center` element contains image title and credits
+Second `center` element contains image title
 
 ```html
 <center>
@@ -61,7 +72,9 @@ Second `center` element contains image title and credits
 ...
 ```
 
-### Image credits
+### Image credits and/or authors
+
+Credits and/or author names are also present in the second `center` element.
 
 ```html
 <center>
@@ -75,4 +88,45 @@ Second `center` element contains image title and credits
 </center>
 ```
 
-Whole text after `:` ..................
+Credits is a whole trimmed text after `:` column sign. See following examples
+
+```plain
+
+ Dawn of the Crab   
+
+Image and Text Credit:
+
+Bradley E. Schaefer
+
+
+```
+
+And more complex
+
+```html
+<center>
+<b> Collision at Asteroid Dimorphos </b> <br> 
+<b> Video Credit: </b> 
+<a href="https://www.asi.it/">ASI</a>, 
+<a href="https://www.nasa.gov/">NASA</a>,
+<a href="https://dart.jhuapl.edu/">Johns Hopkins APL</a>,
+<a href="https://www.nasa.gov/planetarydefense/dart/dart-news">DART</a>,
+<a href="https://www.asi.it/en/planets-stars-universe/solar-system-and-beyond/liciacube/">LICIACube</a>, 
+<a href="https://nssdc.gsfc.nasa.gov/nmc/spacecraft/display.action?id=2021-110C">LUKE</a>, 
+<a href="https://www.iop.org/">IOP</a>
+</center>
+```
+
+Produced but not trimmed yet `innerText`
+
+```plain
+ Collision at Asteroid Dimorphos   
+ Video Credit:  
+ASI, 
+NASA,
+Johns Hopkins APL,
+DART,
+LICIACube, 
+LUKE, 
+IOP
+```
