@@ -11,7 +11,7 @@ public sealed class ApodWebLoader(
     HttpClient httpClient,
     IResourceManager resourceManager )
     : PodLoader<HtmlPodNews>(
-        PodType.Natgeotv,
+        PodType.ApodWeb,
         new HtmlNewsFetcher<HtmlPodNews>(
             httpClient,
             new( ApodPixUrl ),
