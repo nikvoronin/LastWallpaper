@@ -20,12 +20,13 @@ __System requirements:__ Windows 10 x64, .NET Desktop Runtime 8.0.
 
 ## What's New
 
-8 Aug 2025
+1 Oct 2025
 
-- The APOD-web pod now supports fetching pictures directly from web pages.
+[Astronomy Picture of the Day](https://apod.nasa.gov/apod/): due to the lapse in federal government funding, NASA is not updating this website.
 
 Not so far
 
+- The APOD-web pod now supports fetching pictures directly from web pages.
 - [Release Candidate v5.8.5-rc1](https://github.com/nikvoronin/LastWallpaper/releases/tag/v5.8.5-rc1) is now available for download in the Releases section.
 - Fixed saving to the directory with the old year in the new year.
 - AstroBin (Home of astrophotography) pod was discontinued due to the API being no longer available.

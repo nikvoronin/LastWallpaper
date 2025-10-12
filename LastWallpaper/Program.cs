@@ -60,17 +60,17 @@ internal static class Program
             };
         var activePods =
 #if DEBUG
-        Enum.GetValues<PodType>()
+            Enum.GetValues<PodType>()
 #else
             settings.ActivePods.Distinct()
 #endif
-        .Select( podType =>
-            PodsFactory.Create(
-                podType,
-                resourceManager,
-                settings ) )
-        .OfType<IPotdLoader>()
-        .ToList();
+            .Select( podType =>
+                PodsFactory.Create(
+                    podType,
+                    resourceManager,
+                    settings ) )
+            .OfType<IPotdLoader>()
+            .ToList();
 
         if (activePods.Count == 0) // TODO: add logger
             return (int)ErrorLevel.NoPodsDefined;
@@ -218,7 +218,7 @@ internal static class Program
         };
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "5.8.8-rc1";
+    public const string AppVersion = "5.10.12-rc1";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
     private const string CacheFolderName = "cache";
