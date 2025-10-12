@@ -2,6 +2,7 @@
 using LastWallpaper.Abstractions.Handlers;
 using LastWallpaper.Models;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,6 +23,14 @@ public sealed class PodsUpdateHandler(
             .ToArray();
 
         Task.WaitAll( podUpdateTasks, ct );
+
+#if DEBUG
+        foreach (var x in podUpdateTasks) {
+            Debug.WriteLine(
+                $"[{(x.Result.IsSuccess ? "+" : "-")}]" +
+                $" {x.Result.ValueOrDefault?.PodType}" );
+        }
+#endif
 
         var updateResults =
             podUpdateTasks
