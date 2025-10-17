@@ -20,14 +20,16 @@ __System requirements:__ Windows 10 x64, .NET Desktop Runtime 8.0.
 
 ## What's New
 
-1 Oct 2025
+17 Oct 2025
 
-[Astronomy Picture of the Day](https://apod.nasa.gov/apod/): due to the lapse in federal government funding, NASA is not updating this website.
+- A new [release v5.10.17](https://github.com/nikvoronin/LastWallpaper/releases/tag/v5.10.17) is now available for download in the [Releases section](https://github.com/nikvoronin/LastWallpaper/releases).
+- Added `Launch at Startup` menu item.
+- The APOD-web pod now supports fetching pictures directly from web pages.
+- [Astronomy Picture of the Day](https://apod.nasa.gov/apod/): due to the lapse in federal government funding, NASA is not updating this website.
 
 Not so far
 
-- The APOD-web pod now supports fetching pictures directly from web pages.
-- [Release Candidate v5.8.5-rc1](https://github.com/nikvoronin/LastWallpaper/releases/tag/v5.8.5-rc1) is now available for download in the Releases section.
+- [Release Candidate v5.8.5-rc1](https://github.com/nikvoronin/LastWallpaper/releases/tag/v5.8.5-rc1) is now available for download in the [Releases section](https://github.com/nikvoronin/LastWallpaper/releases).
 - Fixed saving to the directory with the old year in the new year.
 - AstroBin (Home of astrophotography) pod was discontinued due to the API being no longer available.
 - Complex refactoring of the inner code base.
@@ -38,8 +40,8 @@ See also [Release Notes](#release-notes) chapter.
 
 🐫 There are two types of tray icons (actually, three):
 
-- Replica - a tiny replica of desktop wallpaper image.
-- Mosaic - nine tiles with main accent colors of desktop image (tiles shuffled from time to time).
+- __Replica__ - a tiny replica of desktop wallpaper image.
+- __Mosaic__ - nine tiles with main accent colors of desktop image (tiles shuffled from time to time).
 
 When the application can't update or retrieve the wallpaper image, it shows you the third one - a default system icon.
 
@@ -57,10 +59,11 @@ When the application can't update or retrieve the wallpaper image, it shows you 
 
 🎯 Do right mouse click over the tray icon:
 
-- Update Now! - check and update wallpaper immediatelly.
-- Open Picture Gallery - open the Explorer with application image folder inside your system Picture Gallery.
-- About The Last Wallpaper /current.version.number/ - open this web-page in default web browser.
-- Quit - close and unload the application.
+- __Update Now!__ - check and update wallpaper immediatelly.
+- __Open Picture Gallery__ - open the Explorer with application image folder inside your system Picture Gallery.
+- __Launch at Startup__ - automatically start the application when Windows starts and the user logs on.
+- __About The Last Wallpaper__ /current.version.number/ - open this web-page in default web browser.
+- __Quit__ - close and unload the application.
 
 ## Documentation
 
@@ -181,13 +184,19 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
 
 ## Release Notes
 
+### 5.10.17
+
+- Added `Launch at Startup` menu item.
+- The APOD-web pod now supports fetching pictures directly from web pages.
+- 1 October 2025: [Astronomy Picture of the Day](https://apod.nasa.gov/apod/) - due to the lapse in federal government funding, NASA is not updating this website.
+
 ### 5.8.5-rc1
 
 - Complex refactoring of the inner code base.
 - Fixed saving to the directory with the old year in the new year.
 - AstroBin (Home of astrophotography) pod was discontinued due to the API being no longer available.
 
-### 4.11.13 --fix 🐞
+### 4.11.13 🐞
 
 - Fix tray icon mouse click.
 
@@ -196,7 +205,7 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
 - Improve validating of wikipedia media types.
 - Rebuild mosaic in tray icon on user click (see [tray_icon:mosaic](#application-settings) option).
 
-### 4.9.30 --fix 🐞
+### 4.9.30 🐞
 
 - Fix using of universal datetime, local one used instead.
 
