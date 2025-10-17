@@ -1,20 +1,64 @@
 ﻿using LastWallpaper.Models;
 using Microsoft.Win32;
+using System;
 using System.Collections.Frozen;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Security;
+using System.Windows.Forms;
 
 namespace LastWallpaper.Logic;
 
 public static class WindowsRegistry
 {
+    public static bool IsInSystemStartup()
+    {
+        try {
+            using var key = Registry.CurrentUser.OpenSubKey( AutoRunPath );
+
+            return
+                key?.GetValue( AppKeyName )
+                is not null;
+        }
+        catch {
+            return false;
+        }
+    }
+
+    public static void ToggleLaunchAtStartup()
+    {
+        try {
+            using var key =
+                Registry.CurrentUser.OpenSubKey( AutoRunPath, true );
+
+            var launchedAtStartup =
+                key?.GetValue( AppKeyName )
+                is not null;
+
+            if (launchedAtStartup)
+                key?.DeleteValue( AppKeyName );
+            else {
+                var appExePath = Application.ExecutablePath;
+
+                if (!File.Exists( appExePath )) return;
+
+                key?.SetValue(
+                    AppKeyName, 
+                    $"\"{appExePath}\"" );
+            }
+        }
+        catch (Exception e)
+        when (e is ObjectDisposedException
+            or SecurityException
+            or UnauthorizedAccessException
+            or IOException) { }
+    }
+
     public static void SetWallpaper(
         string imagePath,
         WallpaperStyle wallpaperStyle = WallpaperStyle.Default )
     {
-        var windows = RuntimeInformation.IsOSPlatform( OSPlatform.Windows );
-        if (!windows) return;
-
         if (!_wallpaperStyles.ContainsKey( wallpaperStyle ))
             wallpaperStyle = WallpaperStyle.Default;
 
@@ -58,6 +102,8 @@ public static class WindowsRegistry
 
     private const string Tiled = "1";
     private const string Single = "0";
+    private const string AppKeyName = Program.AppName;
+    private const string AutoRunPath = @"Software\Microsoft\Windows\CurrentVersion\Run";
 
     [DllImport( "user32.dll", CharSet = CharSet.Unicode )]
     static extern int SystemParametersInfo( int uAction, int uParam, string lpvParam, int fuWinIni );

@@ -153,12 +153,24 @@ internal static class Program
                     null, (_,_) => {
                         try {
                             ExecShellProcess(
-                                "explorer", resourceManager.AlbumFolder);
+                                "explorer",
+                                resourceManager.AlbumFolder);
                         } catch {}
                     } )
                 {
                     Enabled = true,
                     Visible = true
+                },
+
+                new ToolStripSeparator(),
+
+                new ToolStripMenuItem(
+                    "&Launch at Startup",
+                    null,
+                    (_,_) => WindowsRegistry.ToggleLaunchAtStartup() )
+                {
+                    Name = LaunchAtStartupMenuItemName,
+                    Checked = false
                 },
 
                 new ToolStripSeparator(),
@@ -180,11 +192,22 @@ internal static class Program
             ]
         );
 
+        contextMenu.Opening +=
+            ( sender, e ) => {
+                var ctxMenu = sender as ContextMenuStrip;
+
+                if (ctxMenu?.Items[LaunchAtStartupMenuItemName]
+                    is ToolStripMenuItem launchAtStartupCtxMenuItem)
+                    launchAtStartupCtxMenuItem.Checked =
+                        WindowsRegistry.IsInSystemStartup();
+            };
+
         return contextMenu;
     }
 
     private static void ExecShellProcess(
-        string command, string args )
+        string command,
+        string args )
         => Process.Start(
             new ProcessStartInfo( command, args ) {
                 CreateNoWindow = true
@@ -218,9 +241,11 @@ internal static class Program
         };
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "5.10.12-rc1";
+    public const string AppVersion = "5.10.17";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
+    private const string LaunchAtStartupMenuItemName =
+        nameof( LaunchAtStartupMenuItemName );
     private const string CacheFolderName = "cache";
     public const string LastWallpaperFileName = "lastwallpaper.json";
     private const string AppSettingsFileName = "appsettings.json";
