@@ -14,7 +14,7 @@ Picture Of The Day (POTD) on desktop.\
 - [Application Settings](#application-settings)
 - [Release Notes](#release-notes)
 
-__System requirements:__ Windows 10 x64, .NET Desktop Runtime 8.0.
+__System requirements:__ Windows 10 x64, .NET Desktop Runtime 10.0.
 
 > There are at least two others developer versions in branches: one is cross-platform app written under the AvaloniaUI /[develop-cs-xplatform](https://github.com/nikvoronin/LastWallpaper/tree/develop-cs-xplatform) and another one /[develop-fs-win](https://github.com/nikvoronin/LastWallpaper/tree/develop-fs-win) written in F#. Both are workable but abandoned and obsolete.
 
