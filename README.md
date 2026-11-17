@@ -14,25 +14,27 @@ Picture Of The Day (POTD) on desktop.\
 - [Application Settings](#application-settings)
 - [Release Notes](#release-notes)
 
-__System requirements:__ Windows 10 x64, .NET Desktop Runtime 8.0.
+__System requirements:__ Windows 10 x64, .NET Desktop Runtime 10.0.
 
 > There are at least two others developer versions in branches: one is cross-platform app written under the AvaloniaUI /[develop-cs-xplatform](https://github.com/nikvoronin/LastWallpaper/tree/develop-cs-xplatform) and another one /[develop-fs-win](https://github.com/nikvoronin/LastWallpaper/tree/develop-fs-win) written in F#. Both are workable but abandoned and obsolete.
 
 ## What's New
 
-17 Oct 2025
+18 Nov 2026
+
+- A new [release v6.11.18](https://github.com/nikvoronin/LastWallpaper/releases/tag/v6.11.18) is now available for download in the [Releases section](https://github.com/nikvoronin/LastWallpaper/releases).
+- Requires .NET Desktop Runtime 10.0 (upgraded from 8.0).
+- The mosaic tray icon is now built with the [FastKMeans](https://www.nuget.org/packages/FastKMeans) library. It is much faster and uses less memory.
+- Fixed a 1px transparent strip on the right and bottom edges of the mosaic tray icon.
+- Updated FluentResults and HtmlAgilityPack.
+- Unhandled exceptions are now written to the `The Last Wallpaper_<version>_exceptions.log` file.
+
+Not so far
 
 - A new [release v5.10.17](https://github.com/nikvoronin/LastWallpaper/releases/tag/v5.10.17) is now available for download in the [Releases section](https://github.com/nikvoronin/LastWallpaper/releases).
 - Added `Launch at Startup` menu item.
 - The APOD-web pod now supports fetching pictures directly from web pages.
 - [Astronomy Picture of the Day](https://apod.nasa.gov/apod/): due to the lapse in federal government funding, NASA is not updating this website.
-
-Not so far
-
-- [Release Candidate v5.8.5-rc1](https://github.com/nikvoronin/LastWallpaper/releases/tag/v5.8.5-rc1) is now available for download in the [Releases section](https://github.com/nikvoronin/LastWallpaper/releases).
-- Fixed saving to the directory with the old year in the new year.
-- AstroBin (Home of astrophotography) pod was discontinued due to the API being no longer available.
-- Complex refactoring of the inner code base.
 
 See also [Release Notes](#release-notes) chapter.
 
@@ -183,6 +185,14 @@ For ex.: 5 days 4 hour 3 minutes 2 seconds and 789 milliseconds = "5.04:03:02.78
 ```
 
 ## Release Notes
+
+### 6.11.18
+
+- Requires .NET Desktop Runtime 10.0 (upgraded from 8.0).
+- The mosaic tray icon is now built with the [FastKMeans](https://www.nuget.org/packages/FastKMeans) library. It is much faster and uses less memory.
+- Fixed a 1px transparent strip on the right and bottom edges of the mosaic tray icon.
+- Updated FluentResults and HtmlAgilityPack.
+- Unhandled exceptions are now written to the `The Last Wallpaper_<version>_exceptions.log` file.
 
 ### 5.10.17
 
