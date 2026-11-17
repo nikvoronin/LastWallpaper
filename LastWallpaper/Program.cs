@@ -47,7 +47,6 @@ internal static class Program
         ApplicationConfiguration.Initialize();
         Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
         Application.EnableVisualStyles();
-        Application.SetColorMode(SystemColorMode.Dark);
 
         AppDomain.CurrentDomain.UnhandledException += (_, e) =>
             LogException((Exception)e.ExceptionObject);
