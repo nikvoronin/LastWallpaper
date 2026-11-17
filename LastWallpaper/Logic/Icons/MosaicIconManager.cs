@@ -44,7 +44,8 @@ public class MosaicIconManager : IconManager
 
         using var gr = Graphics.FromImage( result );
 
-        var tileSize = result.Width / SqrtNumTiles;
+        var w = result.Width;
+        var h = result.Height;
 
         for (var clusterIx = 0; clusterIx < clusters.ClusterCount; clusterIx++) {
             var labMean = clusters.Centroid( clusterIx );
@@ -52,13 +53,17 @@ public class MosaicIconManager : IconManager
                 _lab2rgb.Convert(
                     new LabColor( labMean[0], labMean[1], labMean[2] ) );
 
-            var x = clusterIx % SqrtNumTiles;
-            var y = clusterIx / SqrtNumTiles;
+            // Edges from the full size: the remainder of w / SqrtNumTiles
+            // goes to the tiles instead of leaving a transparent strip.
+            var col = clusterIx % SqrtNumTiles;
+            var row = clusterIx / SqrtNumTiles;
+            var x0 = col * w / SqrtNumTiles;
+            var x1 = (col + 1) * w / SqrtNumTiles;
+            var y0 = row * h / SqrtNumTiles;
+            var y1 = (row + 1) * h / SqrtNumTiles;
+
             using var brush = new SolidBrush( color );
-            gr.FillRectangle(
-                brush,
-                x * tileSize, y * tileSize,
-                tileSize, tileSize );
+            gr.FillRectangle( brush, x0, y0, x1 - x0, y1 - y0 );
         }
 
         return Icon.FromHandle( result.GetHicon() );
