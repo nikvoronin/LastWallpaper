@@ -44,9 +44,16 @@ internal static class Program
         AppSettings settings =
             LoadAppSettings( Path.Combine( appFolder, AppSettingsFileName ) );
 
-        // TODO: add application and domain exception handlers
-
         ApplicationConfiguration.Initialize();
+        Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
+        Application.EnableVisualStyles();
+        Application.SetColorMode(SystemColorMode.Dark);
+
+        AppDomain.CurrentDomain.UnhandledException += (_, e) =>
+            LogException((Exception)e.ExceptionObject);
+
+        Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+        Application.ThreadException += (_, e) => LogException(e.Exception);
         SynchronizationContext.SetSynchronizationContext(
             new WindowsFormsSynchronizationContext() );
 
@@ -230,6 +237,11 @@ internal static class Program
         return appSettings ?? new();
     }
 
+    private static void LogException(Exception exception) =>
+        File.AppendAllText(
+            $"{AppName}_{AppVersion}_exceptions.log",
+            $"{DateTime.UtcNow:u} {exception}\n");
+    
     private static readonly JsonSerializerOptions _jsonSerializerOptions =
         new() {
             AllowTrailingCommas = true,
@@ -241,7 +253,7 @@ internal static class Program
         };
 
     public const string AppName = "The Last Wallpaper";
-    public const string AppVersion = "5.10.17";
+    public const string AppVersion = "6.11.18";
     public const string GithubProjectUrl = "https://github.com/nikvoronin/LastWallpaper";
 
     private const string LaunchAtStartupMenuItemName =
